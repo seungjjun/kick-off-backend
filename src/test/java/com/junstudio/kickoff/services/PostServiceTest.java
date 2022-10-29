@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -35,8 +36,22 @@ class PostServiceTest {
   }
 
   @Test
+  void findPost() {
+    Post post = new Post(1L, "EPL start", "Today EPL start", "SkySport", "EPL", 1L);
+
+    given(postRepository.findById(any())).willReturn(Optional.of(post));
+
+    Post foundedPost = postService.findPost(post.getId());
+
+    assertThat(foundedPost.getTitle()).isEqualTo("EPL start");
+    assertThat(foundedPost.getAuthor()).isEqualTo("SkySport");
+
+    verify(postRepository).findById(any());
+  }
+
+  @Test
   void write() {
-    Post post = new Post("conte", "reshuffle", "EPL");
+    Post post = new Post("conte", "reshuffle", "EPL", 1L);
 
     postService.write(post.getTitle(), post.getContent(), post.getCategory());
 

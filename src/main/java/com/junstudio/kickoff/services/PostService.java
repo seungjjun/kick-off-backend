@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.exceptions.PostNotFound;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.repositories.PostRepository;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,20 @@ public class PostService {
     this.postRepository = postRepository;
   }
 
+  public Post findPost(Long postId) {
+    Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
+    post.updateHit(post.getHit());
+    return post;
+  }
+
   public List<Post> posts() {
     return postRepository.findAll();
   }
 
-  public void write(String title, String content, String category) {
-    Post post = new Post(title, content, category);
+  public Post write(String title, String content, String category) {
+    Post post = new Post(title, content, category, 0L);
     postRepository.save(post);
+    return post;
   }
 }
+
