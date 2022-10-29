@@ -19,4 +19,9 @@ public class PostService {
   public List<Post> posts() {
     return postRepository.findAll();
   }
+
+  public void write(String title, String content, String category) {
+    Post post = new Post(title, content, category);
+    postRepository.save(post);
+  }
 }

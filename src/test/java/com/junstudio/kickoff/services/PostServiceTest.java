@@ -8,8 +8,10 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class PostServiceTest {
   PostRepository postRepository;
@@ -30,5 +32,16 @@ class PostServiceTest {
     List<Post> posts = postService.posts();
 
     assertThat(posts).hasSize(1);
+  }
+
+  @Test
+  void write() {
+    Post post = new Post("conte", "reshuffle", "EPL");
+
+    postService.write(post.getTitle(), post.getContent(), post.getCategory());
+
+    given(postRepository.save(post)).willReturn(post);
+
+    verify(postRepository).save(any(Post.class));
   }
 }
