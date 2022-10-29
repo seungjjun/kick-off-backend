@@ -1,14 +1,18 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.dtos.WriteDto;
+import com.junstudio.kickoff.dtos.WrittenDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.PostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,15 +36,24 @@ public class PostsController {
     return new PostsDto(posts);
   }
 
+  @GetMapping("/post/{id}")
+  public PostDetailDto post(
+      @PathVariable Long id
+  ) {
+    Post post = postService.findPost(id);
+
+    return post.toDetailDto();
+  }
+
   @PostMapping("/post")
   @ResponseStatus(HttpStatus.CREATED)
-  public String write(
+  public WrittenDto write(
       @Valid @RequestBody WriteDto writeDto
   ) {
-    postService.write(
+    Post post = postService.write(
         writeDto.getTitle(),
         writeDto.getContent(),
         writeDto.getCategory());
-    return "created";
+    return post.writtenDto();
   }
 }
