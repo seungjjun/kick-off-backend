@@ -1,10 +1,12 @@
 package com.junstudio.kickoff.models;
 
 import com.junstudio.kickoff.dtos.PostDto;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 public class Post {
@@ -14,6 +16,8 @@ public class Post {
 
   private String title;
 
+  private String content;
+
   private String author;
 
   private String category;
@@ -21,6 +25,9 @@ public class Post {
   private Long commentNumber;
 
   private Long likeNumber;
+
+  @CreationTimestamp
+  private LocalDateTime createdAt;
 
   public Post() {
   }
@@ -35,12 +42,22 @@ public class Post {
     this.likeNumber = likeNumber;
   }
 
+  public Post(String title, String content, String category) {
+    this.title = title;
+    this.content = content;
+    this.category = category;
+  }
+
   public Long getId() {
     return id;
   }
 
   public String getTitle() {
     return title;
+  }
+
+  public String getContent() {
+    return content;
   }
 
   public String getAuthor() {
@@ -57,6 +74,10 @@ public class Post {
 
   public Long getLikeNumber() {
     return likeNumber;
+  }
+
+  public LocalDateTime getCreatedAt() {
+    return createdAt;
   }
 
   public PostDto toDto() {
