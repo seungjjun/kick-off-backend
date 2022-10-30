@@ -5,6 +5,7 @@ import com.junstudio.kickoff.repositories.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +38,8 @@ class PostServiceTest {
 
   @Test
   void findPost() {
-    Post post = new Post(1L, "EPL start", "Today EPL start", "SkySport", "EPL", 1L);
+    Post post = new Post(1L, "EPL start", "Today EPL start", "SkySport", "EPL",
+        1L, LocalDateTime.now(), "imageUrl");
 
     given(postRepository.findById(any())).willReturn(Optional.of(post));
 
@@ -51,9 +53,9 @@ class PostServiceTest {
 
   @Test
   void write() {
-    Post post = new Post("conte", "reshuffle", "EPL", 1L);
+    Post post = new Post("conte", "reshuffle", "EPL", 1L, "imageUrl");
 
-    postService.write(post.getTitle(), post.getContent(), post.getCategory());
+    postService.write(post.getTitle(), post.getContent(), post.getCategory(), post.getImageUrl());
 
     given(postRepository.save(post)).willReturn(post);
 

@@ -1,22 +1,22 @@
 package com.junstudio.kickoff.dtos;
 
-import javax.validation.constraints.NotBlank;
-
 public class WriteDto {
-  private Long id;
+  private final Long id;
 
-  @NotBlank
-  private String title;
+  private final String title;
 
-  private String content;
+  private final String content;
 
-  private String category;
+  private final String category;
 
-  public WriteDto(Long id, String title, String content, String category) {
+  private final String imageUrl;
+
+  public WriteDto(Long id, String title, String content, String category, String imageUrl) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.category = category;
+    this.imageUrl = imageUrl;
   }
 
   public Long getId() {
@@ -33,5 +33,9 @@ public class WriteDto {
 
   public String getCategory() {
     return category;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
   }
 }

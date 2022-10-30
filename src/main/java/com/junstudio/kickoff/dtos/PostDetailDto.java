@@ -1,7 +1,5 @@
 package com.junstudio.kickoff.dtos;
 
-import javax.persistence.Column;
-
 public class PostDetailDto {
   private final Long id;
 
@@ -15,14 +13,21 @@ public class PostDetailDto {
 
   private final Long hit;
 
+  private final String createdAt;
+
+  private final String imageUrl;
+
   public PostDetailDto(Long id, String title, String content,
-                       String author, String category, Long hit) {
+                       String author, String category, Long hit, String createdAt,
+                       String imageUrl) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.author = author;
     this.category = category;
     this.hit = hit;
+    this.createdAt = createdAt;
+    this.imageUrl = imageUrl;
   }
 
   public Long getId() {
@@ -49,4 +54,11 @@ public class PostDetailDto {
     return hit;
   }
 
+  public String getCreatedAt() {
+    return createdAt;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
 }
