@@ -5,10 +5,12 @@ import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.WrittenDto;
 import org.hibernate.annotations.CreationTimestamp;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Post {
@@ -30,6 +32,9 @@ public class Post {
 
   private Long likeNumber;
 
+  @Column(name = "imageUrl", length = 2048)
+  private String imageUrl;
+
   @CreationTimestamp
   private LocalDateTime createdAt;
 
@@ -47,20 +52,24 @@ public class Post {
   }
 
   public Post(Long id, String title, String content,
-              String author, String category, Long hit) {
+              String author, String category, Long hit, LocalDateTime createdAt,
+              String imageUrl) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.author = author;
     this.category = category;
     this.hit = hit;
+    this.createdAt = createdAt;
+    this.imageUrl = imageUrl;
   }
 
-  public Post(String title, String content, String category, Long hit) {
+  public Post(String title, String content, String category, Long hit, String imageUrl) {
     this.title = title;
     this.content = content;
     this.category = category;
     this.hit = hit;
+    this.imageUrl = imageUrl;
   }
 
   public Long getId() {
@@ -95,16 +104,24 @@ public class Post {
     return hit;
   }
 
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
   public LocalDateTime getCreatedAt() {
     return createdAt;
   }
 
   public PostDto toDto() {
-    return new PostDto(id, title, author, category, commentNumber, likeNumber);
+    return new PostDto(id, title, author,
+        category, commentNumber, likeNumber,
+        hit, createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
   }
 
   public PostDetailDto toDetailDto() {
-    return new PostDetailDto(id, title, content, author, category, hit);
+    return new PostDetailDto(id, title, content,
+        author, category, hit,
+        createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
   }
 
   public void updateHit(Long hit) {

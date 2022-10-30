@@ -2,6 +2,8 @@ package com.junstudio.kickoff.models;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PostTest {
@@ -17,7 +19,7 @@ class PostTest {
   void updateHit() {
     Post post = new Post(
         1L, "손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕",
-        "로마노 기자", "EPL", 3L);
+        "로마노 기자", "EPL", 3L, LocalDateTime.now(), "imageUrl");
 
     post.updateHit(post.getHit());
 

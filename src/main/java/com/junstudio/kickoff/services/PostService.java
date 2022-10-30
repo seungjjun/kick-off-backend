@@ -27,8 +27,8 @@ public class PostService {
     return postRepository.findAll();
   }
 
-  public Post write(String title, String content, String category) {
-    Post post = new Post(title, content, category, 0L);
+  public Post write(String title, String content, String category, String imageUrl) {
+    Post post = new Post(title, content, category, 0L, imageUrl);
     postRepository.save(post);
     return post;
   }

@@ -3,6 +3,7 @@ package com.junstudio.kickoff.controllers;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.services.PostService;
+import com.junstudio.kickoff.utils.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -31,11 +33,15 @@ class PostsControllerTest {
   @MockBean
   private PostService postService;
 
+  @MockBean
+  private S3Uploader s3Uploader;
+
   Post post;
 
   @BeforeEach
   void setup() {
-    post = new Post(1L, "Erik ten Hag", "congraturation", "Sky Sport", "EPL", 1L);
+    post = new Post(1L, "Erik ten Hag", "congraturation",
+        "Sky Sport", "EPL", 1L, LocalDateTime.now(), "imageUrl");
   }
 
   @Test
@@ -54,7 +60,8 @@ class PostsControllerTest {
 
   @Test
   void post() throws Exception {
-    given(postService.write(any(String.class), any(String.class), any(String.class)))
+    given(postService
+        .write(any(String.class), any(String.class), any(String.class), any(String.class)))
         .willReturn(post);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/post")
@@ -63,10 +70,12 @@ class PostsControllerTest {
             .content("{" +
                 "\"title\":\"Erik ten Hag\"," +
                 " \"content\":\"congraturation\"," +
-                " \"category\":\"EPL\"" +
+                " \"category\":\"EPL\"," +
+                " \"imageUrl\":\"imageUrl\"" +
                 "}"))
         .andExpect(status().isCreated());
 
-    verify(postService).write(any(String.class), any(String.class), any(String.class));
+    verify(postService)
+        .write(any(String.class), any(String.class), any(String.class), any(String.class));
   }
 }
