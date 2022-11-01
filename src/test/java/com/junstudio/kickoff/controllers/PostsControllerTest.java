@@ -4,6 +4,7 @@ import com.junstudio.kickoff.models.Category;
 import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.services.LikeService;
 import com.junstudio.kickoff.services.PostService;
 import com.junstudio.kickoff.utils.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,9 @@ class PostsControllerTest {
 
   @MockBean
   private PostService postService;
+
+  @MockBean
+  private LikeService likeService;
 
   @MockBean
   private S3Uploader s3Uploader;
@@ -85,5 +89,18 @@ class PostsControllerTest {
     verify(postService)
         .write(any(String.class), any(String.class),
             any(String.class), any(Long.class), any(Long.class));
+  }
+
+
+  @Test
+  void like() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/like")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"postId\":\"1\"," +
+                "\"userId\":\"1\"" +
+                "}"))
+        .andExpect(status().isOk());
   }
 }

@@ -1,11 +1,13 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
-import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.dtos.PostWriteDto;
 import com.junstudio.kickoff.dtos.PostWrittenDto;
+import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Post;
+import com.junstudio.kickoff.services.LikeService;
 import com.junstudio.kickoff.services.PostService;
 import com.junstudio.kickoff.utils.S3Uploader;
 import org.springframework.http.HttpStatus;
@@ -25,10 +27,12 @@ import java.util.stream.Collectors;
 @RestController
 public class PostsController {
   private final PostService postService;
+  private final LikeService likeService;
   private final S3Uploader s3Uploader;
 
-  public PostsController(PostService postService, S3Uploader s3Uploader) {
+  public PostsController(PostService postService, LikeService likeService, S3Uploader s3Uploader) {
     this.postService = postService;
+    this.likeService = likeService;
     this.s3Uploader = s3Uploader;
   }
 
@@ -53,7 +57,6 @@ public class PostsController {
   @ResponseStatus(HttpStatus.CREATED)
   public PostWrittenDto write(
       @Valid @RequestBody PostWriteDto postWriteDto) throws IOException {
-    System.out.println("*".repeat(20 ) + postWriteDto);
 
     Post post = postService.write(
         postWriteDto.getTitle(),
@@ -63,6 +66,14 @@ public class PostsController {
         postWriteDto.getCategoryId());
 
     return post.postWrittenDto();
+  }
+
+  @PostMapping("/like")
+  public String like(
+      @RequestBody LikeDto likeDto
+  ) {
+    likeService.countLike(likeDto.getPostId(), likeDto.getUserId());
+    return "ok";
   }
 
   @PostMapping("/upload")
