@@ -1,7 +1,9 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.models.Category;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Post;
-import com.junstudio.kickoff.repositories.PostRepository;
+import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.PostService;
 import com.junstudio.kickoff.utils.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,12 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willReturn;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -40,8 +40,13 @@ class PostsControllerTest {
 
   @BeforeEach
   void setup() {
-    post = new Post(1L, "Erik ten Hag", "congraturation",
-        "Sky Sport", "EPL", 1L, LocalDateTime.now(), "imageUrl");
+      User user = new User(1L, "jel1y", "encodedPassword",
+          "Jun", "profileImage", new Grade(), List.of(), List.of());
+
+      Category category = new Category(1L, "EPL", List.of());
+
+      post = new Post(1L, user, category, List.of(), List.of(),
+          "손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕", 3L, "imageUrl", LocalDateTime.now());
   }
 
   @Test
@@ -61,7 +66,8 @@ class PostsControllerTest {
   @Test
   void post() throws Exception {
     given(postService
-        .write(any(String.class), any(String.class), any(String.class), any(String.class)))
+        .write(any(String.class), any(String.class), any(String.class),
+            any(Long.class), any(Long.class)))
         .willReturn(post);
 
     mockMvc.perform(MockMvcRequestBuilders.post("/post")
@@ -70,12 +76,14 @@ class PostsControllerTest {
             .content("{" +
                 "\"title\":\"Erik ten Hag\"," +
                 " \"content\":\"congraturation\"," +
-                " \"category\":\"EPL\"," +
-                " \"imageUrl\":\"imageUrl\"" +
+                " \"imageUrl\":\"imageUrl\"," +
+                " \"userId\":\"1\"," +
+                " \"categoryId\":\"1\"" +
                 "}"))
         .andExpect(status().isCreated());
 
     verify(postService)
-        .write(any(String.class), any(String.class), any(String.class), any(String.class));
+        .write(any(String.class), any(String.class),
+            any(String.class), any(Long.class), any(Long.class));
   }
 }

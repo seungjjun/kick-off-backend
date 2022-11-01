@@ -1,6 +1,6 @@
 package com.junstudio.kickoff.dtos;
 
-public class WriteDto {
+public class PostWriteDto {
   private final Long id;
 
   private final String title;
@@ -11,12 +11,19 @@ public class WriteDto {
 
   private final String imageUrl;
 
-  public WriteDto(Long id, String title, String content, String category, String imageUrl) {
+  private final Long userId;
+
+  private final Long categoryId;
+
+  public PostWriteDto(Long id, String title, String content, String category,
+                      String imageUrl, Long userId, Long categoryId) {
     this.id = id;
     this.title = title;
     this.content = content;
     this.category = category;
     this.imageUrl = imageUrl;
+    this.userId = userId;
+    this.categoryId = categoryId;
   }
 
   public Long getId() {
@@ -37,5 +44,13 @@ public class WriteDto {
 
   public String getImageUrl() {
     return imageUrl;
+  }
+
+  public Long getUserId() {
+    return userId;
+  }
+
+  public Long getCategoryId() {
+    return categoryId;
   }
 }

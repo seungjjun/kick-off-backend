@@ -1,9 +1,9 @@
 package com.junstudio.kickoff.dtos;
 
-public class WrittenDto {
+public class PostWrittenDto {
   private Long id;
 
-  public WrittenDto(Long id) {
+  public PostWrittenDto(Long id) {
     this.id = id;
   }
 
