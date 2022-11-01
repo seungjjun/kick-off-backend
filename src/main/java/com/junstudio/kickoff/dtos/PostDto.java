@@ -1,34 +1,41 @@
 package com.junstudio.kickoff.dtos;
 
+import com.junstudio.kickoff.models.Category;
+import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Like;
+import com.junstudio.kickoff.models.User;
+
+import java.util.List;
+
 public class PostDto {
   private final Long id;
 
   private final String title;
 
-  private final String author;
+  private final List<Comment> comments;
 
-  private final String category;
+  private final Category category;
 
-  private final Long commentNumber;
-
-  private final Long likeNumber;
+  private final User user;
 
   private final Long hit;
+
+  private final List<Like> likes;
 
   private final String createdAt;
 
   private final String imageUrl;
 
-  public PostDto(Long id, String title, String author,
-                 String category, Long commentNumber, Long likeNumber,
-                 Long hit, String createdAt, String imageUrl) {
+  public PostDto(Long id, String title, List<Comment> comments,
+                 Category category, User user, Long hit,
+                 List<Like> likes, String createdAt, String imageUrl) {
     this.id = id;
     this.title = title;
-    this.author = author;
+    this.comments = comments;
     this.category = category;
-    this.commentNumber = commentNumber;
-    this.likeNumber = likeNumber;
+    this.user = user;
     this.hit = hit;
+    this.likes = likes;
     this.createdAt = createdAt;
     this.imageUrl = imageUrl;
   }
@@ -41,24 +48,24 @@ public class PostDto {
     return title;
   }
 
-  public String getAuthor() {
-    return author;
+  public List<Comment> getComments() {
+    return comments;
   }
 
-  public String getCategory() {
+  public Category getCategory() {
     return category;
   }
 
-  public Long getCommentNumber() {
-    return commentNumber;
-  }
-
-  public Long getLikeNumber() {
-    return likeNumber;
+  public User getUser() {
+    return user;
   }
 
   public Long getHit() {
     return hit;
+  }
+
+  public List<Like> getLikes() {
+    return likes;
   }
 
   public String getCreatedAt() {

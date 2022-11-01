@@ -3,8 +3,8 @@ package com.junstudio.kickoff.controllers;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostsDto;
-import com.junstudio.kickoff.dtos.WriteDto;
-import com.junstudio.kickoff.dtos.WrittenDto;
+import com.junstudio.kickoff.dtos.PostWriteDto;
+import com.junstudio.kickoff.dtos.PostWrittenDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.PostService;
 import com.junstudio.kickoff.utils.S3Uploader;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,19 +51,21 @@ public class PostsController {
 
   @PostMapping("/post")
   @ResponseStatus(HttpStatus.CREATED)
-  public WrittenDto write(
-      @Valid @RequestBody WriteDto writeDto) throws IOException {
-    Post post = postService.write(
-        writeDto.getTitle(),
-        writeDto.getContent(),
-        writeDto.getCategory(),
-        writeDto.getImageUrl());
+  public PostWrittenDto write(
+      @Valid @RequestBody PostWriteDto postWriteDto) throws IOException {
+    System.out.println("*".repeat(20 ) + postWriteDto);
 
-    return post.writtenDto();
+    Post post = postService.write(
+        postWriteDto.getTitle(),
+        postWriteDto.getContent(),
+        postWriteDto.getImageUrl(),
+        postWriteDto.getUserId(),
+        postWriteDto.getCategoryId());
+
+    return post.postWrittenDto();
   }
 
   @PostMapping("/upload")
-  @ResponseBody
   public String upload(MultipartFile multipartFile) throws IOException {
     return s3Uploader.uploadFiles(multipartFile, "kickoffproject");
   }
