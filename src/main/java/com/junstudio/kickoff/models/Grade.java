@@ -18,7 +18,6 @@ public class Grade {
 
   private String name;
 
-  @JsonManagedReference
   @OneToMany(mappedBy = "grade")
   private List<User> users = new ArrayList<>();
 

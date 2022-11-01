@@ -1,19 +1,20 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.UserDto;
-import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("users")
 public class UserController {
-  private UserService userService;
+  private final UserService userService;
+
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
   @GetMapping("me")
   public UserDto user() {
