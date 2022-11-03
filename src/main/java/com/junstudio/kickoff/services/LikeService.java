@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.exceptions.PostNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Like;

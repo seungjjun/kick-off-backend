@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Recomment {
@@ -64,6 +65,7 @@ public class Recomment {
   }
 
   public ReCommentDto toDto() {
-    return new ReCommentDto(id, content, commentId, postId, userId);
+    return new ReCommentDto(id, content, commentId, postId, userId,
+        commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
   }
 }

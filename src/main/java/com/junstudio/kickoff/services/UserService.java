@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.dtos.UserDto;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.UserRepository;

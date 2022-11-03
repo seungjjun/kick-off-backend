@@ -24,7 +24,6 @@ public class User {
 
   private String profileImage;
 
-
   private Long gradeId;
 
   public User() {

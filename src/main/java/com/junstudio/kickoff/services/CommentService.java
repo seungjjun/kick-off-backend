@@ -26,4 +26,10 @@ public class CommentService {
   public List<Comment> findComment(Long postId) {
     return commentRepository.findAllByPostId(postId);
   }
+
+  public void createComment(String content, Long userId, Long postId) {
+    Comment comment = new Comment(content, userId, postId);
+
+    commentRepository.save(comment);
+  }
 }

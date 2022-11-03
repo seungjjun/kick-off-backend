@@ -38,6 +38,12 @@ public class Comment {
     this.commentDate = commentDate;
   }
 
+  public Comment(String content, Long userId, Long postId) {
+    this.content = content;
+    this.userId = userId;
+    this.postId = postId;
+  }
+
   public Long id() {
     return id;
   }

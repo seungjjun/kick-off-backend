@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -45,5 +46,18 @@ CommentControllerTest {
         .andExpect(content().string(
             containsString("\"content\":\"reply\"")
         ));
+  }
+
+  @Test
+  void writeComment() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/comment")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"content\":\"comment\"," +
+                "\"userId\":\"1\"," +
+                "\"postId\":\"1\"" +
+                "}"))
+        .andExpect(status().isCreated());
   }
 }

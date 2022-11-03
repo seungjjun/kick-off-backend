@@ -72,8 +72,6 @@ class PostServiceTest {
     postService.write(post.title(), post.content(),
         post.imageUrl(), user.id(), category.id());
 
-    given(postRepository.save(post)).willReturn(post);
-
     verify(postRepository).save(any(Post.class));
   }
 }
