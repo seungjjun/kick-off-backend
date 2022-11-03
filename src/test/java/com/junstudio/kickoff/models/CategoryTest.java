@@ -9,8 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CategoryTest {
   @Test
   void category() {
-    Category category = new Category(1L, "EPL", List.of());
+    Category category = new Category(1L, "EPL");
 
-    assertThat(category.getName()).isEqualTo("EPL");
+    assertThat(category.name()).isEqualTo("EPL");
   }
 }

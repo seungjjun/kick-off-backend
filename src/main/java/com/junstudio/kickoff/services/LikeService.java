@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.exceptions.PostNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Like;
@@ -11,6 +12,7 @@ import com.junstudio.kickoff.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 import java.util.Objects;
 
 @Service
@@ -32,17 +34,25 @@ public class LikeService {
     Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
     User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
 
-    Like like = new Like(-1L, post, user);
+    Like like = new Like(-1L, post.id(), user.id());
     Like foundLike = likeRepository.findByPostId(postId).orElse(like);
 
     if (!(foundLike.equals(like))) {
-      if (Objects.equals(foundLike.getUser().getId(), userId)) {
-        likeRepository.deleteById(foundLike.getId());
+      if (Objects.equals(foundLike.userId(), userId)) {
+        likeRepository.deleteById(foundLike.id());
         return;
       }
     }
 
-    Like newLike = new Like(post, user);
+    Like newLike = new Like(post.id(), user.id());
     likeRepository.save(newLike);
+  }
+
+  public List<Like> likes() {
+    return likeRepository.findAll();
+  }
+
+  public List<Like> findLike(Long postId) {
+    return likeRepository.findAllByPostId(postId);
   }
 }

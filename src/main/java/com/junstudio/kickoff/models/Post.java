@@ -1,7 +1,5 @@
 package com.junstudio.kickoff.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostWrittenDto;
@@ -11,12 +9,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -26,23 +20,9 @@ public class Post {
   @Column(name = "post_id")
   private Long id;
 
-  @JsonBackReference
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+  private Long userId;
 
-  @JsonBackReference
-  @ManyToOne
-  @JoinColumn(name = "category_id")
-  private Category category;
-
-  @JsonManagedReference
-  @OneToMany(mappedBy = "post")
-  private List<Comment> comments = new ArrayList<>();
-
-  @JsonManagedReference
-  @OneToMany(mappedBy = "post")
-  private List<Like> likes = new ArrayList<>();
+  private Long categoryId;
 
   private String title;
 
@@ -59,14 +39,12 @@ public class Post {
   public Post() {
   }
 
-  public Post(Long id, User user, Category category,
-              List<Comment> comments, List<Like> likes, String title,
-              String content, Long hit, String imageUrl, LocalDateTime createdAt) {
+  public Post(Long id, Long userId, Long categoryId, String title,
+              String content, Long hit, String imageUrl,
+              LocalDateTime createdAt) {
     this.id = id;
-    this.user = user;
-    this.category = category;
-    this.comments = comments;
-    this.likes = likes;
+    this.userId = userId;
+    this.categoryId = categoryId;
     this.title = title;
     this.content = content;
     this.hit = hit;
@@ -75,64 +53,53 @@ public class Post {
   }
 
   public Post(String title, String content, Long hit,
-              String imageUrl, User user, Category category) {
+              String imageUrl, Long userId, Long categoryId) {
     this.title = title;
     this.content = content;
     this.hit = hit;
     this.imageUrl = imageUrl;
-    this.user = user;
-    this.category = category;
+    this.userId = userId;
+    this.categoryId = categoryId;
   }
 
-  public Long getId() {
+  public Long id() {
     return id;
   }
 
-  public User getUser() {
-    return user;
+  public Long userId() {
+    return userId;
   }
 
-  public Category getCategory() {
-    return category;
+  public Long categoryId() {
+    return categoryId;
   }
 
-  public List<Comment> getComments() {
-    return comments;
-  }
 
-  public List<Like> getLikes() {
-    return likes;
-  }
-
-  public String getTitle() {
+  public String title() {
     return title;
   }
 
-  public String getContent() {
+  public String content() {
     return content;
   }
 
-  public Long getHit() {
+  public Long hit() {
     return hit;
   }
 
-  public String getImageUrl() {
+  public String imageUrl() {
     return imageUrl;
   }
 
-  public LocalDateTime getCreatedAt() {
+  public LocalDateTime createdAt() {
     return createdAt;
   }
 
   public PostDto toDto() {
-    return new PostDto(id, title, comments, category, user, hit, likes,
+    return new PostDto(id, title, categoryId, userId, hit,
         createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
   }
 
-  public PostDetailDto toDetailDto() {
-    return new PostDetailDto(id, title, content, category, user, hit, comments, likes,
-        createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
-  }
 
   public void updateHit(Long hit) {
     this.hit = hit + 1L;
@@ -140,5 +107,10 @@ public class Post {
 
   public PostWrittenDto postWrittenDto() {
     return new PostWrittenDto(id);
+  }
+
+  public PostDetailDto toDetailDto(User user, Category category, List<Like> likes) {
+    return new PostDetailDto(id, title, content, hit, likes, user, category,
+        createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
   }
 }

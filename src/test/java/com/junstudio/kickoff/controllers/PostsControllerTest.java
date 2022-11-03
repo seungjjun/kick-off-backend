@@ -4,8 +4,12 @@ import com.junstudio.kickoff.models.Category;
 import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.services.CategoryService;
+import com.junstudio.kickoff.services.CommentService;
 import com.junstudio.kickoff.services.LikeService;
 import com.junstudio.kickoff.services.PostService;
+import com.junstudio.kickoff.services.RecommentService;
+import com.junstudio.kickoff.services.UserService;
 import com.junstudio.kickoff.utils.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,9 +24,11 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(PostsController.class)
@@ -40,31 +46,60 @@ class PostsControllerTest {
   @MockBean
   private S3Uploader s3Uploader;
 
-  Post post;
+  @MockBean
+  private CommentService commentService;
+
+  @MockBean
+  private RecommentService recommentService;
+
+  @MockBean
+  private UserService userService;
+
+  @MockBean
+  private CategoryService categoryService;
+
+  private Post post;
+
+  private User user;
+
+  private Category category;
 
   @BeforeEach
   void setup() {
-      User user = new User(1L, "jel1y", "encodedPassword",
-          "Jun", "profileImage", new Grade(), List.of(), List.of());
+    user = new User(1L, "jel1y", "encodedPassword",
+        "Jun", "profileImage", 1L);
 
-      Category category = new Category(1L, "EPL", List.of());
+    category = new Category(1L, "EPL");
 
-      post = new Post(1L, user, category, List.of(), List.of(),
-          "손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕", 3L, "imageUrl", LocalDateTime.now());
+    post = new Post(1L, 1L, 1L, "손흥민 득점왕 수상",
+        "손흥민 아시아인 최초 EPL 득점왕", 3L, "imageUrl", LocalDateTime.now());
   }
+
 
   @Test
   void posts() throws Exception {
+    given(postService.posts()).willReturn(List.of(post));
+
+    given(userService.users()).willReturn(List.of(user));
+
     mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(content().string(
+            containsString("\"identification\":\"jel1y\"")
+        ));
   }
 
   @Test
   void postDetail() throws Exception {
     given(postService.findPost(1L)).willReturn(post);
+    given(postService.findUser(1L)).willReturn(user);
+    given(postService.findCategory(1L)).willReturn(category);
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/post/1"))
-        .andExpect(status().isOk());
+    mockMvc.perform(MockMvcRequestBuilders.get("/posts/1"))
+        .andExpect(status().isOk())
+        .andExpect(content().string(
+            containsString("\"name\":\"EPL\"")
+        ));
   }
 
   @Test

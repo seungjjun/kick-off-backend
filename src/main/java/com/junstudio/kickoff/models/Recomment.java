@@ -1,6 +1,6 @@
 package com.junstudio.kickoff.models;
 
-import com.junstudio.kickoff.dtos.CommentDto;
+import com.junstudio.kickoff.dtos.ReCommentDto;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
@@ -8,14 +8,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Entity
-public class Comment {
-  @Id
-  @GeneratedValue
-  @Column(name = "comment_id")
+public class Recomment {
+  @Id @GeneratedValue
+  @Column(name = "recomment_id")
   private Long id;
+
+  private Long commentId;
 
   private String content;
 
@@ -26,40 +26,44 @@ public class Comment {
   @CreationTimestamp
   private LocalDateTime commentDate;
 
-  public Comment() {
+  public Recomment() {
   }
 
-  public Comment(Long id, String content, Long userId, Long postId,
-                 LocalDateTime commentDate) {
+  public Recomment(Long id, Long commentId, String content,
+                   Long userId, Long postId, LocalDateTime commentDate) {
     this.id = id;
+    this.commentId = commentId;
     this.content = content;
     this.userId = userId;
     this.postId = postId;
     this.commentDate = commentDate;
   }
 
-  public Long id() {
+  public Long getId() {
     return id;
   }
 
-  public String content() {
+  public Long getCommentId() {
+    return commentId;
+  }
+
+  public String getContent() {
     return content;
   }
 
-  public Long userId() {
+  public Long getUserId() {
     return userId;
   }
 
-  public Long postId() {
+  public Long getPostId() {
     return postId;
   }
 
-  public LocalDateTime commentDate() {
+  public LocalDateTime getCommentDate() {
     return commentDate;
   }
 
-  public CommentDto toDto() {
-    return new CommentDto(id, content, userId, postId,
-        commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+  public ReCommentDto toDto() {
+    return new ReCommentDto(id, content, commentId, postId, userId);
   }
 }

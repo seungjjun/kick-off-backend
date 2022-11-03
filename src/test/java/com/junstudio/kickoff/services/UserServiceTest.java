@@ -20,12 +20,12 @@ class UserServiceTest {
     UserService userService = new UserService(userRepository);
 
     User user = new User(1L, "jel1y", "encodedPassword",
-        "Jun", "profileImage", new Grade(), List.of(), List.of());
+        "Jun", "profileImage", 1L);
 
     given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
 
     User foundUser = userService.findUser(1L);
 
-    assertThat(foundUser.getName()).isEqualTo("Jun");
+    assertThat(foundUser.name()).isEqualTo("Jun");
   }
 }

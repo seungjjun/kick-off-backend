@@ -1,55 +1,57 @@
 package com.junstudio.kickoff.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.junstudio.kickoff.dtos.LikeDto;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "LIKES")
 public class Like {
-  @Id @GeneratedValue
+  @Id
+  @GeneratedValue
   @Column(name = "like_id")
   private Long id;
 
-  @JsonBackReference
-  @ManyToOne
-  @JoinColumn(name = "post_id")
-  private Post post;
+  private Long postId;
 
-  @JsonBackReference
-  @ManyToOne
-  @JoinColumn(name = "user_id")
-  private User user;
+
+  private Long userId;
 
   public Like() {
   }
 
-  public Like(Long id, Post post, User user) {
+  public Like(Long id, Long postId, Long userId) {
     this.id = id;
-    this.post = post;
-    this.user = user;
+    this.postId = postId;
+    this.userId = userId;
   }
 
-  public Like(Post post, User user) {
-    this.post = post;
-    this.user = user;
+  public Like(Long postId, Long userId) {
+    this.postId = postId;
+    this.userId = userId;
   }
 
-  public Long getId() {
+  public Long id() {
     return id;
   }
 
-  public Post getPost() {
-    return post;
+  public Long postId() {
+    return postId;
   }
 
-  public User getUser() {
-    return user;
+  public Long userId() {
+    return userId;
+  }
+
+  public LikeDto toDto() {
+    return new LikeDto(id, postId, userId);
+  }
+
+  public LikeDto toLikeDto() {
+    return new LikeDto(id, postId, userId);
   }
 }
