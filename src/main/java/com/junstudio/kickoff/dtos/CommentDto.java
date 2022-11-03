@@ -1,12 +1,5 @@
 package com.junstudio.kickoff.dtos;
 
-import com.junstudio.kickoff.models.Comment;
-import com.junstudio.kickoff.models.Post;
-import com.junstudio.kickoff.models.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
-
 public class CommentDto {
   private final Long id;
 

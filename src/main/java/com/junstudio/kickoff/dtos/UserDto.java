@@ -1,7 +1,5 @@
 package com.junstudio.kickoff.dtos;
 
-import com.junstudio.kickoff.models.Grade;
-
 public class UserDto {
   private final Long id;
 

@@ -16,6 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class CommentServiceTest {
   @MockBean
@@ -58,5 +59,12 @@ class CommentServiceTest {
     assertThat(comments).hasSize(1);
   }
 
+  @Test
+  void createComment() {
+    Comment comment = mock(Comment.class);
 
+    commentService.createComment(comment.content(), comment.userId(), comment.postId());
+
+    verify(commentRepository).save(any(Comment.class));
+  }
 }

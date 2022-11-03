@@ -7,8 +7,12 @@ import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.services.CommentService;
 import com.junstudio.kickoff.services.RecommentService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -37,5 +41,17 @@ public class CommentController {
         .collect(Collectors.toList());
 
     return new CommentsDto(comments, recomments);
+  }
+
+  @PostMapping("/comment")
+  @ResponseStatus(HttpStatus.CREATED)
+  private String comment(
+      @RequestBody CommentDto commentDto
+  ) {
+    commentService.createComment(
+        commentDto.getContent(),
+        commentDto.getUserId(),
+        commentDto.getPostId());
+    return "ok";
   }
 }

@@ -52,5 +52,4 @@ class RecommentServiceTest {
 
     assertThat(recomments).hasSize(1);
   }
-
 }
