@@ -47,14 +47,14 @@ class PostServiceTest {
 
   @Test
   void findPost() {
-    Post post = new Post(1L, new User(), new Category(), List.of(), List.of(),
-        "EPL start", "손흥민 아시아인 최초 EPL 득점왕", 3L, "imageUrl", LocalDateTime.now());
+    Post post = new Post(1L, 1L, 1L, "EPL start",
+        "손흥민 아시아인 최초 EPL 득점왕", 3L, "imageUrl", LocalDateTime.now());
 
     given(postRepository.findById(any())).willReturn(Optional.of(post));
 
-    Post foundedPost = postService.findPost(post.getId());
+    Post foundedPost = postService.findPost(post.id());
 
-    assertThat(foundedPost.getTitle()).isEqualTo("EPL start");
+    assertThat(foundedPost.title()).isEqualTo("EPL start");
 
     verify(postRepository).findById(any());
   }
@@ -62,15 +62,15 @@ class PostServiceTest {
   @Test
   void write() {
     User user = mock(User.class);
-    given(userRepository.findById(user.getId())).willReturn(Optional.of(user));
+    given(userRepository.findById(user.id())).willReturn(Optional.of(user));
 
     Category category = mock(Category.class);
-    given(categoryRepository.findById(category.getId())).willReturn(Optional.of(category));
+    given(categoryRepository.findById(category.id())).willReturn(Optional.of(category));
 
-    Post post = new Post("conte", "reshuffle", 1L, "imageUrl", user, category);
+    Post post = new Post("conte", "reshuffle", 1L, "imageUrl", user.id(), category.id());
 
-    postService.write(post.getTitle(), post.getContent(),
-        post.getImageUrl(), post.getUser().getId(), post.getCategory().getId());
+    postService.write(post.title(), post.content(),
+        post.imageUrl(), user.id(), category.id());
 
     given(postRepository.save(post)).willReturn(post);
 

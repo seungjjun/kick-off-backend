@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -31,8 +30,24 @@ public class PostService {
 
   public Post findPost(Long postId) {
     Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
-    post.updateHit(post.getHit());
+
+    post.updateHit(post.hit());
+
     return post;
+  }
+
+  public User findUser(Long postId) {
+    Post post = postRepository.findById(postId).orElseThrow(UserNotFound::new);
+
+    return userRepository.findById(post.userId())
+        .orElseThrow(UserNotFound::new);
+  }
+
+  public Category findCategory(Long postId) {
+    Post post = postRepository.findById(postId).orElseThrow(CategoryNotFound::new);
+
+    return categoryRepository.findById(post.categoryId())
+        .orElseThrow(CategoryNotFound::new);
   }
 
   public List<Post> posts() {
@@ -44,7 +59,7 @@ public class PostService {
     User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
     Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFound::new);
 
-    Post post = new Post(title, content, 0L, imageUrl, user, category);
+    Post post = new Post(title, content, 0L, imageUrl, user.id(), category.id());
 
     postRepository.save(post);
     return post;

@@ -31,9 +31,11 @@ class LikeServiceTest {
   @SpyBean
   private LikeService likeService;
 
-  User user;
-  Post post;
-  Like like;
+  private User user;
+
+  private Post post;
+
+  private Like like;
 
   @BeforeEach
   void setup() {
@@ -53,20 +55,20 @@ class LikeServiceTest {
 
   @Test
   void countLike() {
-    like = new Like(1L, post, user);
+    like = new Like(1L, post.id(), user.id());
 
-    likeService.countLike(user.getId(), post.getId());
+    likeService.countLike(user.id(), post.id());
     verify(likeRepository).save(any());
   }
 
   @Test
   void deleteLike() {
-    like = new Like(1L, post, user);
+    like = new Like(1L, post.id(), user.id());
 
     given(likeRepository.findByPostId(any(Long.class)))
         .willReturn(Optional.of(like));
 
-    likeService.countLike(post.getId(), user.getId());
+    likeService.countLike(post.id(), user.id());
     verify(likeRepository).deleteById(any(Long.class));
   }
 }

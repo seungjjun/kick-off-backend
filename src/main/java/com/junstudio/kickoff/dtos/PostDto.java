@@ -12,30 +12,27 @@ public class PostDto {
 
   private final String title;
 
-  private final List<Comment> comments;
+//  private final List<Comment> comments;
 
-  private final Category category;
+  private final Long categoryId;
 
-  private final User user;
+  private final Long userId;
 
   private final Long hit;
 
-  private final List<Like> likes;
+//  private final List<Like> likes;
 
   private final String createdAt;
 
   private final String imageUrl;
 
-  public PostDto(Long id, String title, List<Comment> comments,
-                 Category category, User user, Long hit,
-                 List<Like> likes, String createdAt, String imageUrl) {
+  public PostDto(Long id, String title, Long categoryId,
+                 Long userId, Long hit, String createdAt, String imageUrl) {
     this.id = id;
     this.title = title;
-    this.comments = comments;
-    this.category = category;
-    this.user = user;
+    this.categoryId = categoryId;
+    this.userId = userId;
     this.hit = hit;
-    this.likes = likes;
     this.createdAt = createdAt;
     this.imageUrl = imageUrl;
   }
@@ -48,24 +45,16 @@ public class PostDto {
     return title;
   }
 
-  public List<Comment> getComments() {
-    return comments;
+  public Long getCategoryId() {
+    return categoryId;
   }
 
-  public Category getCategory() {
-    return category;
-  }
-
-  public User getUser() {
-    return user;
+  public Long getUserId() {
+    return userId;
   }
 
   public Long getHit() {
     return hit;
-  }
-
-  public List<Like> getLikes() {
-    return likes;
   }
 
   public String getCreatedAt() {

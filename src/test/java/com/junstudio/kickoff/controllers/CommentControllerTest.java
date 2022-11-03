@@ -1,8 +1,10 @@
 package com.junstudio.kickoff.controllers;
 
-import com.junstudio.kickoff.models.Grade;
+import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.services.UserService;
+import com.junstudio.kickoff.services.CommentService;
+import com.junstudio.kickoff.services.RecommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,6 +13,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -18,26 +21,29 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@WebMvcTest(CommentController.class)
 @ActiveProfiles("test")
-class UserControllerTest {
+class
+CommentControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
   @MockBean
-  private UserService userService;
+  private CommentService commentService;
+
+  @MockBean
+  private RecommentService recommentService;
 
   @Test
-  void user() throws Exception {
-    User user = new User(1L, "jel1y", "encodedPassword",
-        "Jun", "profileImage", 1L);
+  void comment() throws Exception {
+    Comment comment = new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
 
-    given(userService.findUser(1L)).willReturn(user);
+    given(commentService.findComment(1L)).willReturn(List.of(comment));
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/users/me"))
+    mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/comments"))
         .andExpect(status().isOk())
         .andExpect(content().string(
-            containsString("jel1y")
+            containsString("\"content\":\"reply\"")
         ));
   }
 }
