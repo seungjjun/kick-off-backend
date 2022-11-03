@@ -54,4 +54,19 @@ public class CommentController {
         commentDto.getPostId());
     return "ok";
   }
+
+  @PostMapping("/recomment")
+  @ResponseStatus(HttpStatus.CREATED)
+  private String recomment(
+      @RequestBody ReCommentDto reCommentDto
+  ) {
+    recommentService.createRecomment(
+        reCommentDto.getContent(),
+        reCommentDto.getCommentId(),
+        reCommentDto.getUserId(),
+        reCommentDto.getPostId()
+    );
+
+    return "ok";
+  }
 }

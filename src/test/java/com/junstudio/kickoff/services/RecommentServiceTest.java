@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class RecommentServiceTest {
   @MockBean
@@ -51,5 +52,18 @@ class RecommentServiceTest {
     List<Recomment> recomments = recommentService.findReComment(any(Long.class));
 
     assertThat(recomments).hasSize(1);
+  }
+
+  @Test
+  void createRecomment() {
+    Recomment recomment = mock(Recomment.class);
+
+    recommentService.createRecomment(
+        recomment.getContent(),
+        recomment.getCommentId(),
+        recomment.getUserId(),
+        recomment.getPostId());
+
+    verify(recommentRepository).save(any(Recomment.class));
   }
 }

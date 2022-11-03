@@ -23,4 +23,10 @@ public class RecommentService {
   public List<Recomment> findReComment(Long postId) {
     return recommentRepository.findAllByPostId(postId);
   }
+
+  public void createRecomment(String content, Long commentId, Long userId, Long postId) {
+    Recomment recomment = new Recomment(content, commentId, userId, postId);
+
+    recommentRepository.save(recomment);
+  }
 }

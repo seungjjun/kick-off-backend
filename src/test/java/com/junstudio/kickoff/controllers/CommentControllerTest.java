@@ -60,4 +60,18 @@ CommentControllerTest {
                 "}"))
         .andExpect(status().isCreated());
   }
+
+  @Test
+  void writeRecomment() throws Exception {
+    mockMvc.perform(MockMvcRequestBuilders.post("/recomment")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"content\":\"recomment\"," +
+                "\"commentId\":\"1\"," +
+                "\"userId\":\"3\"," +
+                "\"postId\":\"1\"" +
+                "}"))
+        .andExpect(status().isCreated());
+  }
 }

@@ -40,6 +40,13 @@ public class Recomment {
     this.commentDate = commentDate;
   }
 
+  public Recomment(String content, Long commentId, Long userId, Long postId) {
+    this.content = content;
+    this.commentId = commentId;
+    this.userId = userId;
+    this.postId = postId;
+  }
+
   public Long getId() {
     return id;
   }
