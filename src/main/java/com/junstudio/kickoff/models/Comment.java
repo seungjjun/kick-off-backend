@@ -12,60 +12,60 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Comment {
-  @Id
-  @GeneratedValue
-  @Column(name = "comment_id")
-  private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "comment_id")
+    private Long id;
 
-  private String content;
+    private String content;
 
-  private Long userId;
+    private Long userId;
 
-  private Long postId;
+    private Long postId;
 
-  @CreationTimestamp
-  private LocalDateTime commentDate;
+    @CreationTimestamp
+    private LocalDateTime commentDate;
 
-  public Comment() {
-  }
+    public Comment() {
+    }
 
-  public Comment(Long id, String content, Long userId, Long postId,
-                 LocalDateTime commentDate) {
-    this.id = id;
-    this.content = content;
-    this.userId = userId;
-    this.postId = postId;
-    this.commentDate = commentDate;
-  }
+    public Comment(Long id, String content, Long userId, Long postId,
+                   LocalDateTime commentDate) {
+        this.id = id;
+        this.content = content;
+        this.userId = userId;
+        this.postId = postId;
+        this.commentDate = commentDate;
+    }
 
-  public Comment(String content, Long userId, Long postId) {
-    this.content = content;
-    this.userId = userId;
-    this.postId = postId;
-  }
+    public Comment(String content, Long userId, Long postId) {
+        this.content = content;
+        this.userId = userId;
+        this.postId = postId;
+    }
 
-  public Long id() {
-    return id;
-  }
+    public Long id() {
+        return id;
+    }
 
-  public String content() {
-    return content;
-  }
+    public String content() {
+        return content;
+    }
 
-  public Long userId() {
-    return userId;
-  }
+    public Long userId() {
+        return userId;
+    }
 
-  public Long postId() {
-    return postId;
-  }
+    public Long postId() {
+        return postId;
+    }
 
-  public LocalDateTime commentDate() {
-    return commentDate;
-  }
+    public LocalDateTime commentDate() {
+        return commentDate;
+    }
 
-  public CommentDto toDto() {
-    return new CommentDto(id, content, userId, postId,
-        commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-  }
+    public CommentDto toDto() {
+        return new CommentDto(id, content, userId, postId,
+            commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
 }

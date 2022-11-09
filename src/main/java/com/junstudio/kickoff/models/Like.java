@@ -11,47 +11,46 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "LIKES")
 public class Like {
-  @Id
-  @GeneratedValue
-  @Column(name = "like_id")
-  private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "like_id")
+    private Long id;
 
-  private Long postId;
+    private Long postId;
 
+    private Long userId;
 
-  private Long userId;
+    private Like() {
+    }
 
-  public Like() {
-  }
+    public Like(Long id, Long postId, Long userId) {
+        this.id = id;
+        this.postId = postId;
+        this.userId = userId;
+    }
 
-  public Like(Long id, Long postId, Long userId) {
-    this.id = id;
-    this.postId = postId;
-    this.userId = userId;
-  }
+    public Like(Long postId, Long userId) {
+        this.postId = postId;
+        this.userId = userId;
+    }
 
-  public Like(Long postId, Long userId) {
-    this.postId = postId;
-    this.userId = userId;
-  }
+    public Long id() {
+        return id;
+    }
 
-  public Long id() {
-    return id;
-  }
+    public Long postId() {
+        return postId;
+    }
 
-  public Long postId() {
-    return postId;
-  }
+    public Long userId() {
+        return userId;
+    }
 
-  public Long userId() {
-    return userId;
-  }
+    public LikeDto toDto() {
+        return new LikeDto(id, postId, userId);
+    }
 
-  public LikeDto toDto() {
-    return new LikeDto(id, postId, userId);
-  }
-
-  public LikeDto toLikeDto() {
-    return new LikeDto(id, postId, userId);
-  }
+    public LikeDto toLikeDto() {
+        return new LikeDto(id, postId, userId);
+    }
 }

@@ -11,59 +11,59 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "PERSON")
 public class User {
-  @Id
-  @GeneratedValue
-  @Column(name = "user_id")
-  private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "user_id")
+    private Long id;
 
-  private String identification;
+    private String identification;
 
-  private String encodedPassword;
+    private String encodedPassword;
 
-  private String name;
+    private String name;
 
-  private String profileImage;
+    private String profileImage;
 
-  private Long gradeId;
+    private Long gradeId;
 
-  public User() {
-  }
+    private User() {
+    }
 
-  public User(Long id, String identification, String encodedPassword,
-              String name, String profileImage, Long gradeId) {
-    this.id = id;
-    this.identification = identification;
-    this.encodedPassword = encodedPassword;
-    this.name = name;
-    this.profileImage = profileImage;
-    this.gradeId = gradeId;
-  }
+    public User(Long id, String identification, String encodedPassword,
+                String name, String profileImage, Long gradeId) {
+        this.id = id;
+        this.identification = identification;
+        this.encodedPassword = encodedPassword;
+        this.name = name;
+        this.profileImage = profileImage;
+        this.gradeId = gradeId;
+    }
 
-  public Long id() {
-    return id;
-  }
+    public Long id() {
+        return id;
+    }
 
-  public String identification() {
-    return identification;
-  }
+    public String identification() {
+        return identification;
+    }
 
-  public String encodedPassword() {
-    return encodedPassword;
-  }
+    public String encodedPassword() {
+        return encodedPassword;
+    }
 
-  public String name() {
-    return name;
-  }
+    public String name() {
+        return name;
+    }
 
-  public String profileImage() {
-    return profileImage;
-  }
+    public String profileImage() {
+        return profileImage;
+    }
 
-  public Long gradeId() {
-    return gradeId;
-  }
+    public Long gradeId() {
+        return gradeId;
+    }
 
-  public UserDto toDto() {
-    return new UserDto(id, identification, name, profileImage);
-  }
+    public UserDto toDto() {
+        return new UserDto(id, identification, name, profileImage);
+    }
 }

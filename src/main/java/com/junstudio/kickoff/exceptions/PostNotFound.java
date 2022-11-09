@@ -1,7 +1,7 @@
 package com.junstudio.kickoff.exceptions;
 
-public class PostNotFound extends RuntimeException{
-  public PostNotFound() {
-    super("게시글을 찾을 수 없습니다.");
-  }
+public class PostNotFound extends RuntimeException {
+    public PostNotFound() {
+        super("게시글을 찾을 수 없습니다.");
+    }
 }

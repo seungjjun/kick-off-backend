@@ -1,24 +1,37 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.UserDto;
+import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.services.UserService;
+import com.junstudio.kickoff.services.GetUserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
 @RequestMapping("users")
 public class UserController {
-  private final UserService userService;
+    private final GetUserService getUserService;
 
-  public UserController(UserService userService) {
-    this.userService = userService;
-  }
+    public UserController(GetUserService getUserService) {
+        this.getUserService = getUserService;
+    }
 
-  @GetMapping("me")
-  public UserDto user() {
-    User user = userService.findUser(1L);
-    return user.toDto();
-  }
+    @GetMapping()
+    private UsersDto users() {
+        List<UserDto> users = getUserService.users()
+            .stream().map(User::toDto)
+            .collect(Collectors.toList());
+
+        return new UsersDto(users);
+    }
+
+    @GetMapping("me")
+    public UserDto user() {
+        User user = getUserService.findUser(1L);
+        return user.toDto();
+    }
 }

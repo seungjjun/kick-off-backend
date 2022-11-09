@@ -1,56 +1,59 @@
 package com.junstudio.kickoff.dtos;
 
+import com.junstudio.kickoff.models.PostInformation;
+import com.junstudio.kickoff.models.UserId;
+
 public class PostDto {
-  private final Long id;
+    private final Long id;
 
-  private final String title;
+    private final PostInformationDto postInformation;
 
-  private final Long categoryId;
+    private final Long categoryId;
 
-  private final Long userId;
+    private final UserId userId;
 
-  private final Long hit;
+    private final Long hit;
 
-  private final String createdAt;
+    private final String createdAt;
 
-  private final String imageUrl;
+    private final String imageUrl;
 
-  public PostDto(Long id, String title, Long categoryId,
-                 Long userId, Long hit, String createdAt, String imageUrl) {
-    this.id = id;
-    this.title = title;
-    this.categoryId = categoryId;
-    this.userId = userId;
-    this.hit = hit;
-    this.createdAt = createdAt;
-    this.imageUrl = imageUrl;
-  }
+    public PostDto(Long id, PostInformation postInformation, Long categoryId,
+                   UserId userId, Long hit, String createdAt, String imageUrl) {
+        this.id = id;
+        this.postInformation = postInformation.toDto();
+        this.categoryId = categoryId;
+        this.userId = userId;
+        this.hit = hit;
+        this.createdAt = createdAt;
+        this.imageUrl = imageUrl;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public PostInformationDto getPostInformation() {
+        return postInformation;
+    }
 
-  public Long getCategoryId() {
-    return categoryId;
-  }
+    public Long getCategoryId() {
+        return categoryId;
+    }
 
-  public Long getUserId() {
-    return userId;
-  }
+    public UserId getUserId() {
+        return userId;
+    }
 
-  public Long getHit() {
-    return hit;
-  }
+    public Long getHit() {
+        return hit;
+    }
 
-  public String getCreatedAt() {
-    return createdAt;
-  }
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-  public String getImageUrl() {
-    return imageUrl;
-  }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

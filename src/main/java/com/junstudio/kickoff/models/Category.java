@@ -9,30 +9,37 @@ import javax.persistence.Id;
 
 @Entity
 public class Category {
-  @Id
-  @GeneratedValue
-  @Column(name = "category_id")
-  private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "category_id")
+    private Long id;
 
-  private String name;
+    private String name;
 
-  public Category() {
-  }
+    private Long parentId;
 
-  public Category(Long id, String name) {
-    this.id = id;
-    this.name = name;
-  }
+    public Category() {
+    }
 
-  public Long id() {
-    return id;
-  }
+    public Category(Long id, String name, Long parentId) {
+        this.id = id;
+        this.name = name;
+        this.parentId = parentId;
+    }
 
-  public String name() {
-    return name;
-  }
+    public Long id() {
+        return id;
+    }
 
-  public CategoryDto toDto() {
-    return new CategoryDto(id, name);
-  }
+    public String name() {
+        return name;
+    }
+
+    public Long getParentId() {
+        return parentId;
+    }
+
+    public CategoryDto toDto() {
+        return new CategoryDto(id, name, parentId);
+    }
 }

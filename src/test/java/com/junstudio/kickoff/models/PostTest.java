@@ -4,33 +4,31 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class PostTest {
-  Post post;
+    Post post;
 
-  @BeforeEach
-  void setup() {
-    User user = new User(1L, "jel1y", "encodedPassword",
-        "Jun", "profileImage", 1L);
+    @BeforeEach
+    void setup() {
+        User user = new User(1L, "jel1y", "encodedPassword",
+            "Jun", "profileImage", 1L);
 
-    Category category = new Category(1L, "EPL");
+        post = new Post(1L, new UserId(1L), 1L,
+            new PostInformation("손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕"),
+            3L, "imageUrl", LocalDateTime.now());
+    }
 
-    post = new Post(1L, 1L, 1L, "손흥민 득점왕 수상",
-        "손흥민 아시아인 최초 EPL 득점왕", 3L, "imageUrl", LocalDateTime.now());
-  }
+    @Test
+    void creation() {
+        assertThat(post.postInformation().getTitle()).isEqualTo("손흥민 득점왕 수상");
+    }
 
-  @Test
-  void creation() {
-    assertThat(post.title()).isEqualTo("손흥민 득점왕 수상");
-  }
+    @Test
+    void updateHit() {
+        post.updateHit(post.hit());
 
-  @Test
-  void updateHit() {
-    post.updateHit(post.hit());
-
-    assertThat(post.hit()).isEqualTo(4L);
-  }
+        assertThat(post.hit()).isEqualTo(4L);
+    }
 }
