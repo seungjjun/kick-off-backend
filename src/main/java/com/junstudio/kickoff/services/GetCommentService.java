@@ -10,11 +10,12 @@ import java.util.List;
 
 @Service
 @Transactional
-public class CommentService {
+public class GetCommentService {
   private final CommentRepository commentRepository;
   private final PostRepository postRepository;
 
-  public CommentService(CommentRepository commentRepository, PostRepository postRepository) {
+  public GetCommentService(CommentRepository commentRepository,
+                           PostRepository postRepository) {
     this.commentRepository = commentRepository;
     this.postRepository = postRepository;
   }
@@ -25,11 +26,5 @@ public class CommentService {
 
   public List<Comment> findComment(Long postId) {
     return commentRepository.findAllByPostId(postId);
-  }
-
-  public void createComment(String content, Long userId, Long postId) {
-    Comment comment = new Comment(content, userId, postId);
-
-    commentRepository.save(comment);
   }
 }

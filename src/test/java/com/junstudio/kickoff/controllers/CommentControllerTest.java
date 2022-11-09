@@ -1,10 +1,8 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.models.Comment;
-import com.junstudio.kickoff.models.Post;
-import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.services.CommentService;
-import com.junstudio.kickoff.services.RecommentService;
+import com.junstudio.kickoff.services.CreateCommentService;
+import com.junstudio.kickoff.services.GetCommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -26,52 +24,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class
 CommentControllerTest {
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockBean
-  private CommentService commentService;
+    @MockBean
+    private GetCommentService getCommentService;
 
-  @MockBean
-  private RecommentService recommentService;
+    @MockBean
+    private CreateCommentService createCommentService;
 
-  @Test
-  void comment() throws Exception {
-    Comment comment = new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
+    @Test
+    void comment() throws Exception {
+        Comment comment = new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
 
-    given(commentService.findComment(1L)).willReturn(List.of(comment));
+        given(getCommentService.findComment(1L)).willReturn(List.of(comment));
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/comments"))
-        .andExpect(status().isOk())
-        .andExpect(content().string(
-            containsString("\"content\":\"reply\"")
-        ));
-  }
+        mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/comments")
+                .param("postId", "1"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("\"content\":\"reply\"")
+            ));
+    }
 
-  @Test
-  void writeComment() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.post("/comment")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{" +
-                "\"content\":\"comment\"," +
-                "\"userId\":\"1\"," +
-                "\"postId\":\"1\"" +
-                "}"))
-        .andExpect(status().isCreated());
-  }
-
-  @Test
-  void writeRecomment() throws Exception {
-    mockMvc.perform(MockMvcRequestBuilders.post("/recomment")
-            .accept(MediaType.APPLICATION_JSON)
-            .contentType(MediaType.APPLICATION_JSON)
-            .content("{" +
-                "\"content\":\"recomment\"," +
-                "\"commentId\":\"1\"," +
-                "\"userId\":\"3\"," +
-                "\"postId\":\"1\"" +
-                "}"))
-        .andExpect(status().isCreated());
-  }
+    @Test
+    void writeComment() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/comment")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"content\":\"comment\"," +
+                    "\"userId\":\"1\"," +
+                    "\"postId\":\"1\"" +
+                    "}"))
+            .andExpect(status().isCreated());
+    }
 }

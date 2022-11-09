@@ -1,8 +1,8 @@
 package com.junstudio.kickoff.controllers;
 
-import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.services.UserService;
+import com.junstudio.kickoff.services.GetUserService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,23 +21,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 @ActiveProfiles("test")
 class UserControllerTest {
-  @Autowired
-  private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-  @MockBean
-  private UserService userService;
+    @MockBean
+    private GetUserService getUserService;
 
-  @Test
-  void user() throws Exception {
-    User user = new User(1L, "jel1y", "encodedPassword",
-        "Jun", "profileImage", 1L);
+    User user;
 
-    given(userService.findUser(1L)).willReturn(user);
+    @BeforeEach
+    void setup() {
+        user = new User(1L, "jel1y", "encodedPassword",
+            "Jun", "profileImage", 1L);
+    }
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/users/me"))
-        .andExpect(status().isOk())
-        .andExpect(content().string(
-            containsString("jel1y")
-        ));
-  }
+    @Test
+    void user() throws Exception {
+        given(getUserService.users()).willReturn(List.of(user));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("name\":\"Jun")
+            ));
+    }
+
+    @Test
+    void findUser() throws Exception {
+        given(getUserService.findUser(1L)).willReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/users/me"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("jel1y")
+            ));
+    }
 }

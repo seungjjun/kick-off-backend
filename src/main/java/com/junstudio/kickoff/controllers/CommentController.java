@@ -2,11 +2,9 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CommentsDto;
-import com.junstudio.kickoff.dtos.ReCommentDto;
 import com.junstudio.kickoff.models.Comment;
-import com.junstudio.kickoff.models.Recomment;
-import com.junstudio.kickoff.services.CommentService;
-import com.junstudio.kickoff.services.RecommentService;
+import com.junstudio.kickoff.services.CreateCommentService;
+import com.junstudio.kickoff.services.GetCommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,53 +18,43 @@ import java.util.stream.Collectors;
 
 @RestController
 public class CommentController {
-  private final CommentService commentService;
-  private final RecommentService recommentService;
+    private final GetCommentService getCommentService;
+    private final CreateCommentService createCommentService;
 
-  public CommentController(CommentService commentService, RecommentService recommentService) {
-    this.commentService = commentService;
-    this.recommentService = recommentService;
-  }
+    public CommentController(GetCommentService getCommentService,
+                             CreateCommentService createCommentService) {
+        this.getCommentService = getCommentService;
+        this.createCommentService = createCommentService;
+    }
 
-  @GetMapping("/posts/{postId}/comments")
-  private CommentsDto comments(
-      @PathVariable Long postId
-  ) {
-    List<CommentDto> comments = commentService.findComment(postId)
-        .stream().map(Comment::toDto)
-        .collect(Collectors.toList());
+    @GetMapping("/comments")
+    private CommentsDto comments() {
+        List<CommentDto> comments = getCommentService.comments()
+            .stream().map(Comment::toDto)
+            .collect(Collectors.toList());
 
-    List<ReCommentDto> recomments = recommentService.findReComment(postId)
-        .stream().map(Recomment::toDto)
-        .collect(Collectors.toList());
+        return new CommentsDto(comments);
+    }
 
-    return new CommentsDto(comments, recomments);
-  }
+    @GetMapping("/posts/{postId}/comments")
+    private CommentsDto comments(
+        @PathVariable Long postId
+    ) {
+        List<CommentDto> comments = getCommentService.findComment(postId)
+            .stream().map(Comment::toDto)
+            .collect(Collectors.toList());
+        return new CommentsDto(comments);
+    }
 
-  @PostMapping("/comment")
-  @ResponseStatus(HttpStatus.CREATED)
-  private String comment(
-      @RequestBody CommentDto commentDto
-  ) {
-    commentService.createComment(
-        commentDto.getContent(),
-        commentDto.getUserId(),
-        commentDto.getPostId());
-    return "ok";
-  }
-
-  @PostMapping("/recomment")
-  @ResponseStatus(HttpStatus.CREATED)
-  private String recomment(
-      @RequestBody ReCommentDto reCommentDto
-  ) {
-    recommentService.createRecomment(
-        reCommentDto.getContent(),
-        reCommentDto.getCommentId(),
-        reCommentDto.getUserId(),
-        reCommentDto.getPostId()
-    );
-
-    return "ok";
-  }
+    @PostMapping("/comment")
+    @ResponseStatus(HttpStatus.CREATED)
+    private String comment(
+        @RequestBody CommentDto commentDto
+    ) {
+        createCommentService.createComment(
+            commentDto.getContent(),
+            commentDto.getUserId(),
+            commentDto.getPostId());
+        return "ok";
+    }
 }

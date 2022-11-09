@@ -7,26 +7,26 @@ import javax.persistence.Id;
 
 @Entity
 public class Grade {
-  @Id
-  @GeneratedValue
-  @Column(name = "grade_id")
-  private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "grade_id")
+    private Long id;
 
-  private String name;
+    private String name;
 
-  public Grade() {
-  }
+    public Grade() {
+    }
 
-  public Grade(Long id, String name) {
-    this.id = id;
-    this.name = name;
-  }
+    public Grade(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getName() {
-    return name;
-  }
+    public String getName() {
+        return name;
+    }
 }

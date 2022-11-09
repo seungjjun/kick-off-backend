@@ -1,78 +1,52 @@
 package com.junstudio.kickoff.dtos;
 
 import com.junstudio.kickoff.models.Category;
-import com.junstudio.kickoff.models.Like;
-import com.junstudio.kickoff.models.User;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import com.junstudio.kickoff.models.PostInformation;
 
 public class PostDetailDto {
-  private final Long id;
+    private final Long id;
 
-  private final String title;
+    private final PostInformation postInformation;
 
-  private final String content;
+    private final CategoryDto category;
 
-  private final CategoryDto category;
+    private final Long hit;
 
-  private final UserDto user;
+    private final String createdAt;
 
-  private final Long hit;
+    private final String imageUrl;
 
-  private final List<LikeDto> likes;
+    public PostDetailDto(Long id, PostInformation postInformation, Long hit,
+                         Category category, String createdAt, String imageUrl) {
+        this.id = id;
+        this.postInformation = postInformation;
+        this.category = category.toDto();
+        this.hit = hit;
+        this.createdAt = createdAt;
+        this.imageUrl = imageUrl;
+    }
 
-  private final String createdAt;
+    public Long getId() {
+        return id;
+    }
 
-  private final String imageUrl;
+    public PostInformation getPostInformation() {
+        return postInformation;
+    }
 
-  public PostDetailDto(Long id, String title, String content, Long hit,
-                       List<Like> likes, User user, Category category,
-                       String createdAt, String imageUrl) {
-    this.id = id;
-    this.title = title;
-    this.content = content;
-    this.category = category.toDto();
-    this.user = user.toDto();
-    this.hit = hit;
-    this.likes = likes.stream().map(Like::toLikeDto).collect(Collectors.toList());
-    this.createdAt = createdAt;
-    this.imageUrl = imageUrl;
-  }
+    public CategoryDto getCategory() {
+        return category;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getHit() {
+        return hit;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getCreatedAt() {
+        return createdAt;
+    }
 
-  public String getContent() {
-    return content;
-  }
-
-  public CategoryDto getCategory() {
-    return category;
-  }
-
-  public UserDto getUser() {
-    return user;
-  }
-
-  public Long getHit() {
-    return hit;
-  }
-
-  public List<LikeDto> getLikes() {
-    return likes;
-  }
-
-  public String getCreatedAt() {
-    return createdAt;
-  }
-
-  public String getImageUrl() {
-    return imageUrl;
-  }
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }

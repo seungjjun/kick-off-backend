@@ -12,67 +12,68 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Recomment {
-  @Id @GeneratedValue
-  @Column(name = "recomment_id")
-  private Long id;
+    @Id
+    @GeneratedValue
+    @Column(name = "recomment_id")
+    private Long id;
 
-  private Long commentId;
+    private Long commentId;
 
-  private String content;
+    private String content;
 
-  private Long userId;
+    private Long userId;
 
-  private Long postId;
+    private Long postId;
 
-  @CreationTimestamp
-  private LocalDateTime commentDate;
+    @CreationTimestamp
+    private LocalDateTime commentDate;
 
-  public Recomment() {
-  }
+    public Recomment() {
+    }
 
-  public Recomment(Long id, Long commentId, String content,
-                   Long userId, Long postId, LocalDateTime commentDate) {
-    this.id = id;
-    this.commentId = commentId;
-    this.content = content;
-    this.userId = userId;
-    this.postId = postId;
-    this.commentDate = commentDate;
-  }
+    public Recomment(Long id, Long commentId, String content,
+                     Long userId, Long postId, LocalDateTime commentDate) {
+        this.id = id;
+        this.commentId = commentId;
+        this.content = content;
+        this.userId = userId;
+        this.postId = postId;
+        this.commentDate = commentDate;
+    }
 
-  public Recomment(String content, Long commentId, Long userId, Long postId) {
-    this.content = content;
-    this.commentId = commentId;
-    this.userId = userId;
-    this.postId = postId;
-  }
+    public Recomment(String content, Long commentId, Long userId, Long postId) {
+        this.content = content;
+        this.commentId = commentId;
+        this.userId = userId;
+        this.postId = postId;
+    }
 
-  public Long getId() {
-    return id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public Long getCommentId() {
-    return commentId;
-  }
+    public Long getCommentId() {
+        return commentId;
+    }
 
-  public String getContent() {
-    return content;
-  }
+    public String getContent() {
+        return content;
+    }
 
-  public Long getUserId() {
-    return userId;
-  }
+    public Long getUserId() {
+        return userId;
+    }
 
-  public Long getPostId() {
-    return postId;
-  }
+    public Long getPostId() {
+        return postId;
+    }
 
-  public LocalDateTime getCommentDate() {
-    return commentDate;
-  }
+    public LocalDateTime getCommentDate() {
+        return commentDate;
+    }
 
-  public ReCommentDto toDto() {
-    return new ReCommentDto(id, content, commentId, postId, userId,
-        commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-  }
+    public ReCommentDto toDto() {
+        return new ReCommentDto(id, content, commentId, postId, userId,
+            commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
 }
