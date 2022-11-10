@@ -33,9 +33,6 @@ class GetPostServiceTest {
 
     GetPostService getPostService;
 
-    @SpyBean
-    private Pageable pageable;
-
     @BeforeEach
     void setup() {
         postRepository = mock(PostRepository.class);
@@ -47,8 +44,6 @@ class GetPostServiceTest {
     @Test
     void posts() {
         Post post = Post.fake();
-
-        pageable = PageRequest.of(1, 10);
 
         List<Post> posts = new ArrayList<>();
         posts.add(post);

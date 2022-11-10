@@ -4,13 +4,13 @@ import java.util.List;
 
 public class PostsDto {
     private final List<PostDto> posts;
-    private PageDto page;
+    private PostPageDto page;
 
     public PostsDto(List<PostDto> posts) {
         this.posts = posts;
     }
 
-    public PostsDto(List<PostDto> posts, PageDto page) {
+    public PostsDto(List<PostDto> posts, PostPageDto page) {
         this.posts = posts;
         this.page = page;
     }
@@ -19,7 +19,7 @@ public class PostsDto {
         return posts;
     }
 
-    public PageDto getPage() {
+    public PostPageDto getPage() {
         return page;
     }
 }
