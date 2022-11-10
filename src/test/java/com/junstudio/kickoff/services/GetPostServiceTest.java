@@ -10,8 +10,14 @@ import com.junstudio.kickoff.repositories.CategoryRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,6 +33,9 @@ class GetPostServiceTest {
 
     GetPostService getPostService;
 
+    @SpyBean
+    private Pageable pageable;
+
     @BeforeEach
     void setup() {
         postRepository = mock(PostRepository.class);
@@ -39,11 +48,18 @@ class GetPostServiceTest {
     void posts() {
         Post post = Post.fake();
 
-        given(postRepository.findAll()).willReturn(List.of(post));
+        pageable = PageRequest.of(1, 10);
 
-        PostsDto posts = getPostService.posts();
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
 
-        assertThat(posts.getPosts()).hasSize(1);
+        Page<Post> page = new PageImpl<>(posts);
+
+        given(postRepository.findAll(Pageable.ofSize(1))).willReturn(page);
+
+        PostsDto postsDto = getPostService.posts(Pageable.ofSize(1));
+
+        assertThat(postsDto.getPosts()).hasSize(1);
     }
 
     @Test
@@ -66,10 +82,15 @@ class GetPostServiceTest {
     void findCategoryPosts() {
         Post post = Post.fake();
 
-        given(postRepository.findAllByCategoryId(any())).willReturn(List.of(post));
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
 
-        PostsDto posts = getPostService.findCategoryPosts(post.categoryId());
+        Page<Post> page = new PageImpl<>(posts);
 
-        assertThat(posts.getPosts()).hasSize(1);
+        given(postRepository.findAllByCategoryId(any(), any())).willReturn(page);
+
+        PostsDto postsDto = getPostService.findCategoryPosts(any(), any());
+
+        assertThat(postsDto.getPosts()).hasSize(1);
     }
 }

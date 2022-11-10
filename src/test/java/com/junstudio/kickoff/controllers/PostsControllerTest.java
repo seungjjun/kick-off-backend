@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -56,7 +57,7 @@ class PostsControllerTest {
 
     @Test
     void posts() throws Exception {
-        given(getPostService.posts()).willReturn(new PostsDto(
+        given(getPostService.posts(any(Pageable.class))).willReturn(new PostsDto(
             List.of(new PostDto(post.id(), post.postInformation(), post.categoryId(),
                 post.userId(), post.hit(), post.createdAt().toString(), post.imageUrl()))));
 
@@ -69,8 +70,16 @@ class PostsControllerTest {
 
     @Test
     void categoryPosts() throws Exception {
+        given(getPostService.findCategoryPosts(any(Long.class), any(Pageable.class)))
+            .willReturn(new PostsDto(
+                List.of(new PostDto(post.id(), post.postInformation(), post.categoryId(),
+                    post.userId(), post.hit(), post.createdAt().toString(), post.imageUrl()))));
+
         mockMvc.perform(MockMvcRequestBuilders.get("/category/1"))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("content\":\"Son is the first Asian to score EPL")
+            ));
     }
 
     @Test
