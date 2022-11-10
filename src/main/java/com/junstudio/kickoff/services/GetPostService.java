@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.dtos.PageDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostsDto;
@@ -9,6 +10,7 @@ import com.junstudio.kickoff.models.Category;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.repositories.CategoryRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -21,18 +23,20 @@ public class GetPostService {
     private final PostRepository postRepository;
     private final CategoryRepository categoryRepository;
 
-    public GetPostService(PostRepository postRepository, CategoryRepository categoryRepository) {
+    public GetPostService(PostRepository postRepository,
+                          CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.categoryRepository = categoryRepository;
     }
 
-    public PostsDto posts() {
-//    Page<PostDto> post = postRepository.findAll(pageable);
-        List<PostDto> posts = postRepository.findAll()
-            .stream().map(Post::toDto)
-            .collect(Collectors.toList());
+    public PostsDto posts(Pageable pageable) {
+    List<PostDto> posts = postRepository.findAll(pageable)
+        .stream().map(Post::toDto)
+        .collect(Collectors.toList());
 
-        return new PostsDto(posts);
+        return new PostsDto(posts,
+            new PageDto(postRepository.findAll(pageable).getNumber() + 1,
+                postRepository.findAll(pageable).getTotalElements()));
     }
 
     public PostDetailDto findPost(Long postId) {
@@ -46,11 +50,16 @@ public class GetPostService {
         return post.toDetailDto(category);
     }
 
-    public PostsDto findCategoryPosts(Long categoryId) {
-        List<PostDto> categoryPosts = postRepository.findAllByCategoryId(categoryId)
+    public PostsDto findCategoryPosts(Long categoryId, Pageable pageable) {
+        List<PostDto> categoryPosts =
+            postRepository.findAllByCategoryId(categoryId, pageable)
             .stream().map(Post::toDto)
             .collect(Collectors.toList());
-        return new PostsDto(categoryPosts);
+
+        System.out.println();
+        return new PostsDto(categoryPosts,
+            new PageDto(postRepository.findAllByCategoryId(categoryId, pageable).getNumber() + 1,
+                postRepository.findAllByCategoryId(categoryId, pageable).getTotalElements()));
     }
 }
 

@@ -8,6 +8,9 @@ import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.GetPostService;
 import com.junstudio.kickoff.utils.S3Uploader;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,16 +39,17 @@ public class PostsController {
 
     @GetMapping("/posts")
     public PostsDto posts(
-//      @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
+      @PageableDefault(sort = "id", direction = Sort.Direction.ASC, value = 2) Pageable pageable
     ) {
-        return getPostService.posts();
+        return getPostService.posts(pageable);
     }
 
     @GetMapping("/category/{categoryId}")
     public PostsDto categoryPosts(
-        @PathVariable Long categoryId
+        @PathVariable Long categoryId,
+        @PageableDefault(sort = "id", direction = Sort.Direction.ASC, value = 2) Pageable pageable
     ) {
-        return getPostService.findCategoryPosts(categoryId);
+        return getPostService.findCategoryPosts(categoryId, pageable);
     }
 
     @GetMapping("/posts/{id}")
