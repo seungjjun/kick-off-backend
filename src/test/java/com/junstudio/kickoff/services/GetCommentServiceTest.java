@@ -1,13 +1,21 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.dtos.CommentsDto;
 import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -24,6 +32,9 @@ class GetCommentServiceTest {
 
     @MockBean
     private GetCommentService getCommentService;
+
+    @SpyBean
+    private Pageable pageable;
 
     @BeforeEach
     void setup() {
@@ -48,11 +59,18 @@ class GetCommentServiceTest {
     void findComment() {
         Comment comment = new Comment(1L, "댓긍릐 댓글", 1L, 1L, LocalDateTime.now());
 
-        given(commentRepository.findAllByPostId(any(Long.class)))
-            .willReturn(List.of(comment));
+        pageable = PageRequest.of(1, 10);
 
-        List<Comment> comments = getCommentService.findComment(1L);
+        List<Comment> comments = new ArrayList<>();
+        comments.add(comment);
 
-        assertThat(comments).hasSize(1);
+        Page<Comment> page = new PageImpl<>(comments);
+
+        given(commentRepository.findAllByPostId(comment.postId(), pageable))
+            .willReturn(page);
+
+        CommentsDto commentsDto = getCommentService.findComment(comment.postId(), pageable);
+
+        assertThat(commentsDto.getComments()).hasSize(1);
     }
 }

@@ -5,6 +5,9 @@ import com.junstudio.kickoff.dtos.CommentsDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.services.CreateCommentService;
 import com.junstudio.kickoff.services.GetCommentService;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,12 +41,10 @@ public class CommentController {
 
     @GetMapping("/posts/{postId}/comments")
     private CommentsDto comments(
-        @PathVariable Long postId
+        @PathVariable Long postId,
+        @PageableDefault(sort = "id", direction = Sort.Direction.ASC, value = 5) Pageable pageable
     ) {
-        List<CommentDto> comments = getCommentService.findComment(postId)
-            .stream().map(Comment::toDto)
-            .collect(Collectors.toList());
-        return new CommentsDto(comments);
+        return getCommentService.findComment(postId, pageable);
     }
 
     @PostMapping("/comment")

@@ -1,6 +1,6 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.dtos.PageDto;
+import com.junstudio.kickoff.dtos.PostPageDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostsDto;
@@ -35,7 +35,7 @@ public class GetPostService {
         .collect(Collectors.toList());
 
         return new PostsDto(posts,
-            new PageDto(postRepository.findAll(pageable).getNumber() + 1,
+            new PostPageDto(postRepository.findAll(pageable).getNumber() + 1,
                 postRepository.findAll(pageable).getTotalElements()));
     }
 
@@ -58,7 +58,7 @@ public class GetPostService {
 
         System.out.println();
         return new PostsDto(categoryPosts,
-            new PageDto(postRepository.findAllByCategoryId(categoryId, pageable).getNumber() + 1,
+            new PostPageDto(postRepository.findAllByCategoryId(categoryId, pageable).getNumber() + 1,
                 postRepository.findAllByCategoryId(categoryId, pageable).getTotalElements()));
     }
 }
