@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Category;
@@ -7,13 +8,15 @@ import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.CategoryRepository;
+import com.junstudio.kickoff.repositories.CommentRepository;
+import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
+import com.junstudio.kickoff.repositories.RecommentRepository;
+import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDateTime;
@@ -30,6 +33,10 @@ import static org.mockito.Mockito.verify;
 class GetPostServiceTest {
     PostRepository postRepository;
     CategoryRepository categoryRepository;
+    CommentRepository commentRepository;
+    RecommentRepository recommentRepository;
+    LikeRepository likeRepository;
+    UserRepository userRepository;
 
     GetPostService getPostService;
 
@@ -37,8 +44,17 @@ class GetPostServiceTest {
     void setup() {
         postRepository = mock(PostRepository.class);
         categoryRepository = mock(CategoryRepository.class);
+        commentRepository = mock(CommentRepository.class);
+        recommentRepository = mock(RecommentRepository.class);
+        likeRepository = mock(LikeRepository.class);
+        userRepository = mock(UserRepository.class);
 
-        getPostService = new GetPostService(postRepository, categoryRepository);
+        getPostService = new GetPostService(postRepository,
+            categoryRepository,
+            commentRepository,
+            recommentRepository,
+            likeRepository,
+            userRepository);
     }
 
     @Test
@@ -52,9 +68,9 @@ class GetPostServiceTest {
 
         given(postRepository.findAll(Pageable.ofSize(1))).willReturn(page);
 
-        PostsDto postsDto = getPostService.posts(Pageable.ofSize(1));
+        CreatePostsDto createPostsDto = getPostService.posts(Pageable.ofSize(1));
 
-        assertThat(postsDto.getPosts()).hasSize(1);
+        assertThat(createPostsDto).isNotNull();
     }
 
     @Test

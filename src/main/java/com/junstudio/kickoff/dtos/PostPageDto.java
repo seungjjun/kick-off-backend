@@ -1,13 +1,13 @@
 package com.junstudio.kickoff.dtos;
 
 public class PostPageDto {
-    private int startPage;
+    private final int startPage;
 
     private int lastPage;
 
-    private int currentPageNumber;
+    private final int currentPageNumber;
 
-    private int currentLastPage;
+    private final int currentLastPage;
 
     private final Long totalPageNumber;
 
@@ -24,7 +24,7 @@ public class PostPageDto {
     }
 
     public int getLastPage() {
-        if(this.lastPage > currentLastPage) {
+        if (this.lastPage > currentLastPage) {
             this.lastPage = currentLastPage;
         }
         return lastPage;

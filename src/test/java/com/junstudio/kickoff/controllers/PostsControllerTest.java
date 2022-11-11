@@ -1,11 +1,20 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.CategoryDto;
+import com.junstudio.kickoff.dtos.CommentDto;
+import com.junstudio.kickoff.dtos.CreatePostsDto;
+import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
+import com.junstudio.kickoff.dtos.PostPageDto;
 import com.junstudio.kickoff.dtos.PostsDto;
+import com.junstudio.kickoff.dtos.ReCommentDto;
 import com.junstudio.kickoff.models.Category;
+import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
+import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.GetPostService;
 import com.junstudio.kickoff.utils.S3Uploader;
@@ -46,6 +55,12 @@ class PostsControllerTest {
 
     private Post post;
 
+    private Comment comment;
+
+    private Recomment recomment;
+
+    private Like like;
+
     private Category category;
 
     @BeforeEach
@@ -53,13 +68,32 @@ class PostsControllerTest {
         category = new Category(1L, "EPL", null);
 
         post = Post.fake();
+        comment = Comment.fake();
+        recomment = Recomment.fake();
+        like = Like.fake();
     }
 
     @Test
     void posts() throws Exception {
-        given(getPostService.posts(any(Pageable.class))).willReturn(new PostsDto(
-            List.of(new PostDto(post.id(), post.postInformation(), post.categoryId(),
-                post.userId(), post.hit(), post.createdAt().toString(), post.imageUrl()))));
+        PostDto postDto = new PostDto(post.id(), post.postInformation(),
+            post.categoryId(), post.userId(), post.hit(),
+            post.createdAt().toString(), post.imageUrl());
+
+        CommentDto commentDto = new CommentDto(comment.id(), comment.content(),
+            comment.userId(), comment.postId(), comment.commentDate().toString());
+
+        ReCommentDto recommentDto =
+            new ReCommentDto(recomment.getCommentId(), recomment.getContent(),
+                recomment.getCommentId(), recomment.getPostId(),
+                recomment.getPostId(), recomment.getCommentDate().toString());
+
+        LikeDto likeDto = new LikeDto(like.id(), like.postId(), like.userId());
+
+        CategoryDto categoryDto = new CategoryDto(category.id(), category.name(), category.getParentId());
+
+        given(getPostService.posts(any(Pageable.class))).willReturn(new CreatePostsDto(
+            new PostsDto(List.of(postDto), List.of(commentDto), List.of(recommentDto),
+                List.of(likeDto), List.of(categoryDto), any()), new PostPageDto(1, 1L)));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
             .andExpect(status().isOk())
@@ -70,10 +104,11 @@ class PostsControllerTest {
 
     @Test
     void categoryPosts() throws Exception {
-        given(getPostService.findCategoryPosts(any(Long.class), any(Pageable.class)))
-            .willReturn(new PostsDto(
-                List.of(new PostDto(post.id(), post.postInformation(), post.categoryId(),
-                    post.userId(), post.hit(), post.createdAt().toString(), post.imageUrl()))));
+        PostDto postDto = new PostDto(post.id(), post.postInformation(),
+            post.categoryId(), post.userId(), post.hit(), post.createdAt().toString(), post.imageUrl());
+
+        given(getPostService.findCategoryPosts(any(), any()))
+            .willReturn(new PostsDto(List.of(postDto), new PostPageDto(1, 1L)));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/category/1"))
             .andExpect(status().isOk())

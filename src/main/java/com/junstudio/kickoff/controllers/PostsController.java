@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostWriteDto;
 import com.junstudio.kickoff.dtos.PostWrittenDto;
@@ -38,8 +39,8 @@ public class PostsController {
     }
 
     @GetMapping("/posts")
-    public PostsDto posts(
-      @PageableDefault(sort = "id", direction = Sort.Direction.ASC, value = 2) Pageable pageable
+    public CreatePostsDto posts(
+      @PageableDefault(sort = "id", size = 2) Pageable pageable
     ) {
         return getPostService.posts(pageable);
     }
