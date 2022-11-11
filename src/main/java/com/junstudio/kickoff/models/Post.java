@@ -113,4 +113,10 @@ public class Post {
                 "Son is the first Asian to score EPL"),
             3L, "imageUrl", LocalDateTime.now());
     }
+
+    public void patch(String title, String content, Long categoryId, String imageUrl) {
+        this.postInformation = new PostInformation(title, content);
+        this.categoryId = categoryId;
+        this.imageUrl = imageUrl;
+    }
 }
