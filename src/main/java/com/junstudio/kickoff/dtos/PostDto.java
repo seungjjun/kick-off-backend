@@ -56,4 +56,9 @@ public class PostDto {
     public String getImageUrl() {
         return imageUrl;
     }
+
+    public PostDto toDto() {
+        return new PostDto(id, new PostInformation(postInformation.getTitle(), postInformation.getContent()),
+            categoryId, userId, hit, createdAt, imageUrl);
+    }
 }

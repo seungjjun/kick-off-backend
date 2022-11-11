@@ -68,4 +68,8 @@ public class Comment {
         return new CommentDto(id, content, userId, postId,
             commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
+
+    public static Comment fake() {
+        return new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
+    }
 }

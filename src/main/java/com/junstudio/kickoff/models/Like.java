@@ -53,4 +53,8 @@ public class Like {
     public LikeDto toLikeDto() {
         return new LikeDto(id, postId, userId);
     }
+
+    public static Like fake() {
+        return new Like(1L, 1L, 1L);
+    }
 }

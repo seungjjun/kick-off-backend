@@ -48,6 +48,7 @@ public class Recomment {
         this.postId = postId;
     }
 
+
     public Long getId() {
         return id;
     }
@@ -75,5 +76,9 @@ public class Recomment {
     public ReCommentDto toDto() {
         return new ReCommentDto(id, content, commentId, postId, userId,
             commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+    }
+
+    public static Recomment fake() {
+        return new Recomment(1L, 1L, "대댓글", 1L, 1L, LocalDateTime.now());
     }
 }
