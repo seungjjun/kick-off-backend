@@ -7,20 +7,17 @@ public class PostWriteDto {
 
     private final String content;
 
-    private final String category;
-
     private final String imageUrl;
 
     private final Long userId;
 
     private final Long categoryId;
 
-    public PostWriteDto(Long id, String title, String content, String category,
+    public PostWriteDto(Long id, String title, String content,
                         String imageUrl, Long userId, Long categoryId) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.category = category;
         this.imageUrl = imageUrl;
         this.userId = userId;
         this.categoryId = categoryId;
@@ -36,10 +33,6 @@ public class PostWriteDto {
 
     public String getContent() {
         return content;
-    }
-
-    public String getCategory() {
-        return category;
     }
 
     public String getImageUrl() {

@@ -7,6 +7,7 @@ import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostPageDto;
+import com.junstudio.kickoff.dtos.PostWriteDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.dtos.ReCommentDto;
 import com.junstudio.kickoff.models.Category;
@@ -15,8 +16,10 @@ import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.Recomment;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.GetPostService;
+import com.junstudio.kickoff.services.PatchPostService;
 import com.junstudio.kickoff.utils.S3Uploader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,10 +32,12 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -49,6 +54,9 @@ class PostsControllerTest {
 
     @MockBean
     private CreatePostService createPostService;
+
+    @MockBean
+    private PatchPostService patchPostService;
 
     @MockBean
     private S3Uploader s3Uploader;
@@ -150,5 +158,19 @@ class PostsControllerTest {
         verify(createPostService)
             .write(any(String.class), any(String.class),
                 any(String.class), any(Long.class), any(Long.class));
+    }
+
+    @Test
+    void patch() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/posts/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"title\":\"patch post\"," +
+                    "\"content\":\"modify content\"," +
+                    "\"imageUrl\":\"imageUrl\"," +
+                    "\"categoryId\":\"1\"" +
+                    "}"))
+            .andExpect(status().isNoContent());
     }
 }

@@ -8,12 +8,15 @@ import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.GetPostService;
+import com.junstudio.kickoff.services.PatchPostService;
 import com.junstudio.kickoff.utils.S3Uploader;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,17 +28,21 @@ import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
+@CrossOrigin
 public class PostsController {
-    private final GetPostService getPostService;
     private final S3Uploader s3Uploader;
+    private final GetPostService getPostService;
     private final CreatePostService createPostService;
+    private final PatchPostService patchPostService;
 
-    public PostsController(GetPostService getPostService,
-                           S3Uploader s3Uploader,
-                           CreatePostService createPostService) {
-        this.getPostService = getPostService;
+    public PostsController(S3Uploader s3Uploader,
+                           GetPostService getPostService,
+                           CreatePostService createPostService,
+                           PatchPostService patchPostService) {
         this.s3Uploader = s3Uploader;
+        this.getPostService = getPostService;
         this.createPostService = createPostService;
+        this.patchPostService = patchPostService;
     }
 
     @GetMapping("/posts")
@@ -73,6 +80,15 @@ public class PostsController {
             postWriteDto.getCategoryId());
 
         return post.postWrittenDto();
+    }
+
+    @PatchMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void patch(
+        @Valid @RequestBody PostWriteDto postWriteDto,
+        @PathVariable Long postId
+    ) {
+        patchPostService.patch(postWriteDto, postId);
     }
 
     @PostMapping("/upload")
