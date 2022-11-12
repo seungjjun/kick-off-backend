@@ -7,6 +7,7 @@ import com.junstudio.kickoff.dtos.PostWrittenDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.CreatePostService;
+import com.junstudio.kickoff.services.DeletePostService;
 import com.junstudio.kickoff.services.GetPostService;
 import com.junstudio.kickoff.services.PatchPostService;
 import com.junstudio.kickoff.utils.S3Uploader;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,15 +36,18 @@ public class PostsController {
     private final GetPostService getPostService;
     private final CreatePostService createPostService;
     private final PatchPostService patchPostService;
+    private final DeletePostService deletePostService;
 
     public PostsController(S3Uploader s3Uploader,
                            GetPostService getPostService,
                            CreatePostService createPostService,
-                           PatchPostService patchPostService) {
+                           PatchPostService patchPostService,
+                           DeletePostService deletePostService) {
         this.s3Uploader = s3Uploader;
         this.getPostService = getPostService;
         this.createPostService = createPostService;
         this.patchPostService = patchPostService;
+        this.deletePostService = deletePostService;
     }
 
     @GetMapping("/posts")
@@ -89,6 +94,14 @@ public class PostsController {
         @PathVariable Long postId
     ) {
         patchPostService.patch(postWriteDto, postId);
+    }
+
+    @DeleteMapping("/posts/{postId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(
+        @PathVariable Long postId
+    ) {
+        deletePostService.delete(postId);
     }
 
     @PostMapping("/upload")

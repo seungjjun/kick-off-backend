@@ -7,4 +7,8 @@ import java.util.List;
 
 public interface RecommentRepository extends JpaRepository<Recomment, Long> {
   List<Recomment> findAllByPostId(Long postId);
+
+    void deleteAllById(Long postId);
+
+  Recomment getReferenceByPostId(Long postId);
 }
