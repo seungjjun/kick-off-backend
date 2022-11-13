@@ -1,11 +1,12 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.CommentDto;
-import com.junstudio.kickoff.dtos.CommentPageDto;
 import com.junstudio.kickoff.dtos.CommentsDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.services.CreateCommentService;
+import com.junstudio.kickoff.services.DeleteCommentService;
 import com.junstudio.kickoff.services.GetCommentService;
+import com.junstudio.kickoff.services.PatchCommentService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -22,6 +23,7 @@ import java.util.List;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,6 +40,12 @@ CommentControllerTest {
     @MockBean
     private CreateCommentService createCommentService;
 
+    @MockBean
+    private PatchCommentService patchCommentService;
+
+    @MockBean
+    private DeleteCommentService deleteCommentService;
+
     @Test
     void comment() throws Exception {
         Comment comment = new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
@@ -45,7 +53,8 @@ CommentControllerTest {
         given(getCommentService.findComment(any(Long.class), any(Pageable.class)))
             .willReturn(new CommentsDto
                 (List.of(new CommentDto(comment.id(), comment.content(),
-                    comment.userId(), comment.postId(), comment.commentDate().toString()))));
+                    comment.userId(), comment.postId(), comment.isDeleted(),
+                    comment.commentDate().toString()))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/comments")
                 .param("postId", "1"))
@@ -66,5 +75,26 @@ CommentControllerTest {
                     "\"postId\":\"1\"" +
                     "}"))
             .andExpect(status().isCreated());
+    }
+
+    @Test
+    void patchComment() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/comments/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"content\":\"comment\"" +
+                    "}"))
+            .andExpect(status().isNoContent());
+
+        verify(patchCommentService).patchComment(1L, "comment");
+    }
+
+    @Test
+    void deleteComment() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/comments/3"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteCommentService).deleteComment(3L);
     }
 }

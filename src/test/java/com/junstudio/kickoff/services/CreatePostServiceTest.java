@@ -50,5 +50,4 @@ class CreatePostServiceTest {
 
         verify(postRepository).save(any(Post.class));
     }
-
 }

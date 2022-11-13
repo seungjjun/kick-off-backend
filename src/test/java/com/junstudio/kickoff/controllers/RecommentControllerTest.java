@@ -2,7 +2,9 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.services.CreateRecommentService;
+import com.junstudio.kickoff.services.DeleteRecommentService;
 import com.junstudio.kickoff.services.GetRecommentService;
+import com.junstudio.kickoff.services.PatchRecommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,6 +35,12 @@ class RecommentControllerTest {
 
     @MockBean
     private CreateRecommentService createRecommentService;
+
+    @MockBean
+    private DeleteRecommentService deleteRecommentService;
+
+    @MockBean
+    private PatchRecommentService patchRecommentService;
 
     Recomment recomment;
 
@@ -75,5 +84,25 @@ class RecommentControllerTest {
                     "\"postId\":\"1\"" +
                     "}"))
             .andExpect(status().isCreated());
+
+        verify(createRecommentService).createRecomment("recomment", 1L, 3L, 1L);
+    }
+
+    @Test
+    void patchRecomment() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/recomments/5")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"content\":\"recomment\"}"))
+            .andExpect(status().isNoContent());
+
+        verify(patchRecommentService).patch(5L, "recomment");
+    }
+
+    @Test
+    void deleteRecomment() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/recomments/1"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteRecommentService).delete(1L);
     }
 }
