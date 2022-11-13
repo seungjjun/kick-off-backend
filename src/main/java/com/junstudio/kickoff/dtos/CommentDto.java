@@ -9,14 +9,17 @@ public class CommentDto {
 
   private final Long postId;
 
+  private final boolean isDeleted;
+
   private final String commentDate;
 
-  public CommentDto(Long id, String content, Long userId, Long postId,
+  public CommentDto(Long id, String content, Long userId, Long postId, boolean isDeleted,
                     String commentDate) {
     this.id = id;
     this.content = content;
     this.userId = userId;
     this.postId = postId;
+    this.isDeleted = isDeleted;
     this.commentDate = commentDate;
   }
 
@@ -34,6 +37,10 @@ public class CommentDto {
 
   public Long getPostId() {
     return postId;
+  }
+
+  public boolean isDeleted() {
+    return isDeleted;
   }
 
   public String getCommentDate() {

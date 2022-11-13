@@ -88,7 +88,7 @@ class PostsControllerTest {
             post.createdAt().toString(), post.imageUrl());
 
         CommentDto commentDto = new CommentDto(comment.id(), comment.content(),
-            comment.userId(), comment.postId(), comment.commentDate().toString());
+            comment.userId(), comment.postId(), comment.isDeleted(), comment.commentDate().toString());
 
         ReCommentDto recommentDto =
             new ReCommentDto(recomment.getCommentId(), recomment.getContent(),

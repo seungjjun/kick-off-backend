@@ -23,6 +23,8 @@ public class Comment {
 
     private Long postId;
 
+    private boolean isDeleted;
+
     @CreationTimestamp
     private LocalDateTime commentDate;
 
@@ -35,6 +37,7 @@ public class Comment {
         this.content = content;
         this.userId = userId;
         this.postId = postId;
+        this.isDeleted = false;
         this.commentDate = commentDate;
     }
 
@@ -42,6 +45,7 @@ public class Comment {
         this.content = content;
         this.userId = userId;
         this.postId = postId;
+        this.isDeleted = false;
     }
 
     public Long id() {
@@ -60,16 +64,28 @@ public class Comment {
         return postId;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
     public LocalDateTime commentDate() {
         return commentDate;
     }
 
     public CommentDto toDto() {
-        return new CommentDto(id, content, userId, postId,
+        return new CommentDto(id, content, userId, postId, isDeleted,
             commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
 
     public static Comment fake() {
         return new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
+    }
+
+    public void patch(String content) {
+        this.content = content;
+    }
+
+    public void delete() {
+        this.isDeleted = true;
     }
 }

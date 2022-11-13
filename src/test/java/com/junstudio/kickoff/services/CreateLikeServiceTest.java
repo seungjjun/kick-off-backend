@@ -68,5 +68,4 @@ class CreateLikeServiceTest {
         createLikeService.countLike(post.id(), user.id());
         verify(likeRepository).deleteById(any(Long.class));
     }
-
 }
