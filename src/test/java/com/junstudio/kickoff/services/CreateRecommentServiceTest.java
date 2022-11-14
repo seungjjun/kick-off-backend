@@ -30,7 +30,7 @@ class CreateRecommentServiceTest {
 
         createRecommentService.createRecomment(
             recomment.getContent(),
-            recomment.getCommentId(),
+            recomment.commentId(),
             recomment.getUserId(),
             recomment.getPostId());
 

@@ -52,7 +52,7 @@ public class PostsController {
 
     @GetMapping("/posts")
     public CreatePostsDto posts(
-      @PageableDefault(sort = "id", size = 2) Pageable pageable
+      @PageableDefault(sort = "id", direction = Sort.Direction.DESC, size = 2) Pageable pageable
     ) {
         return getPostService.posts(pageable);
     }
@@ -60,7 +60,7 @@ public class PostsController {
     @GetMapping("/category/{categoryId}")
     public PostsDto categoryPosts(
         @PathVariable Long categoryId,
-        @PageableDefault(sort = "id", direction = Sort.Direction.ASC, value = 2) Pageable pageable
+        @PageableDefault(sort = "id", direction = Sort.Direction.DESC, value = 2) Pageable pageable
     ) {
         return getPostService.findCategoryPosts(categoryId, pageable);
     }

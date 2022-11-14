@@ -23,8 +23,11 @@ public class DeleteRecommentService {
     public void delete(Long recommentId) {
         Recomment recomment = recommentRepository.getReferenceById(recommentId);
 
-        if(commentRepository.getReferenceById(recomment.getCommentId()).isDeleted()) {
-            Comment comment = commentRepository.getReferenceById(recomment.getCommentId());
+        if(commentRepository.getReferenceById(
+            recomment.commentId())
+            .isDeleted()
+        ) {
+            Comment comment = commentRepository.getReferenceById(recomment.commentId());
 
             recommentRepository.delete(recomment);
 
@@ -33,7 +36,10 @@ public class DeleteRecommentService {
             }
         }
 
-        if(!commentRepository.getReferenceById(recomment.getCommentId()).isDeleted()) {
+        if(!commentRepository.getReferenceById(
+            recomment.commentId())
+            .isDeleted()
+        ) {
             recommentRepository.delete(recomment);
         }
     }

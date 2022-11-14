@@ -37,12 +37,14 @@ public class CreateLikeService {
 
         if (!(foundLike.equals(like))) {
             if (Objects.equals(foundLike.userId(), userId)) {
+                post.minusLike();
                 likeRepository.deleteById(foundLike.id());
                 return;
             }
         }
 
         Like newLike = new Like(post.id(), user.id());
+        post.addLike();
         likeRepository.save(newLike);
     }
 }
