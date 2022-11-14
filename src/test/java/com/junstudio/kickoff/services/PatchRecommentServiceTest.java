@@ -23,9 +23,9 @@ class PatchRecommentServiceTest {
         PatchRecommentService patchRecommentService
             = new PatchRecommentService(recommentRepository);
 
-        given(recommentRepository.getReferenceById(recomment.getId())).willReturn(recomment);
+        given(recommentRepository.getReferenceById(recomment.id())).willReturn(recomment);
 
-        patchRecommentService.patch(recomment.getId(), recomment.getContent());
+        patchRecommentService.patch(recomment.id(), recomment.getContent());
 
         verify(recomment).patch(recomment.getContent());
     }

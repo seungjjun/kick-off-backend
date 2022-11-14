@@ -30,6 +30,8 @@ public class Post {
 
     private Long hit;
 
+    private Long likeNumber;
+
     @Column(name = "imageUrl", length = 2048)
     private String imageUrl;
 
@@ -41,13 +43,14 @@ public class Post {
 
     public Post(Long id, UserId userId, Long categoryId,
                 PostInformation postInformation,
-                Long hit, String imageUrl,
+                Long hit, Long likeNumber, String imageUrl,
                 LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.categoryId = categoryId;
         this.postInformation = postInformation;
         this.hit = hit;
+        this.likeNumber = likeNumber;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
     }
@@ -59,6 +62,7 @@ public class Post {
         this.imageUrl = imageUrl;
         this.userId = new UserId(userId);
         this.categoryId = categoryId;
+        this.likeNumber = 0L;
     }
 
     public Long id() {
@@ -81,6 +85,10 @@ public class Post {
         return hit;
     }
 
+    public Long likeNumber() {
+        return likeNumber;
+    }
+
     public String imageUrl() {
         return imageUrl;
     }
@@ -90,7 +98,7 @@ public class Post {
     }
 
     public PostDto toDto() {
-        return new PostDto(id, postInformation, categoryId, userId, hit,
+        return new PostDto(id, postInformation, categoryId, userId, hit, likeNumber,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
     }
 
@@ -103,7 +111,7 @@ public class Post {
     }
 
     public PostDetailDto toDetailDto(Category category) {
-        return new PostDetailDto(id, postInformation, hit, category,
+        return new PostDetailDto(id, postInformation, hit, likeNumber, category,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
     }
 
@@ -111,12 +119,20 @@ public class Post {
         return new Post(1L, new UserId(1L), 1L,
             new PostInformation("Son is EPL King",
                 "Son is the first Asian to score EPL"),
-            3L, "imageUrl", LocalDateTime.now());
+            3L, 1L, "imageUrl", LocalDateTime.now());
     }
 
     public void patch(String title, String content, Long categoryId, String imageUrl) {
         this.postInformation = new PostInformation(title, content);
         this.categoryId = categoryId;
         this.imageUrl = imageUrl;
+    }
+
+    public void addLike() {
+        this.likeNumber += 1L;
+    }
+
+    public void minusLike() {
+        this.likeNumber -= 1L;
     }
 }

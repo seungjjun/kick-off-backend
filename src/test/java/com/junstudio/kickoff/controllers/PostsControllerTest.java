@@ -84,15 +84,15 @@ class PostsControllerTest {
     @Test
     void posts() throws Exception {
         PostDto postDto = new PostDto(post.id(), post.postInformation(),
-            post.categoryId(), post.userId(), post.hit(),
+            post.categoryId(), post.userId(), post.hit(), post.likeNumber(),
             post.createdAt().toString(), post.imageUrl());
 
         CommentDto commentDto = new CommentDto(comment.id(), comment.content(),
             comment.userId(), comment.postId(), comment.isDeleted(), comment.commentDate().toString());
 
         ReCommentDto recommentDto =
-            new ReCommentDto(recomment.getCommentId(), recomment.getContent(),
-                recomment.getCommentId(), recomment.getPostId(),
+            new ReCommentDto(recomment.commentId(), recomment.getContent(),
+                recomment.commentId(), recomment.getPostId(),
                 recomment.getPostId(), recomment.getCommentDate().toString());
 
         LikeDto likeDto = new LikeDto(like.id(), like.postId(), like.userId());
@@ -113,7 +113,8 @@ class PostsControllerTest {
     @Test
     void categoryPosts() throws Exception {
         PostDto postDto = new PostDto(post.id(), post.postInformation(),
-            post.categoryId(), post.userId(), post.hit(), post.createdAt().toString(), post.imageUrl());
+            post.categoryId(), post.userId(), post.hit(), post.likeNumber(),
+            post.createdAt().toString(), post.imageUrl());
 
         given(getPostService.findCategoryPosts(any(), any()))
             .willReturn(new PostsDto(List.of(postDto), new PostPageDto(1, 1L)));
@@ -128,7 +129,7 @@ class PostsControllerTest {
     @Test
     void postDetail() throws Exception {
         given(getPostService.findPost(any(Long.class)))
-            .willReturn(new PostDetailDto(1L, new PostInformation("title", "content"), 1L,
+            .willReturn(new PostDetailDto(1L, new PostInformation("title", "content"), 1L, 1L,
                 category, "2022", "imageUrl"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/posts/1"))

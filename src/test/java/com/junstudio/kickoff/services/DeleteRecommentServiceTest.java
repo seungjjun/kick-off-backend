@@ -38,24 +38,24 @@ class DeleteRecommentServiceTest {
 
     @Test
     void deleteOnlyRecomment() {
-        given(recommentRepository.getReferenceById(recomment.getId())).willReturn(recomment);
+        given(recommentRepository.getReferenceById(recomment.id())).willReturn(recomment);
 
-        given(commentRepository.getReferenceById(recomment.getCommentId())).willReturn(comment);
+        given(commentRepository.getReferenceById(recomment.commentId())).willReturn(comment);
 
-        deleteRecommentService.delete(recomment.getId());
+        deleteRecommentService.delete(recomment.id());
 
         verify(recommentRepository).delete(recomment);
     }
 
     @Test
     void deleteRecommentWithComment() {
-        given(recommentRepository.getReferenceById(recomment.getId())).willReturn(recomment);
+        given(recommentRepository.getReferenceById(recomment.id())).willReturn(recomment);
 
         comment.delete();
 
-        given(commentRepository.getReferenceById(recomment.getCommentId())).willReturn(comment);
+        given(commentRepository.getReferenceById(recomment.commentId())).willReturn(comment);
 
-        deleteRecommentService.delete(recomment.getId());
+        deleteRecommentService.delete(recomment.id());
 
         verify(recommentRepository).delete(recomment);
         verify(commentRepository).delete(comment);

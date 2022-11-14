@@ -48,12 +48,11 @@ public class Recomment {
         this.postId = postId;
     }
 
-
-    public Long getId() {
+    public Long id() {
         return id;
     }
 
-    public Long getCommentId() {
+    public Long commentId() {
         return commentId;
     }
 
