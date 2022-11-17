@@ -15,7 +15,7 @@ public class CommentPageDto {
         this.currentPageNumber = currentPageNumber;
         this.totalPageNumber = totalPageNumber;
         this.lastPage = (int) (Math.ceil(currentPageNumber / 10.0) * 10);
-        this.currentLastPage = (int) Math.ceil(totalPageNumber * 1.0 / 5);
+        this.currentLastPage = (int) Math.ceil(totalPageNumber * 1.0 / 20);
         this.startPage = lastPage - 9;
     }
 

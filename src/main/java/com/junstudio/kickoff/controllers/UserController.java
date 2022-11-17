@@ -5,6 +5,7 @@ import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.GetUserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -30,8 +31,10 @@ public class UserController {
     }
 
     @GetMapping("me")
-    public UserDto user() {
-        User user = getUserService.findUser(1L);
+    public UserDto user(
+        @RequestAttribute("identification") String identification
+    ) {
+        User user = getUserService.findUser(identification);
         return user.toDto();
     }
 }
