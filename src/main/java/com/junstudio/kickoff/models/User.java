@@ -1,6 +1,8 @@
 package com.junstudio.kickoff.models;
 
+import com.junstudio.kickoff.dtos.LoginResultDto;
 import com.junstudio.kickoff.dtos.UserDto;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -65,5 +67,14 @@ public class User {
 
     public UserDto toDto() {
         return new UserDto(id, identification, name, profileImage);
+    }
+
+    public boolean authenticate(String password, PasswordEncoder passwordEncoder) {
+        System.out.println(passwordEncoder.matches(password, encodedPassword));
+        return passwordEncoder.matches(password, encodedPassword);
+    }
+
+    public void changePassword(String password, PasswordEncoder passwordEncoder) {
+        encodedPassword = passwordEncoder.encode(password);
     }
 }

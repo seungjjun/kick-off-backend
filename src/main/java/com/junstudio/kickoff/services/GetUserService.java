@@ -21,7 +21,7 @@ public class GetUserService {
         return userRepository.findAll();
     }
 
-    public User findUser(Long userId) {
-        return userRepository.findById(userId).orElseThrow(UserNotFound::new);
+    public User findUser(String identification) {
+        return userRepository.findByIdentification(identification).orElseThrow(UserNotFound::new);
     }
 }
