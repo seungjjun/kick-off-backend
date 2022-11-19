@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 
 class PatchPostServiceTest {
     @MockBean
-    private  PostRepository postRepository;
+    private PostRepository postRepository;
 
     @Test
     void patch() {
@@ -28,14 +28,14 @@ class PatchPostServiceTest {
 
         PostWriteDto postWriteDto = new PostWriteDto(post.id(),
             post.postInformation().getTitle(), post.postInformation().getContent(),
-            post.imageUrl(), post.userId().getUserId(), post.categoryId());
+            post.imageUrl(), post.userId().getUserId(), post.getBoardId());
 
         patchPostService.patch(postWriteDto, post.id());
 
         verify(post).patch(
             postWriteDto.getTitle(),
             postWriteDto.getContent(),
-            postWriteDto.getCategoryId(),
+            postWriteDto.getBoardId(),
             postWriteDto.getImageUrl());
     }
 }

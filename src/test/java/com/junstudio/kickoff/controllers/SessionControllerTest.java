@@ -42,6 +42,7 @@ class SessionControllerTest {
         given(loginService.login("Test", "password")).willThrow(new LoginFailed());
         given(loginService.login("jel1y", "xxx")).willThrow(new LoginFailed());
     }
+
     @Test
     void loginSuccess() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/session")

@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.backdoor;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,8 +14,12 @@ import javax.transaction.Transactional;
 public class BackdoorController {
     private final JdbcTemplate jdbcTemplate;
 
-    public BackdoorController(JdbcTemplate jdbcTemplate) {
+    private final PasswordEncoder passwordEncoder;
+
+    public BackdoorController(JdbcTemplate jdbcTemplate,
+                              PasswordEncoder passwordEncoder) {
         this.jdbcTemplate = jdbcTemplate;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("setup-database")
@@ -25,17 +30,18 @@ public class BackdoorController {
         jdbcTemplate.execute("DELETE FROM post");
         jdbcTemplate.execute("DELETE FROM person");
 
-        jdbcTemplate.execute("" +
+        jdbcTemplate.update("" +
             "INSERT INTO person" +
             "(user_id, identification, encoded_password, name, profile_image, grade_id)" +
-            " VALUES(1, 'jel1y', 'Qwe1234!', 'son7'," +
+            " VALUES(1, ?, ?, 'son7'," +
             " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/7fb14f2b-f348-426b-a9af-c54e410941da%E1%84%91%E1%85%B5%E1%84%8F%E1%85%A1%E1%84%8E%E1%85%B2.jpeg'," +
             " 1)"
+            , "jel1y", passwordEncoder.encode("Qwe1234!")
         );
 
         jdbcTemplate.execute("" +
             "INSERT INTO post" +
-            "(post_id, post_title, post_content, user_id, category_id, hit, image_url, created_at)" +
+            "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
             " VALUES(1, '카타르 월드컵 개최 일주일 전', '월드컵 기대가 됩니다.', 1, 1, 10," +
             " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/aac172c5-45bf-47f9-aabd-6ff671204bfaLaLiga.jpg'," +
             " '2022-11-14')"
@@ -60,7 +66,7 @@ public class BackdoorController {
         for (long i = 1; i <= 101; i += 1) {
             jdbcTemplate.update("" +
                     "INSERT INTO post" +
-                    "(post_id, post_title, post_content, user_id, category_id, hit, image_url, created_at)" +
+                    "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
                     " VALUES(?, '카타르 월드컵 개최 일주일 전', '월드컵 기대가 됩니다.', 1, 1, 10," +
                     " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/aac172c5-45bf-47f9-aabd-6ff671204bfaLaLiga.jpg'," +
                     " '2022-11-14')"
@@ -71,17 +77,17 @@ public class BackdoorController {
         return "ok";
     }
 
-    @GetMapping("setting-posts-ten")
+    @GetMapping("setting-posts10")
     public String settingPostsTen() {
         jdbcTemplate.execute("DELETE FROM likes");
         jdbcTemplate.execute("DELETE FROM recomment");
         jdbcTemplate.execute("DELETE FROM comment");
         jdbcTemplate.execute("DELETE FROM post");
 
-        for (long i = 1; i <= 1; i += 1) {
+        for (long i = 1; i <= 11; i += 1) {
             jdbcTemplate.update("" +
                 "INSERT INTO post" +
-                "(post_id, post_title, post_content, user_id, category_id, hit, image_url, created_at)" +
+                "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
                 " VALUES(?, '카타르 월드컵 개최 일주일 전', '월드컵 기대가 됩니다.', 1, 1, 10," +
                 " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/aac172c5-45bf-47f9-aabd-6ff671204bfaLaLiga.jpg'," +
                 " '2022-11-14')"

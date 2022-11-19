@@ -26,7 +26,7 @@ public class Post {
     @Embedded
     private PostInformation postInformation;
 
-    private Long categoryId;
+    private Long boardId;
 
     private Long hit;
 
@@ -41,13 +41,13 @@ public class Post {
     public Post() {
     }
 
-    public Post(Long id, UserId userId, Long categoryId,
+    public Post(Long id, UserId userId, Long boardId,
                 PostInformation postInformation,
                 Long hit, Long likeNumber, String imageUrl,
                 LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
-        this.categoryId = categoryId;
+        this.boardId = boardId;
         this.postInformation = postInformation;
         this.hit = hit;
         this.likeNumber = likeNumber;
@@ -56,12 +56,12 @@ public class Post {
     }
 
     public Post(PostInformation postInformation, Long hit,
-                String imageUrl, Long userId, Long categoryId) {
+                String imageUrl, Long userId, Long boardId) {
         this.postInformation = postInformation;
         this.hit = hit;
         this.imageUrl = imageUrl;
         this.userId = new UserId(userId);
-        this.categoryId = categoryId;
+        this.boardId = boardId;
         this.likeNumber = 0L;
     }
 
@@ -73,8 +73,8 @@ public class Post {
         return userId;
     }
 
-    public Long categoryId() {
-        return categoryId;
+    public Long getBoardId() {
+        return boardId;
     }
 
     public PostInformation postInformation() {
@@ -98,7 +98,7 @@ public class Post {
     }
 
     public PostDto toDto() {
-        return new PostDto(id, postInformation, categoryId, userId, hit, likeNumber,
+        return new PostDto(id, postInformation, boardId, userId, hit, likeNumber,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
     }
 
@@ -110,8 +110,8 @@ public class Post {
         return new PostWrittenDto(id);
     }
 
-    public PostDetailDto toDetailDto(Category category) {
-        return new PostDetailDto(id, postInformation, hit, likeNumber, category,
+    public PostDetailDto toDetailDto(Board board, User user) {
+        return new PostDetailDto(id, postInformation, hit, likeNumber, board, user,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
     }
 
@@ -122,9 +122,9 @@ public class Post {
             3L, 1L, "imageUrl", LocalDateTime.now());
     }
 
-    public void patch(String title, String content, Long categoryId, String imageUrl) {
+    public void patch(String title, String content, Long boardId, String imageUrl) {
         this.postInformation = new PostInformation(title, content);
-        this.categoryId = categoryId;
+        this.boardId = boardId;
         this.imageUrl = imageUrl;
     }
 

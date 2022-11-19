@@ -32,5 +32,4 @@ class CreateCommentServiceTest {
 
         verify(commentRepository).save(any(Comment.class));
     }
-
 }

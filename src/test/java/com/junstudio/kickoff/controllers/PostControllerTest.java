@@ -1,20 +1,13 @@
 package com.junstudio.kickoff.controllers;
 
-import com.junstudio.kickoff.dtos.CategoryDto;
-import com.junstudio.kickoff.dtos.CommentDto;
-import com.junstudio.kickoff.dtos.CreatePostsDto;
-import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
-import com.junstudio.kickoff.dtos.PostDto;
-import com.junstudio.kickoff.dtos.PostPageDto;
-import com.junstudio.kickoff.dtos.PostsDto;
-import com.junstudio.kickoff.dtos.ReCommentDto;
-import com.junstudio.kickoff.models.Category;
+import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.Recomment;
+import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.DeletePostService;
 import com.junstudio.kickoff.services.GetPostService;
@@ -25,13 +18,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,9 +30,9 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(PostsController.class)
+@WebMvcTest(PostController.class)
 @ActiveProfiles("test")
-class PostsControllerTest {
+class PostControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -69,12 +59,15 @@ class PostsControllerTest {
 
     private Like like;
 
-    private Category category;
+    private Board board;
+
+    private User user;
 
     @BeforeEach
     void setup() {
-        category = new Category(1L, "EPL", null);
+        user = new User(1L, "jel1y", "password", "son7", "image", 1L);
 
+        board = Board.fake();
         post = Post.fake();
         comment = Comment.fake();
         recomment = Recomment.fake();
@@ -82,60 +75,18 @@ class PostsControllerTest {
     }
 
     @Test
-    void posts() throws Exception {
-        PostDto postDto = new PostDto(post.id(), post.postInformation(),
-            post.categoryId(), post.userId(), post.hit(), post.likeNumber(),
-            post.createdAt().toString(), post.imageUrl());
-
-        CommentDto commentDto = new CommentDto(comment.id(), comment.content(),
-            comment.userId(), comment.postId(), comment.isDeleted(), comment.commentDate().toString());
-
-        ReCommentDto recommentDto =
-            new ReCommentDto(recomment.commentId(), recomment.getContent(),
-                recomment.commentId(), recomment.getPostId(),
-                recomment.getPostId(), recomment.getCommentDate().toString());
-
-        LikeDto likeDto = new LikeDto(like.id(), like.postId(), like.userId());
-
-        CategoryDto categoryDto = new CategoryDto(category.id(), category.name(), category.getParentId());
-
-        given(getPostService.posts(any(Pageable.class))).willReturn(new CreatePostsDto(
-            new PostsDto(List.of(postDto), List.of(commentDto), List.of(recommentDto),
-                List.of(likeDto), List.of(categoryDto), any()), new PostPageDto(1, 1L)));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(
-                containsString("\"title\":\"Son is EPL King\"")
-            ));
-    }
-
-    @Test
-    void categoryPosts() throws Exception {
-        PostDto postDto = new PostDto(post.id(), post.postInformation(),
-            post.categoryId(), post.userId(), post.hit(), post.likeNumber(),
-            post.createdAt().toString(), post.imageUrl());
-
-        given(getPostService.findCategoryPosts(any(), any()))
-            .willReturn(new PostsDto(List.of(postDto), new PostPageDto(1, 1L)));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/category/1"))
-            .andExpect(status().isOk())
-            .andExpect(content().string(
-                containsString("content\":\"Son is the first Asian to score EPL")
-            ));
-    }
-
-    @Test
     void postDetail() throws Exception {
         given(getPostService.findPost(any(Long.class)))
-            .willReturn(new PostDetailDto(1L, new PostInformation("title", "content"), 1L, 1L,
-                category, "2022", "imageUrl"));
+            .willReturn(
+                new PostDetailDto(
+                    1L, new PostInformation("World Cup", "content"),
+                    1L, 1L, board, user, "2022", "imageUrl")
+            );
 
         mockMvc.perform(MockMvcRequestBuilders.get("/posts/1"))
             .andExpect(status().isOk())
             .andExpect(content().string(
-                containsString("\"name\":\"EPL\"")
+                containsString("\"title\":\"World Cup\"")
             ));
     }
 
@@ -152,7 +103,7 @@ class PostsControllerTest {
                     " \"content\":\"congraturation\"," +
                     " \"imageUrl\":\"imageUrl\"," +
                     " \"userId\":\"1\"," +
-                    " \"categoryId\":\"1\"" +
+                    " \"boardId\":\"1\"" +
                     "}"))
             .andExpect(status().isCreated());
 

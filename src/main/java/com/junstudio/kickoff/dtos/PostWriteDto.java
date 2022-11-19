@@ -11,16 +11,16 @@ public class PostWriteDto {
 
     private final Long userId;
 
-    private final Long categoryId;
+    private final Long boardId;
 
     public PostWriteDto(Long id, String title, String content,
-                        String imageUrl, Long userId, Long categoryId) {
+                        String imageUrl, Long userId, Long boardId) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.userId = userId;
-        this.categoryId = categoryId;
+        this.boardId = boardId;
     }
 
     public Long getId() {
@@ -43,7 +43,7 @@ public class PostWriteDto {
         return userId;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getBoardId() {
+        return boardId;
     }
 }

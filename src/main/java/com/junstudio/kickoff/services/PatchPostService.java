@@ -21,7 +21,7 @@ public class PatchPostService {
 
         post.patch(postWriteDto.getTitle(),
             postWriteDto.getContent(),
-            postWriteDto.getCategoryId(),
+            postWriteDto.getBoardId(),
             postWriteDto.getImageUrl());
     }
 }

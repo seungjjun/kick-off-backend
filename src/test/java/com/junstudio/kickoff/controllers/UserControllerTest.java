@@ -36,6 +36,7 @@ class UserControllerTest {
     String identification;
 
     String token;
+
     @BeforeEach
     void setup() {
         identification = "je1ly";

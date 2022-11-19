@@ -1,9 +1,9 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.models.Category;
+import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.repositories.CategoryRepository;
+import com.junstudio.kickoff.repositories.BoardRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 class CreatePostServiceTest {
     PostRepository postRepository;
     UserRepository userRepository;
-    CategoryRepository categoryRepository;
+    BoardRepository boardRepository;
 
     CreatePostService createPostService;
 
@@ -27,12 +27,12 @@ class CreatePostServiceTest {
     void setup() {
         postRepository = mock(PostRepository.class);
         userRepository = mock(UserRepository.class);
-        categoryRepository = mock(CategoryRepository.class);
+        boardRepository = mock(BoardRepository.class);
 
         createPostService = new CreatePostService(
             postRepository,
             userRepository,
-            categoryRepository);
+            boardRepository);
     }
 
     @Test
@@ -40,13 +40,13 @@ class CreatePostServiceTest {
         User user = mock(User.class);
         given(userRepository.findById(user.id())).willReturn(Optional.of(user));
 
-        Category category = mock(Category.class);
-        given(categoryRepository.findById(category.id())).willReturn(Optional.of(category));
+        Board board = mock(Board.class);
+        given(boardRepository.findById(board.id())).willReturn(Optional.of(board));
 
         Post post = Post.fake();
 
         createPostService.write(post.postInformation().getTitle(), post.postInformation().getContent(),
-            post.imageUrl(), user.id(), category.id());
+            post.imageUrl(), user.id(), board.id());
 
         verify(postRepository).save(any(Post.class));
     }

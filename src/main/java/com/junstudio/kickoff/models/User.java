@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.models;
 
-import com.junstudio.kickoff.dtos.LoginResultDto;
 import com.junstudio.kickoff.dtos.UserDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -76,5 +75,6 @@ public class User {
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
         encodedPassword = passwordEncoder.encode(password);
+        System.out.println(encodedPassword);
     }
 }

@@ -31,38 +31,23 @@ import java.io.IOException;
 
 @RestController
 @CrossOrigin
-public class PostsController {
+public class PostController {
     private final S3Uploader s3Uploader;
     private final GetPostService getPostService;
     private final CreatePostService createPostService;
     private final PatchPostService patchPostService;
     private final DeletePostService deletePostService;
 
-    public PostsController(S3Uploader s3Uploader,
-                           GetPostService getPostService,
-                           CreatePostService createPostService,
-                           PatchPostService patchPostService,
-                           DeletePostService deletePostService) {
+    public PostController(S3Uploader s3Uploader,
+                          GetPostService getPostService,
+                          CreatePostService createPostService,
+                          PatchPostService patchPostService,
+                          DeletePostService deletePostService) {
         this.s3Uploader = s3Uploader;
         this.getPostService = getPostService;
         this.createPostService = createPostService;
         this.patchPostService = patchPostService;
         this.deletePostService = deletePostService;
-    }
-
-    @GetMapping("/posts")
-    public CreatePostsDto posts(
-      @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
-    ) {
-        return getPostService.posts(pageable);
-    }
-
-    @GetMapping("/category/{categoryId}")
-    public PostsDto categoryPosts(
-        @PathVariable Long categoryId,
-        @PageableDefault(sort = "id", direction = Sort.Direction.DESC, value = 20) Pageable pageable
-    ) {
-        return getPostService.findCategoryPosts(categoryId, pageable);
     }
 
     @GetMapping("/posts/{id}")
@@ -82,7 +67,7 @@ public class PostsController {
             postWriteDto.getContent(),
             postWriteDto.getImageUrl(),
             postWriteDto.getUserId(),
-            postWriteDto.getCategoryId());
+            postWriteDto.getBoardId());
 
         return post.postWrittenDto();
     }
