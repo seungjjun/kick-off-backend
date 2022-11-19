@@ -22,6 +22,7 @@ public class GetUserService {
     }
 
     public User findUser(String identification) {
-        return userRepository.findByIdentification(identification).orElseThrow(UserNotFound::new);
+        return userRepository.findByIdentification(identification)
+            .orElseThrow(UserNotFound::new);
     }
 }

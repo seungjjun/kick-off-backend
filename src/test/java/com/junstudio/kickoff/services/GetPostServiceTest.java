@@ -4,11 +4,13 @@ import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostsDto;
+import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.Category;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
+import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.models.UserId;
-import com.junstudio.kickoff.repositories.CategoryRepository;
+import com.junstudio.kickoff.repositories.BoardRepository;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
@@ -33,29 +35,30 @@ import static org.mockito.Mockito.verify;
 
 class GetPostServiceTest {
     PostRepository postRepository;
-    CategoryRepository categoryRepository;
     CommentRepository commentRepository;
     RecommentRepository recommentRepository;
     LikeRepository likeRepository;
     UserRepository userRepository;
+    BoardRepository boardRepository;
 
     GetPostService getPostService;
 
     @BeforeEach
     void setup() {
         postRepository = mock(PostRepository.class);
-        categoryRepository = mock(CategoryRepository.class);
         commentRepository = mock(CommentRepository.class);
         recommentRepository = mock(RecommentRepository.class);
         likeRepository = mock(LikeRepository.class);
         userRepository = mock(UserRepository.class);
+        boardRepository = mock(BoardRepository.class);
 
-        getPostService = new GetPostService(postRepository,
-            categoryRepository,
+        getPostService = new GetPostService(
+            postRepository,
             commentRepository,
             recommentRepository,
             likeRepository,
-            userRepository);
+            userRepository,
+            boardRepository);
     }
 
     @Test
@@ -69,9 +72,9 @@ class GetPostServiceTest {
 
         given(postRepository.findAll(Pageable.ofSize(1))).willReturn(page);
 
-        CreatePostsDto createPostsDto = getPostService.posts(Pageable.ofSize(1));
+        PostsDto postsDto = getPostService.posts(post.getBoardId(), Pageable.ofSize(1));
 
-        assertThat(createPostsDto).isNotNull();
+        assertThat(postsDto).isNotNull();
     }
 
     @Test
@@ -80,29 +83,18 @@ class GetPostServiceTest {
             new PostInformation("EPL start", "손흥민 아시아인 최초 EPL 득점왕"),
             3L, 1L, "imageUrl", LocalDateTime.now());
 
+        Board board = Board.fake();
+        User user = new User(1L, "jel1y", "encodedPassword",
+            "Jun", "profileImage", 1L);
+
         given(postRepository.findById(any())).willReturn(Optional.of(post));
-        given(categoryRepository.findById(any())).willReturn(Optional.of(new Category()));
+        given(boardRepository.findById(any())).willReturn(Optional.of(board));
+        given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         PostDetailDto foundPost = getPostService.findPost(post.id());
 
         assertThat(foundPost.getPostInformation().getTitle()).isEqualTo("EPL start");
 
         verify(postRepository).findById(any());
-    }
-
-    @Test
-    void findCategoryPosts() {
-        Post post = Post.fake();
-
-        List<Post> posts = new ArrayList<>();
-        posts.add(post);
-
-        Page<Post> page = new PageImpl<>(posts);
-
-        given(postRepository.findAllByCategoryId(any(), any())).willReturn(page);
-
-        PostsDto postsDto = getPostService.findCategoryPosts(any(), any(Pageable.class));
-
-        assertThat(postsDto).isNotNull();
     }
 }

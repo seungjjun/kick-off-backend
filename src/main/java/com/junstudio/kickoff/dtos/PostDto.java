@@ -8,7 +8,7 @@ public class PostDto {
 
     private final PostInformationDto postInformation;
 
-    private final Long categoryId;
+    private final Long boardId;
 
     private final UserId userId;
 
@@ -20,11 +20,11 @@ public class PostDto {
 
     private final String imageUrl;
 
-    public PostDto(Long id, PostInformation postInformation, Long categoryId,
+    public PostDto(Long id, PostInformation postInformation, Long boardId,
                    UserId userId, Long hit, Long likeNumber, String createdAt, String imageUrl) {
         this.id = id;
         this.postInformation = postInformation.toDto();
-        this.categoryId = categoryId;
+        this.boardId = boardId;
         this.userId = userId;
         this.hit = hit;
         this.likeNumber = likeNumber;
@@ -40,8 +40,8 @@ public class PostDto {
         return postInformation;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getBoardId() {
+        return boardId;
     }
 
     public UserId getUserId() {
@@ -66,7 +66,7 @@ public class PostDto {
 
     public PostDto toDto() {
         return new PostDto(id, new PostInformation(postInformation.getTitle(),
-            postInformation.getContent()), categoryId, userId, hit, likeNumber,
+            postInformation.getContent()), boardId, userId, hit, likeNumber,
             createdAt, imageUrl);
     }
 }

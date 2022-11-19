@@ -1,6 +1,6 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.dtos.CategoryDto;
+import com.junstudio.kickoff.dtos.BoardDto;
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.LikeDto;
@@ -10,15 +10,16 @@ import com.junstudio.kickoff.dtos.PostPageDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.dtos.ReCommentDto;
 import com.junstudio.kickoff.dtos.UserDto;
-import com.junstudio.kickoff.exceptions.CategoryNotFound;
+import com.junstudio.kickoff.exceptions.BoardNotFound;
 import com.junstudio.kickoff.exceptions.PostNotFound;
-import com.junstudio.kickoff.models.Category;
+import com.junstudio.kickoff.exceptions.UserNotFound;
+import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.repositories.CategoryRepository;
+import com.junstudio.kickoff.repositories.BoardRepository;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
@@ -35,42 +36,55 @@ import java.util.stream.Collectors;
 @Transactional
 public class GetPostService {
     private final PostRepository postRepository;
-    private final CategoryRepository categoryRepository;
     private final CommentRepository commentRepository;
     private final RecommentRepository recommentRepository;
     private final LikeRepository likeRepository;
     private final UserRepository userRepository;
+    private final BoardRepository boardRepository;
 
     public GetPostService(PostRepository postRepository,
-                          CategoryRepository categoryRepository,
                           CommentRepository commentRepository,
                           RecommentRepository recommentRepository,
                           LikeRepository likeRepository,
-                          UserRepository userRepository) {
+                          UserRepository userRepository,
+                          BoardRepository boardRepository) {
         this.postRepository = postRepository;
-        this.categoryRepository = categoryRepository;
         this.commentRepository = commentRepository;
         this.recommentRepository = recommentRepository;
         this.likeRepository = likeRepository;
         this.userRepository = userRepository;
+        this.boardRepository = boardRepository;
     }
 
-    public CreatePostsDto posts(Pageable pageable) {
-        List<PostDto> posts = getPostDtos(pageable);
+    public PostsDto posts(Long boardId, Pageable pageable) {
+        List<CommentDto> comments = commentDto();
 
-        List<CommentDto> comments = getCommentDtos();
+        List<ReCommentDto> reComments = recommentDto();
 
-        List<ReCommentDto> reComments = getReCommentDtos();
+        List<LikeDto> likes = likeDto();
 
-        List<LikeDto> likes = getLikeDtos();
+        List<UserDto> users = userDto();
 
-        List<CategoryDto> categories = getCategoryDtoList();
+        List<BoardDto> boards = boardDto();
 
-        List<UserDto> users = getUserDtos();
+        if (boardId != 1) {
+            List<PostDto> posts = postRepository.findAllByBoardId(boardId, pageable)
+                .stream().map(Post::toDto).collect(Collectors.toList());
 
-        PostsDto postsDto = new PostsDto(posts, comments, reComments, likes, categories, users);
+            CreatePostsDto createPostsDto =
+                new CreatePostsDto(posts, comments, reComments, likes, users, boards);
 
-        return new CreatePostsDto(postsDto,
+            return new PostsDto(createPostsDto,
+                new PostPageDto(postRepository.findAll(pageable).getNumber() + 1,
+                    postRepository.findAll(pageable).getTotalElements()));
+        }
+
+        List<PostDto> posts = postDto(pageable);
+
+        CreatePostsDto createPostsDto =
+            new CreatePostsDto(posts, comments, reComments, likes, users, boards);
+
+        return new PostsDto(createPostsDto,
             new PostPageDto(postRepository.findAll(pageable).getNumber() + 1,
                 postRepository.findAll(pageable).getTotalElements()));
     }
@@ -78,58 +92,50 @@ public class GetPostService {
     public PostDetailDto findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        Category category = categoryRepository.findById(post.categoryId())
-            .orElseThrow(CategoryNotFound::new);
+        Board board = boardRepository.findById(post.getBoardId())
+            .orElseThrow(BoardNotFound::new);
+
+        User user = userRepository.findById(post.userId().getUserId())
+            .orElseThrow(UserNotFound::new);
 
         post.updateHit(post.hit());
 
-        return post.toDetailDto(category);
+        return post.toDetailDto(board, user);
     }
 
-    public PostsDto findCategoryPosts(Long categoryId, Pageable pageable) {
-        List<PostDto> categoryPosts =
-            postRepository.findAllByCategoryId(categoryId, pageable)
-                .stream().map(Post::toDto)
-                .collect(Collectors.toList());
-
-        return new PostsDto(categoryPosts,
-            new PostPageDto(postRepository.findAllByCategoryId(categoryId, pageable).getNumber() + 1,
-                postRepository.findAllByCategoryId(categoryId, pageable).getTotalElements()));
-    }
-
-    private List<PostDto> getPostDtos(Pageable pageable) {
+    private List<PostDto> postDto(Pageable pageable) {
         return postRepository.findAll(pageable)
             .stream().map(Post::toDto)
             .collect(Collectors.toList());
     }
 
-    private List<CommentDto> getCommentDtos() {
+    private List<CommentDto> commentDto() {
         return commentRepository.findAll()
             .stream().map(Comment::toDto)
             .collect(Collectors.toList());
     }
 
-    private List<ReCommentDto> getReCommentDtos() {
+    private List<ReCommentDto> recommentDto() {
         return recommentRepository.findAll()
             .stream().map(Recomment::toDto)
             .collect(Collectors.toList());
     }
 
-    private List<LikeDto> getLikeDtos() {
+    private List<LikeDto> likeDto() {
         return likeRepository.findAll()
             .stream().map(Like::toDto)
             .collect(Collectors.toList());
     }
 
-    private List<CategoryDto> getCategoryDtoList() {
-        return categoryRepository.findAll()
-            .stream().map(Category::toDto)
+    private List<UserDto> userDto() {
+        return userRepository.findAll()
+            .stream().map(User::toDto)
             .collect(Collectors.toList());
     }
 
-    private List<UserDto> getUserDtos() {
-        return userRepository.findAll()
-            .stream().map(User::toDto)
+    private List<BoardDto> boardDto() {
+        return boardRepository.findAll()
+            .stream().map(Board::toDto)
             .collect(Collectors.toList());
     }
 }

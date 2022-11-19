@@ -17,7 +17,6 @@ class GetCreateRecommentServiceTest {
     @BeforeEach
     void setup() {
         recommentRepository = mock(RecommentRepository.class);
-
     }
 
     @Test
