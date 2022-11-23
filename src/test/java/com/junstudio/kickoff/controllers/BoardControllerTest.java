@@ -51,7 +51,7 @@ class BoardControllerTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "son7", "image", 1L);
+        user = new User(1L, "jel1y", "password", "son7", "image", 1L, false);
 
         post = Post.fake();
         comment = Comment.fake();

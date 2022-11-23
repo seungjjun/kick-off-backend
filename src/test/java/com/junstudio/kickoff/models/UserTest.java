@@ -10,7 +10,7 @@ class UserTest {
     @Test
     void User() {
         User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L);
+            "Jun", "profileImage", 1L, false);
 
         assertThat(user.identification()).isEqualTo("jel1y");
         assertThat(user.name()).isEqualTo("Jun");
@@ -19,7 +19,7 @@ class UserTest {
     @Test
     void authenticate() {
         User user = new User(1L, "jel1y", "password",
-            "Jun", "profileImage", 1L);
+            "Jun", "profileImage", 1L, false);
 
         PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
 

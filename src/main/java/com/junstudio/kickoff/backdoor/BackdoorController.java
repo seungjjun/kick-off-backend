@@ -39,6 +39,15 @@ public class BackdoorController {
             , "jel1y", passwordEncoder.encode("Qwe1234!")
         );
 
+        jdbcTemplate.update("" +
+                "INSERT INTO person" +
+                "(user_id, identification, encoded_password, name, profile_image, grade_id)" +
+                " VALUES(2, ?, ?, 'Jun'," +
+                " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/7fb14f2b-f348-426b-a9af-c54e410941da%E1%84%91%E1%85%B5%E1%84%8F%E1%85%A1%E1%84%8E%E1%85%B2.jpeg'," +
+                " 1)"
+            , "stw550", passwordEncoder.encode("Qwe1234!")
+        );
+
         jdbcTemplate.execute("" +
             "INSERT INTO post" +
             "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +

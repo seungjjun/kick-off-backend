@@ -1,7 +1,6 @@
 package com.junstudio.kickoff.dtos;
 
 import com.junstudio.kickoff.models.Board;
-import com.junstudio.kickoff.models.Category;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.User;
 
