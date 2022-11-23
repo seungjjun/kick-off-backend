@@ -38,7 +38,7 @@ class LoginServiceTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "jun", "url", 1L);
+        user = new User(1L, "jel1y", "password", "jun", "url", 1L, false);
 
         gradeRepository = mock(GradeRepository.class);
         userRepository = mock(UserRepository.class);

@@ -85,7 +85,7 @@ class GetPostServiceTest {
 
         Board board = Board.fake();
         User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L);
+            "Jun", "profileImage", 1L, false);
 
         given(postRepository.findById(any())).willReturn(Optional.of(post));
         given(boardRepository.findById(any())).willReturn(Optional.of(board));

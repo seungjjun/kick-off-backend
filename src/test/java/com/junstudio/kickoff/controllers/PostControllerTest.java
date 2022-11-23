@@ -65,7 +65,7 @@ class PostControllerTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "son7", "image", 1L);
+        user = new User(1L, "jel1y", "password", "son7", "image", 1L, false);
 
         board = Board.fake();
         post = Post.fake();

@@ -27,17 +27,21 @@ public class User {
 
     private Long gradeId;
 
+    @Column(name = "is_my_token", columnDefinition = "boolean default false")
+    private boolean isMyToken = false;
+
     private User() {
     }
 
     public User(Long id, String identification, String encodedPassword,
-                String name, String profileImage, Long gradeId) {
+                String name, String profileImage, Long gradeId, boolean isMyToken) {
         this.id = id;
         this.identification = identification;
         this.encodedPassword = encodedPassword;
         this.name = name;
         this.profileImage = profileImage;
         this.gradeId = gradeId;
+        this.isMyToken = isMyToken;
     }
 
     public Long id() {
@@ -65,16 +69,18 @@ public class User {
     }
 
     public UserDto toDto() {
-        return new UserDto(id, identification, name, profileImage);
+        return new UserDto(id, identification, name, profileImage, isMyToken);
     }
 
     public boolean authenticate(String password, PasswordEncoder passwordEncoder) {
-        System.out.println(passwordEncoder.matches(password, encodedPassword));
         return passwordEncoder.matches(password, encodedPassword);
     }
 
     public void changePassword(String password, PasswordEncoder passwordEncoder) {
         encodedPassword = passwordEncoder.encode(password);
-        System.out.println(encodedPassword);
+    }
+
+    public void changeTokenState() {
+        isMyToken = true;
     }
 }

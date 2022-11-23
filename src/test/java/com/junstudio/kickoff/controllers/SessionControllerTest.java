@@ -34,7 +34,7 @@ class SessionControllerTest {
 
     @BeforeEach
     void setup() {
-        User user = new User(1L, "jel1y", "password", "jun", "url", 1L);
+        User user = new User(1L, "jel1y", "password", "jun", "url", 1L, false);
 
         given(loginService.login("jel1y", "password"))
             .willReturn(new LoginResultDto("accessToken", user.name(), user.profileImage(), "worldClass"));

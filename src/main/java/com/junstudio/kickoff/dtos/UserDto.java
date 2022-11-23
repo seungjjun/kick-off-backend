@@ -9,11 +9,21 @@ public class UserDto {
 
     private final String profileImage;
 
-    public UserDto(Long id, String identification, String name, String profileImage) {
+    private final boolean isMyToken;
+
+    public UserDto(
+        Long id,
+        String identification,
+        String name,
+        String profileImage,
+        boolean isMyToken
+    ) {
+
         this.id = id;
         this.identification = identification;
         this.name = name;
         this.profileImage = profileImage;
+        this.isMyToken = isMyToken;
     }
 
     public Long getId() {
@@ -30,5 +40,9 @@ public class UserDto {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public boolean isMyToken() {
+        return isMyToken;
     }
 }

@@ -1,19 +1,14 @@
 package com.junstudio.kickoff.controllers;
 
-import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostWriteDto;
 import com.junstudio.kickoff.dtos.PostWrittenDto;
-import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.DeletePostService;
 import com.junstudio.kickoff.services.GetPostService;
 import com.junstudio.kickoff.services.PatchPostService;
 import com.junstudio.kickoff.utils.S3Uploader;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;

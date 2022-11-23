@@ -1,10 +1,12 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.UserDto;
+import com.junstudio.kickoff.dtos.UserInformationDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.GetUserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +36,17 @@ public class UserController {
     public UserDto user(
         @RequestAttribute("identification") String identification
     ) {
-        User user = getUserService.findUser(identification);
+        User user = getUserService.findMyInformation(identification);
         return user.toDto();
+    }
+
+    @GetMapping("{userId}")
+    public UserInformationDto information(
+        @PathVariable Long userId,
+        @RequestAttribute("identification") String identification
+    ) {
+        UsersDto usersDto = getUserService.findUser(userId, identification);
+
+        return new UserInformationDto(usersDto);
     }
 }
