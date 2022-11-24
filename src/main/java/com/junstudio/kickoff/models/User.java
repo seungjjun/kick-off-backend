@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "PERSON")
@@ -27,7 +28,8 @@ public class User {
 
     private Long gradeId;
 
-    @Column(name = "is_my_token", columnDefinition = "boolean default false")
+    @Transient
+//    @Column(name = "is_my_token", columnDefinition = "boolean default false")
     private boolean isMyToken = false;
 
     private User() {
@@ -68,6 +70,10 @@ public class User {
         return gradeId;
     }
 
+    public boolean isMyToken() {
+        return isMyToken;
+    }
+
     public UserDto toDto() {
         return new UserDto(id, identification, name, profileImage, isMyToken);
     }
@@ -82,5 +88,17 @@ public class User {
 
     public void changeTokenState() {
         isMyToken = true;
+    }
+
+    public void setTokenState() {
+        isMyToken = false;
+    }
+
+    public void update(String name, String profileImage) {
+        this.name = name;
+        if(profileImage.equals("")) {
+            return;
+        }
+        this.profileImage = profileImage;
     }
 }

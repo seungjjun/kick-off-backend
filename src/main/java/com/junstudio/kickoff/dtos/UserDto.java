@@ -42,7 +42,7 @@ public class UserDto {
         return profileImage;
     }
 
-    public boolean isMyToken() {
+    public boolean getIsMyToken() {
         return isMyToken;
     }
 }

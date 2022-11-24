@@ -12,6 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -29,6 +32,8 @@ class DeletePostServiceTest {
     @MockBean
     private RecommentRepository recommentRepository;
 
+    private DeletePostService deletePostService;
+
     private Post post;
     private Like like;
     private Comment comment;
@@ -45,13 +50,17 @@ class DeletePostServiceTest {
         likeRepository = mock(LikeRepository.class);
         commentRepository = mock(CommentRepository.class);
         recommentRepository = mock(RecommentRepository.class);
+
+        deletePostService = new DeletePostService(
+            postRepository,
+            likeRepository,
+            commentRepository,
+            recommentRepository
+        );
     }
 
     @Test
     void delete() {
-        DeletePostService deletePostService
-            = new DeletePostService(postRepository, likeRepository, commentRepository, recommentRepository);
-
         given(postRepository.getReferenceById(post.id())).willReturn(post);
         given(likeRepository.getReferenceByPostId(post.id())).willReturn(like);
         given(commentRepository.getReferenceByPostId(post.id())).willReturn(comment);
@@ -60,5 +69,18 @@ class DeletePostServiceTest {
         deletePostService.delete(post.id());
 
         verify(postRepository).delete(post);
+    }
+
+    @Test
+    void deletePosts() {
+        List<Long> postsId = new ArrayList<>();
+
+        postsId.add(1L);
+        postsId.add(2L);
+
+        deletePostService.deletePosts(postsId);
+
+        verify(postRepository).deleteById(postsId.get(0));
+        verify(postRepository).deleteById(postsId.get(1));
     }
 }

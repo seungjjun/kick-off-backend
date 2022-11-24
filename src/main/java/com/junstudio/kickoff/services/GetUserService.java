@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.services;
 
-import com.amazonaws.services.kms.model.NotFoundException;
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.ReCommentDto;
@@ -59,8 +58,12 @@ public class GetUserService {
         User user = userRepository.findById(userId)
             .orElseThrow(UserNotFound::new);
 
-        if(user.identification().equals(identification)) {
+        if (user.identification().equals(identification)) {
             user.changeTokenState();
+        }
+
+        if (!user.identification().equals(identification)) {
+            user.setTokenState();
         }
 
         List<PostDto> posts = postRepository.findAllByUserId(new UserId(userId))

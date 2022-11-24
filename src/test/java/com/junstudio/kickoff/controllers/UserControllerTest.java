@@ -6,6 +6,7 @@ import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.GetUserService;
+import com.junstudio.kickoff.services.PatchUserService;
 import com.junstudio.kickoff.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -32,6 +34,9 @@ class UserControllerTest {
 
     @MockBean
     private GetUserService getUserService;
+
+    @MockBean
+    private PatchUserService patchUserService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -94,11 +99,23 @@ class UserControllerTest {
             );
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/1")
-                .header("Authorization", "Bearer " + token)
-                .content("userId\":\"1"))
+                .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
             .andExpect(content().string(
                 containsString("title\":\"Son is EPL King")
             ));
+    }
+
+    @Test
+    void patch() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.patch("/users/1")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"name\":\"son\"," +
+                    "\"profileImage\":\"image\"" +
+                    "}")
+            )
+            .andExpect(status().isNoContent());
     }
 }
