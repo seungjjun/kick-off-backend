@@ -3,6 +3,7 @@ package com.junstudio.kickoff.controllers;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostWriteDto;
 import com.junstudio.kickoff.dtos.PostWrittenDto;
+import com.junstudio.kickoff.dtos.SelectedPostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.services.CreatePostService;
 import com.junstudio.kickoff.services.DeletePostService;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -82,6 +84,14 @@ public class PostController {
         @PathVariable Long postId
     ) {
         deletePostService.delete(postId);
+    }
+
+    @DeleteMapping("/posts")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteSelectedPost(
+        @RequestBody SelectedPostsDto selectedPostsDto
+    ) {
+        deletePostService.deletePosts(selectedPostsDto.postsId);
     }
 
     @PostMapping("/upload")

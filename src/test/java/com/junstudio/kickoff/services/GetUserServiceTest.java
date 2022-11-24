@@ -10,10 +10,8 @@ import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.RecommentRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
-import com.junstudio.kickoff.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Optional;
 

@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.exceptions.LikeNotFound;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
@@ -60,5 +59,9 @@ public class DeletePostService {
         }
 
         postRepository.delete(post);
+    }
+
+    public void deletePosts(List<Long> selectedPosts) {
+        selectedPosts.forEach(postRepository::deleteById);
     }
 }

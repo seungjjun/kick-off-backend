@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.PostDetailDto;
+import com.junstudio.kickoff.dtos.SelectedPostsDto;
 import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
@@ -22,6 +23,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -132,5 +135,21 @@ class PostControllerTest {
             .andExpect(status().isNoContent());
 
         verify(deletePostService).delete(post.id());
+    }
+
+    @Test
+    void selectedPostsDelete() throws Exception {
+        SelectedPostsDto selectedPostsDto = new SelectedPostsDto(List.of(1L, 2L));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/posts")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"postsId\": [1, 2]" +
+                    "}")
+            )
+            .andExpect(status().isNoContent());
+
+        verify(deletePostService).deletePosts(selectedPostsDto.postsId);
     }
 }
