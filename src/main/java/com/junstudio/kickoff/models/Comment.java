@@ -24,7 +24,6 @@ public class Comment {
 
     private Long postId;
 
-    @Transient
     private boolean isDeleted;
 
     @CreationTimestamp
