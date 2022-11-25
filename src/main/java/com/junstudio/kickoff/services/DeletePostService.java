@@ -34,22 +34,18 @@ public class DeletePostService {
     public void delete(Long postId) {
         Post post = postRepository.getReferenceById(postId);
 
-        if(likeRepository.existsByPostId(postId)) {
-            List<Like> likes = likeRepository.findAllByPostId(postId);
+        deleteLikes(postId);
+        deleteComments(postId);
+        deleteRecomments(postId);
 
-            for (int i = 0; i < likes.size(); i += 1) {
-                likeRepository.deleteAllById(likes.get(i).id());
-            }
-        }
+        postRepository.delete(post);
+    }
 
-        if(commentRepository.existsByPostId(postId)) {
-            List<Comment> comments = commentRepository.findAllByPostId(postId);
+    public void deletePosts(List<Long> selectedPosts) {
+        selectedPosts.forEach(postRepository::deleteById);
+    }
 
-            for (int i = 0; i < comments.size(); i += 1) {
-                commentRepository.deleteAllById(comments.get(i).id());
-            }
-        }
-
+    private void deleteRecomments(Long postId) {
         if (recommentRepository.existsByPostId(postId)) {
             List<Recomment> recomments = recommentRepository.findAllByPostId(postId);
 
@@ -57,11 +53,25 @@ public class DeletePostService {
                 recommentRepository.deleteAllById(recomments.get(i).id());
             }
         }
-
-        postRepository.delete(post);
     }
 
-    public void deletePosts(List<Long> selectedPosts) {
-        selectedPosts.forEach(postRepository::deleteById);
+    private void deleteComments(Long postId) {
+        if(commentRepository.existsByPostId(postId)) {
+            List<Comment> comments = commentRepository.findAllByPostId(postId);
+
+            for (int i = 0; i < comments.size(); i += 1) {
+                commentRepository.deleteAllById(comments.get(i).id());
+            }
+        }
+    }
+
+    private void deleteLikes(Long postId) {
+        if(likeRepository.existsByPostId(postId)) {
+            List<Like> likes = likeRepository.findAllByPostId(postId);
+
+            for (int i = 0; i < likes.size(); i += 1) {
+                likeRepository.deleteAllById(likes.get(i).id());
+            }
+        }
     }
 }

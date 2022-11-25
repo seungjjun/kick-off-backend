@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.SelectedRecommentDto;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.services.CreateRecommentService;
 import com.junstudio.kickoff.services.DeleteRecommentService;
@@ -104,5 +105,20 @@ class RecommentControllerTest {
             .andExpect(status().isNoContent());
 
         verify(deleteRecommentService).delete(1L);
+    }
+
+    @Test
+    void deleteRecomments() throws Exception {
+        SelectedRecommentDto selectedRecommentDto = new SelectedRecommentDto(List.of(7L, 8L));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/recomments")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content("{" +
+                "\"recommentId\": [7, 8]" +
+                "}"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteRecommentService).deleteRecomments(selectedRecommentDto.getRecommentId());
     }
 }

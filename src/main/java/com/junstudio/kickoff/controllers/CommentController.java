@@ -2,6 +2,7 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CommentsDto;
+import com.junstudio.kickoff.dtos.SelectedCommentDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.services.CreateCommentService;
 import com.junstudio.kickoff.services.DeleteCommentService;
@@ -84,5 +85,13 @@ public class CommentController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void delete(@PathVariable Long commentId) {
         deleteCommentService.deleteComment(commentId);
+    }
+
+    @DeleteMapping("/comments")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void deleteSelectedComments(
+        @RequestBody SelectedCommentDto selectedCommentDto
+        ) {
+        deleteCommentService.deleteComments(selectedCommentDto.getCommentId());
     }
 }

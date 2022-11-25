@@ -29,7 +29,6 @@ public class User {
     private Long gradeId;
 
     @Transient
-//    @Column(name = "is_my_token", columnDefinition = "boolean default false")
     private boolean isMyToken = false;
 
     private User() {

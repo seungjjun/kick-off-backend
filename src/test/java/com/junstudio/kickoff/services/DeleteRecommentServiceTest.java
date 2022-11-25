@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.List;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -59,5 +61,16 @@ class DeleteRecommentServiceTest {
 
         verify(recommentRepository).delete(recomment);
         verify(commentRepository).delete(comment);
+    }
+
+    @Test
+    void deleteRecomments() {
+        given(recommentRepository.getReferenceById(recomment.id())).willReturn(recomment);
+
+        given(commentRepository.getReferenceById(recomment.commentId())).willReturn(comment);
+
+        deleteRecommentService.deleteRecomments(List.of(recomment.id()));
+
+        verify(recommentRepository).delete(recomment);
     }
 }

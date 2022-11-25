@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.controllers;
 
-import com.junstudio.kickoff.dtos.BoardDto;
 import com.junstudio.kickoff.dtos.BoardsDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.services.GetBoardService;
