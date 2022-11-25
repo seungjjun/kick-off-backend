@@ -24,8 +24,8 @@ public class DeleteRecommentService {
     public void delete(Long recommentId) {
         Recomment recomment = recommentRepository.getReferenceById(recommentId);
 
-        if(commentRepository.getReferenceById(recomment.commentId()).isDeleted()) {
-            Comment comment = commentRepository.getReferenceById(recomment.commentId());
+        if(findComment(recomment).isDeleted()) {
+            Comment comment = findComment(recomment);
 
             recommentRepository.delete(recomment);
 
@@ -34,12 +34,17 @@ public class DeleteRecommentService {
             }
         }
 
-        if(!commentRepository.getReferenceById(recomment.commentId()).isDeleted()) {
+        if(!findComment(recomment).isDeleted()) {
             recommentRepository.delete(recomment);
         }
     }
 
     public void deleteRecomments(List<Long> recommentId) {
         recommentId.forEach(this::delete);
+    }
+
+    private Comment findComment(Recomment recomment) {
+        return commentRepository.getReferenceById(
+            recomment.commentId());
     }
 }

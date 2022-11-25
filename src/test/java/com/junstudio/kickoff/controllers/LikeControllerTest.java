@@ -1,6 +1,8 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.SelectedLikeDto;
 import com.junstudio.kickoff.services.CreateLikeService;
+import com.junstudio.kickoff.services.DeleteLikeService;
 import com.junstudio.kickoff.services.GetLikeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.List;
+
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(LikeController.class)
@@ -24,6 +30,9 @@ class LikeControllerTest {
 
     @MockBean
     private CreateLikeService createLikeService;
+
+    @MockBean
+    private DeleteLikeService deleteLikeService;
 
     @Test
     void likes() throws Exception {
@@ -41,5 +50,20 @@ class LikeControllerTest {
                     ",\"userId\":\"1\"" +
                     "}"))
             .andExpect(status().isCreated());
+    }
+
+    @Test
+    void deleteLike() throws Exception {
+        SelectedLikeDto selectedLikeDto = new SelectedLikeDto(List.of(1L, 2L));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/likes")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"likeId\": [1, 2]" +
+                    "}"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteLikeService).deleteLike(selectedLikeDto.getLikeId());
     }
 }
