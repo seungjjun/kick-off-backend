@@ -2,6 +2,7 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CommentsDto;
+import com.junstudio.kickoff.dtos.SelectedCommentDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.services.CreateCommentService;
 import com.junstudio.kickoff.services.DeleteCommentService;
@@ -96,5 +97,21 @@ CommentControllerTest {
             .andExpect(status().isNoContent());
 
         verify(deleteCommentService).deleteComment(3L);
+    }
+
+    @Test
+    void deleteSelectedComments() throws Exception {
+        SelectedCommentDto selectedCommentDto =
+            new SelectedCommentDto(List.of(4L, 5L, 6L));
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/comments")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"commentId\": [4, 5, 6]" +
+                    "}"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteCommentService).deleteComments(selectedCommentDto.getCommentId());
     }
 }

@@ -7,6 +7,7 @@ import com.junstudio.kickoff.repositories.RecommentRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -23,10 +24,7 @@ public class DeleteRecommentService {
     public void delete(Long recommentId) {
         Recomment recomment = recommentRepository.getReferenceById(recommentId);
 
-        if(commentRepository.getReferenceById(
-            recomment.commentId())
-            .isDeleted()
-        ) {
+        if(commentRepository.getReferenceById(recomment.commentId()).isDeleted()) {
             Comment comment = commentRepository.getReferenceById(recomment.commentId());
 
             recommentRepository.delete(recomment);
@@ -36,11 +34,12 @@ public class DeleteRecommentService {
             }
         }
 
-        if(!commentRepository.getReferenceById(
-            recomment.commentId())
-            .isDeleted()
-        ) {
+        if(!commentRepository.getReferenceById(recomment.commentId()).isDeleted()) {
             recommentRepository.delete(recomment);
         }
+    }
+
+    public void deleteRecomments(List<Long> recommentId) {
+        recommentId.forEach(this::delete);
     }
 }

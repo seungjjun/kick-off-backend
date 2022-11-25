@@ -2,6 +2,7 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.ReCommentDto;
 import com.junstudio.kickoff.dtos.RecommentsDto;
+import com.junstudio.kickoff.dtos.SelectedRecommentDto;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.services.CreateRecommentService;
 import com.junstudio.kickoff.services.DeleteRecommentService;
@@ -88,5 +89,12 @@ public class RecommentController {
     private void deleteRecomment(@PathVariable Long recommentId) {
         deleteRecommentService.delete(recommentId);
     }
-}
 
+    @DeleteMapping("/recomments")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    private void  deleteRecomments(
+        @RequestBody SelectedRecommentDto selectedRecommentDto
+    ) {
+        deleteRecommentService.deleteRecomments(selectedRecommentDto.getRecommentId());
+    }
+}
