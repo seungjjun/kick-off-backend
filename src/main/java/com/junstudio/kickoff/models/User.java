@@ -1,6 +1,8 @@
 package com.junstudio.kickoff.models;
 
 import com.junstudio.kickoff.dtos.UserDto;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.context.annotation.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
@@ -26,12 +28,19 @@ public class User {
 
     private String profileImage;
 
+    @Column(columnDefinition = "Long default 1L")
     private Long gradeId;
 
     @Transient
     private boolean isMyToken = false;
 
-    private User() {
+    public User() {
+    }
+
+    public User(String name, String identification) {
+        this.name = name;
+        this.identification = identification;
+        this.gradeId = 1L;
     }
 
     public User(Long id, String identification, String encodedPassword,
