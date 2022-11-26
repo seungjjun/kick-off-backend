@@ -11,14 +11,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/session")
 public class SessionController {
     private final LoginService loginService;
 
@@ -26,7 +24,7 @@ public class SessionController {
         this.loginService = loginService;
     }
 
-    @PostMapping
+    @PostMapping("/session")
     @ResponseStatus(HttpStatus.CREATED)
     public LoginResultDto login(
         @Valid @RequestBody LoginRequestDto loginRequestDto

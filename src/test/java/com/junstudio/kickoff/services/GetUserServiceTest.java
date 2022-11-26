@@ -10,8 +10,10 @@ import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.RecommentRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
+import com.junstudio.kickoff.utils.OAuth2Kakao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Optional;
 
@@ -31,6 +33,9 @@ class GetUserServiceTest {
     Post post;
     Comment comment;
     Like like;
+
+    @SpyBean
+    private OAuth2Kakao oAuth2Kakao;
 
     @BeforeEach
     void setup() {
@@ -59,8 +64,8 @@ class GetUserServiceTest {
                 postRepository,
                 commentRepository,
                 likeRepository,
-                recommentRepository
-            );
+                recommentRepository,
+                oAuth2Kakao);
 
         User foundUser = getUserService.findMyInformation("jel1y");
 
@@ -75,8 +80,8 @@ class GetUserServiceTest {
                 postRepository,
                 commentRepository,
                 likeRepository,
-                recommentRepository
-            );
+                recommentRepository,
+                oAuth2Kakao);
 
         given(userRepository.findById(user.id())).willReturn(Optional.of(user));
         UsersDto users = getUserService.findUser(user.id(), user.identification());

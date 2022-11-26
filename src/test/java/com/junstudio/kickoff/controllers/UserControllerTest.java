@@ -1,10 +1,12 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.RegistrationRequestDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.services.CreateUserService;
 import com.junstudio.kickoff.services.GetUserService;
 import com.junstudio.kickoff.services.PatchUserService;
 import com.junstudio.kickoff.utils.JwtUtil;
@@ -17,12 +19,17 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -32,11 +39,17 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext context;
+
     @MockBean
     private GetUserService getUserService;
 
     @MockBean
     private PatchUserService patchUserService;
+
+    @MockBean
+    private CreateUserService createUserService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -52,6 +65,11 @@ class UserControllerTest {
 
     @BeforeEach
     void setup() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
+            .addFilters(new CharacterEncodingFilter("UTF-8", true))
+            .alwaysDo(print())
+            .build();
+
         identification = "je1ly";
 
         user = new User(1L, "jel1y", "encodedPassword",
@@ -62,6 +80,15 @@ class UserControllerTest {
         recomment = Recomment.fake();
 
         token = jwtUtil.encode(identification);
+
+        RegistrationRequestDto registrationRequestDto =
+            new RegistrationRequestDto("jun", "gmail", "Jun!@123", "Jun!@123");
+
+        given(createUserService.register(
+            registrationRequestDto.getName(),
+            registrationRequestDto.getIdentification(),
+            registrationRequestDto.getPassword(),
+            registrationRequestDto.getConfirmPassword())).willReturn(user);
     }
 
     @Test
@@ -117,5 +144,130 @@ class UserControllerTest {
                     "}")
             )
             .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void register() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"jun\"," +
+                    "\"identification\":\"gmail\"," +
+                    "\"password\":\"Jun!@123\"," +
+                    "\"confirmPassword\":\"Jun!@123\"" +
+                    "}"))
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    void registerWithWrongNameLength() throws Exception {
+        RegistrationRequestDto registrationRequestDto =
+            new RegistrationRequestDto("NohSeungjun", "gmail", "Jun!@123", "Jun!@123");
+
+        given(createUserService.register(
+            registrationRequestDto.getName(),
+            registrationRequestDto.getIdentification(),
+            registrationRequestDto.getPassword(),
+            registrationRequestDto.getConfirmPassword())).willReturn(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"NohSeungjun\"," +
+                    "\"identification\":\"gmail\"," +
+                    "\"password\":\"Jun!@123\"," +
+                    "\"confirmPassword\":\"Jun!@123\"" +
+                    "}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(
+                containsString("닉네임은 특수문자를 제외한 2 ~ 10자리여야 합니다.")
+            ));
+    }
+
+    @Test
+    void registerWithWrongIdFormat() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"jun\"," +
+                    "\"identification\":\"jun-jingmailcom\"," +
+                    "\"password\":\"Jun!@123\"," +
+                    "\"confirmPassword\":\"Jun!@123\"" +
+                    "}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(
+                containsString("아이디는 4 ~ 16자 영문 소문자, 숫자를 사용해야 합니다.")
+            ));
+    }
+
+    @Test
+    void registerWithWrongPasswordFormat() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"jun\"," +
+                    "\"identification\":\"gmail\"," +
+                    "\"password\":\"123\"," +
+                    "\"confirmPassword\":\"123\"" +
+                    "}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(
+                containsString("비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
+            ));
+    }
+
+    @Test
+    void registerWithNameInputFieldIsBlank() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"\"," +
+                    "\"identification\":\"gmail\"," +
+                    "\"password\":\"Jun!@123\"," +
+                    "\"confirmPassword\":\"Jun!@123\"" +
+                    "}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(
+                containsString("닉네임은 특수문자를 제외한 2 ~ 10자리여야 합니다.")
+            ));
+    }
+
+    @Test
+    void registerWithIdInputFieldIsBlank() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"jun\"," +
+                    "\"identification\":\"\"," +
+                    "\"password\":\"Jun!@123\"," +
+                    "\"confirmPassword\":\"Jun!@123\"" +
+                    "}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(
+                containsString("아이디는 4 ~ 16자 영문 소문자, 숫자를 사용해야 합니다.")
+            ));
+    }
+
+    @Test
+    void registerWithConfirmPasswordInputFieldIsBlank() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.post("/users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content("{" +
+                    "\"name\":\"jun\"," +
+                    "\"identification\":\"gmail\"," +
+                    "\"password\":\"\"," +
+                    "\"confirmPassword\":\"\"" +
+                    "}"))
+            .andExpect(status().isBadRequest())
+            .andExpect(content().string(
+                containsString("비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
+            ));
     }
 }
