@@ -1,8 +1,11 @@
 package com.junstudio.kickoff.dtos;
 
+import java.util.List;
+
 public class PostsDto {
-    private final PostPageDto page;
-    private final CreatePostsDto posts;
+    private PostPageDto page;
+    private CreatePostsDto posts;
+    private List<PostDto> searchedPosts;
 
     public PostsDto(CreatePostsDto createPostsDto, PostPageDto page) {
         this.posts = createPostsDto;

@@ -3,7 +3,6 @@ package com.junstudio.kickoff.services;
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CommentPageDto;
 import com.junstudio.kickoff.dtos.CommentsDto;
-import com.junstudio.kickoff.dtos.PostPageDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
