@@ -14,4 +14,14 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findAllByBoardId(Long boardId, Pageable pageable);
 
     List<Post> findAllByUserId(UserId userId);
+
+    Page<Post> findByPostInformation_TitleContaining(String keyword, Pageable pageable);
+
+    Page<Post> findByBoardIdAndPostInformation_TitleContaining(Long boardId, String keyword, Pageable pageable);
+
+    Page<Post> findByPostInformation_ContentContaining(String keyword, Pageable pageable);
+
+    Page<Post> findByBoardIdAndPostInformation_ContentContaining(Long boardId, String keyword, Pageable pageable);
+
+    Page<Post> findByUserId(UserId userId, Pageable pageable);
 }

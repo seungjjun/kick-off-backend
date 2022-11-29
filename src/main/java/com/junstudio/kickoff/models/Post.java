@@ -127,12 +127,4 @@ public class Post {
         this.boardId = boardId;
         this.imageUrl = imageUrl;
     }
-
-    public void addLike() {
-        this.likeNumber += 1L;
-    }
-
-    public void minusLike() {
-        this.likeNumber -= 1L;
-    }
 }

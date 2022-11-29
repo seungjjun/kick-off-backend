@@ -1,8 +1,6 @@
 package com.junstudio.kickoff.models;
 
 import com.junstudio.kickoff.dtos.UserDto;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.context.annotation.Role;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
@@ -104,7 +102,7 @@ public class User {
 
     public void update(String name, String profileImage) {
         this.name = name;
-        if(profileImage.equals("")) {
+        if (profileImage.equals("")) {
             return;
         }
         this.profileImage = profileImage;

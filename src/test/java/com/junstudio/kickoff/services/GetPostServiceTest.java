@@ -1,11 +1,8 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
-import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Board;
-import com.junstudio.kickoff.models.Category;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.User;
@@ -96,5 +93,67 @@ class GetPostServiceTest {
         assertThat(foundPost.getPostInformation().getTitle()).isEqualTo("EPL start");
 
         verify(postRepository).findById(any());
+    }
+
+    @Test
+    void searchWithTitle() {
+        Post post = new Post(1L, new UserId(1L), 2L,
+            new PostInformation("Laliga start", "이강인 개막전 득점"),
+            3L, 1L, "imageUrl", LocalDateTime.now());
+
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
+
+        Page<Post> page = new PageImpl<>(posts);
+
+        given(postRepository.findByPostInformation_TitleContaining(
+            "Laliga", Pageable.ofSize(1))
+        ).willReturn(page);
+
+        given(postRepository.findByBoardIdAndPostInformation_TitleContaining(
+            2L, "Laliga", Pageable.ofSize(1))
+        ).willReturn(page);
+
+        PostsDto searchedPosts =
+            getPostService.search(2L, "Laliga", "title", Pageable.ofSize(1));
+
+        assertThat(searchedPosts.getPosts().getPosts().get(0)
+            .getPostInformation().getTitle())
+            .isEqualTo("Laliga start");
+
+        verify(postRepository).findByBoardIdAndPostInformation_TitleContaining(any(), any(), any());
+    }
+
+    @Test
+    void searchWithContent() {
+        Post post = new Post(1L, new UserId(1L), 1L,
+            new PostInformation("Laliga start", "이강인 개막전 득점"),
+            3L, 1L, "imageUrl", LocalDateTime.now());
+
+        List<Post> posts = new ArrayList<>();
+        posts.add(post);
+
+        Page<Post> page = new PageImpl<>(posts);
+
+        given(postRepository.findByPostInformation_TitleContaining(
+            "이강인", Pageable.ofSize(1))
+        ).willReturn(page);
+
+        given(postRepository.findByPostInformation_ContentContaining(
+            "이강인", Pageable.ofSize(1))
+        ).willReturn(page);
+
+        given(postRepository.findByPostInformation_ContentContaining(
+            "이강인", Pageable.ofSize(1))
+        ).willReturn(page);
+
+        PostsDto searchedPosts =
+            getPostService.search(1L, "이강인", "content", Pageable.ofSize(1));
+
+        assertThat(searchedPosts.getPosts().getPosts().get(0)
+            .getPostInformation().getContent())
+            .isEqualTo("이강인 개막전 득점");
+
+        verify(postRepository).findByPostInformation_ContentContaining(any(), any());
     }
 }

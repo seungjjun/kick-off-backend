@@ -19,16 +19,19 @@ import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.BoardRepository;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.RecommentRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,6 +104,61 @@ public class GetPostService {
         post.updateHit(post.hit());
 
         return post.toDetailDto(board, user);
+    }
+
+    public PostsDto search(Long boardId, String keyword, String keywordType, Pageable pageable) {
+        List<PostDto> searchedPosts = new ArrayList<>();
+
+        if (keywordType.equals("title")) {
+            searchedPosts = searchByPostTitle(keyword, pageable)
+                .map(Post::toDto).stream().collect(Collectors.toList());
+
+            if (boardId != 1) {
+                searchedPosts = postRepository
+                    .findByBoardIdAndPostInformation_TitleContaining(boardId, keyword, pageable)
+                    .stream().map(Post::toDto).collect(Collectors.toList());
+            }
+        }
+
+        if (keywordType.equals("content")) {
+            searchedPosts = postRepository.findByPostInformation_ContentContaining(keyword, pageable)
+                .map(Post::toDto).stream().collect(Collectors.toList());
+            ;
+
+            if (boardId != 1) {
+                searchedPosts = postRepository
+                    .findByBoardIdAndPostInformation_ContentContaining(boardId, keyword, pageable)
+                    .stream().map(Post::toDto).collect(Collectors.toList());
+            }
+        }
+
+        if (keywordType.equals("author")) {
+            User user = userRepository.findByName(keyword).orElseThrow(UserNotFound::new);
+
+            searchedPosts = postRepository.findByUserId(new UserId(user.id()), pageable)
+                .stream().map(Post::toDto).collect(Collectors.toList());
+        }
+
+        List<CommentDto> comments = commentDto();
+
+        List<ReCommentDto> reComments = recommentDto();
+
+        List<LikeDto> likes = likeDto();
+
+        List<UserDto> users = userDto();
+
+        List<BoardDto> boards = boardDto();
+
+        CreatePostsDto createPostsDto =
+            new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards);
+
+        return new PostsDto(createPostsDto,
+            new PostPageDto(searchByPostTitle(keyword, pageable).getNumber() + 1,
+                searchByPostTitle(keyword, pageable).getTotalElements()));
+    }
+
+    private Page<Post> searchByPostTitle(String keyword, Pageable pageable) {
+        return postRepository.findByPostInformation_TitleContaining(keyword, pageable);
     }
 
     private List<PostDto> postDto(Pageable pageable) {

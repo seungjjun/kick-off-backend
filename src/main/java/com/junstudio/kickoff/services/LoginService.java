@@ -47,12 +47,12 @@ public class LoginService {
 
     public LoginResultDto kakaoLogin(HashMap<String, Object> userInfo) {
         String name = String.valueOf(userInfo.get("nickname"));
-        String identification = String.valueOf(userInfo.get("nickname"));
+        String identification = String.valueOf(userInfo.get("email"));
 
         if(!userRepository.existsByIdentification(identification)) {
             User user = new User(name, identification);
 
-            user.changePassword(name, passwordEncoder);
+            user.changePassword(identification, passwordEncoder);
 
             userRepository.save(user);
 

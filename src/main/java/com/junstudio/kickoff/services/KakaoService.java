@@ -85,10 +85,14 @@ public class KakaoService {
 
             JsonObject properties =
                 element.getAsJsonObject().get("properties").getAsJsonObject();
+            JsonObject kakaoAccount =
+                element.getAsJsonObject().get("kakao_account").getAsJsonObject();
 
             String nickname = properties.getAsJsonObject().get("nickname").getAsString();
+            String email = kakaoAccount.getAsJsonObject().get("email").getAsString();
 
             user.put("nickname", nickname);
+            user.put("email", email);
         } catch (IOException e) {
             e.printStackTrace();
         }
