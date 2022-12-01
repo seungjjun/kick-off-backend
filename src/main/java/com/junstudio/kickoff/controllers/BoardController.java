@@ -41,6 +41,7 @@ public class BoardController {
         return getPostService.posts(boardId, pageable);
     }
 
+//    /boards/{boardId}/posts/search
     @GetMapping("/posts/{boardId}/search")
     private PostsDto searchedPosts(
         @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,

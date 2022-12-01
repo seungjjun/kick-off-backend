@@ -13,7 +13,6 @@ import com.junstudio.kickoff.repositories.RecommentRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.Optional;
 
