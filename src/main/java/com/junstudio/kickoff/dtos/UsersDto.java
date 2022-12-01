@@ -5,13 +5,13 @@ import com.junstudio.kickoff.models.User;
 import java.util.List;
 
 public class UsersDto {
-
     private List<UserDto> users;
     private UserDto user;
     private List<PostDto> posts;
     private List<CommentDto> comments;
     private List<ReCommentDto> reCommentDtos;
     private List<PostDto> likedPosts;
+    private ManagingUsersDto managingUsersDto;
 
     public UsersDto(List<UserDto> users) {
         this.users = users;
@@ -28,6 +28,14 @@ public class UsersDto {
         this.comments = comments;
         this.reCommentDtos = reCommentDtos;
         this.likedPosts = likedPosts;
+    }
+
+    public UsersDto(ManagingUsersDto managingUsersDto) {
+        this.managingUsersDto = managingUsersDto;
+    }
+
+    public ManagingUsersDto getMembers() {
+        return managingUsersDto;
     }
 
     public List<UserDto> getUsers() {

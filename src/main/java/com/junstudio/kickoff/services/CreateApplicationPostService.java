@@ -26,10 +26,10 @@ public class CreateApplicationPostService {
     private final RecommentRepository recommentRepository;
 
     public CreateApplicationPostService(ApplicationPostRepository applicationPostRepository,
-                                        UserRepository userRepository,
-                                        PostRepository postRepository,
-                                        CommentRepository commentRepository,
-                                        RecommentRepository recommentRepository) {
+                  UserRepository userRepository,
+                  PostRepository postRepository,
+                  CommentRepository commentRepository,
+                  RecommentRepository recommentRepository) {
         this.applicationPostRepository = applicationPostRepository;
         this.userRepository = userRepository;
         this.postRepository = postRepository;

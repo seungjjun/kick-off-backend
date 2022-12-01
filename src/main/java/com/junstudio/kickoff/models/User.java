@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 @Table(name = "PERSON")
