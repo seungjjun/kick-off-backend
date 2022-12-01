@@ -1,14 +1,13 @@
 package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.dtos.UserDto;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -24,7 +23,7 @@ class PatchUserServiceTest {
         PatchUserService patchUserService = new PatchUserService(userRepository);
 
         User user = spy(new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L, false));
+            "Jun", "profileImage", new Grade("아마추어"), false));
 
         given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
 
@@ -33,6 +32,7 @@ class PatchUserServiceTest {
             user.identification(),
             user.name(),
             user.profileImage(),
+            user.grade().name(),
             user.isMyToken()
         );
 

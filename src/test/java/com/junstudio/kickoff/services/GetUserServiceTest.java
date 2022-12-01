@@ -2,6 +2,7 @@ package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
@@ -46,7 +47,7 @@ class GetUserServiceTest {
         like = Like.fake();
 
         user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L, false);
+            "Jun", "profileImage", new Grade("아마추어"), false);
 
         given(userRepository.findByIdentification(any()))
             .willReturn(Optional.of(user));
@@ -62,9 +63,9 @@ class GetUserServiceTest {
                 likeRepository,
                 recommentRepository);
 
-        User foundUser = getUserService.findMyInformation("jel1y");
+        UsersDto foundUser = getUserService.findMyInformation("jel1y");
 
-        assertThat(foundUser.name()).isEqualTo("Jun");
+        assertThat(foundUser.getUser().getName()).isEqualTo("Jun");
     }
 
     @Test
@@ -77,8 +78,8 @@ class GetUserServiceTest {
                 likeRepository,
                 recommentRepository);
 
-        given(userRepository.findById(user.id())).willReturn(Optional.of(user));
-        UsersDto users = getUserService.findUser(user.id(), user.identification());
+        given(userRepository.findByName(user.name())).willReturn(Optional.of(user));
+        UsersDto users = getUserService.findUser(user.name(), user.identification());
 
         assertThat(users.getUser().getName()).isEqualTo("Jun");
         assertThat(users.getUser().getIdentification()).isEqualTo("jel1y");

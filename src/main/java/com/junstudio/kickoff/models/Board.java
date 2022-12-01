@@ -29,6 +29,10 @@ public class Board {
         this.parentId = parentId;
     }
 
+    public Board(BoardName boardName) {
+        this.boardName = boardName;
+    }
+
     public Long id() {
         return id;
     }

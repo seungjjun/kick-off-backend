@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.BoardDto;
 import com.junstudio.kickoff.dtos.BoardsDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.services.GetBoardService;
@@ -7,8 +8,13 @@ import com.junstudio.kickoff.services.GetPostService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -43,5 +49,16 @@ public class BoardController {
         String keywordType
     ) {
         return getPostService.search(boardId, keyword, keywordType, pageable);
+    }
+
+    @PostMapping("/board")
+    @ResponseStatus(HttpStatus.CREATED)
+    private String createBoard(
+        @RequestBody BoardDto boardDto,
+        @RequestAttribute("identification") String identification
+    ) {
+        getPostService.createPost(boardDto.getBoardName(), identification);
+
+        return "OK";
     }
 }

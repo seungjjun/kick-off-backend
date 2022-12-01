@@ -9,6 +9,8 @@ public class UserDto {
 
     private final String profileImage;
 
+    private final String grade;
+
     private final boolean isMyToken;
 
     public UserDto(
@@ -16,13 +18,14 @@ public class UserDto {
         String identification,
         String name,
         String profileImage,
+        String grade,
         boolean isMyToken
     ) {
-
         this.id = id;
         this.identification = identification;
         this.name = name;
         this.profileImage = profileImage;
+        this.grade = grade;
         this.isMyToken = isMyToken;
     }
 
@@ -40,6 +43,10 @@ public class UserDto {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public String getGrade() {
+        return grade;
     }
 
     public boolean getIsMyToken() {

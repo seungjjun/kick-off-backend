@@ -3,9 +3,7 @@ package com.junstudio.kickoff.services;
 import com.junstudio.kickoff.dtos.LoginResultDto;
 import com.junstudio.kickoff.exceptions.LoginFailed;
 import com.junstudio.kickoff.exceptions.UserNotFound;
-import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.repositories.GradeRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
 import com.junstudio.kickoff.utils.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,16 +15,13 @@ import java.util.HashMap;
 public class LoginService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final GradeRepository gradeRepository;
     private final JwtUtil jwtUtil;
 
     public LoginService(UserRepository userRepository,
                         PasswordEncoder passwordEncoder,
-                        GradeRepository gradeRepository,
                         JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.gradeRepository = gradeRepository;
         this.jwtUtil = jwtUtil;
     }
 
@@ -36,20 +31,18 @@ public class LoginService {
 
         String accessToken = jwtUtil.encode(identification);
 
-        Grade grade = gradeRepository.getReferenceById(user.gradeId());
-
         if (!user.authenticate(password, passwordEncoder)) {
             throw new LoginFailed();
         }
 
-        return new LoginResultDto(accessToken, user.name(), user.profileImage(), grade.getName());
+        return new LoginResultDto(accessToken, user.name(), user.profileImage(), user.grade().name());
     }
 
     public LoginResultDto kakaoLogin(HashMap<String, Object> userInfo) {
         String name = String.valueOf(userInfo.get("nickname"));
         String identification = String.valueOf(userInfo.get("email"));
 
-        if(!userRepository.existsByIdentification(identification)) {
+        if (!userRepository.existsByIdentification(identification)) {
             User user = new User(name, identification);
 
             user.changePassword(identification, passwordEncoder);

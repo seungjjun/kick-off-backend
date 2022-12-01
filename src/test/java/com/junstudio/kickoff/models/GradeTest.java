@@ -7,8 +7,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class GradeTest {
     @Test
     void grade() {
-        Grade grade = new Grade(1L, "WorldClass");
+        Grade grade = new Grade("WorldClass");
 
-        assertThat(grade.getName()).isEqualTo("WorldClass");
+        assertThat(grade.name()).isEqualTo("WorldClass");
     }
 }

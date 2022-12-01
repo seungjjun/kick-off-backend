@@ -8,7 +8,7 @@ class LikeTest {
     @Test
     void like() {
         User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L, false);
+            "Jun", "profileImage", new Grade("아마추어"), false);
 
         Post post = Post.fake();
 

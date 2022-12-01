@@ -49,13 +49,29 @@ public class GetUserService {
         return userRepository.findAll();
     }
 
-    public User findMyInformation(String identification) {
-        return userRepository.findByIdentification(identification)
+    public UsersDto findMyInformation(String identification) {
+        User user = userRepository.findByIdentification(identification)
             .orElseThrow(UserNotFound::new);
+
+        user.changeTokenState();
+
+        List<PostDto> posts = posts(user);
+
+        List<CommentDto> comments = comments(user);
+
+        List<ReCommentDto> reCommentDtos = recomments(user);
+
+        List<Like> likes = likes(user);
+
+        List<PostDto> likedPosts = new ArrayList<>();
+
+        addLikes(likes, likedPosts);
+
+        return new UsersDto(user, posts, comments, reCommentDtos, likedPosts);
     }
 
-    public UsersDto findUser(Long userId, String identification) {
-        User user = userRepository.findById(userId)
+    public UsersDto findUser(String userName, String identification) {
+        User user = userRepository.findByName(userName)
             .orElseThrow(UserNotFound::new);
 
         if (user.identification().equals(identification)) {
@@ -66,25 +82,45 @@ public class GetUserService {
             user.setTokenState();
         }
 
-        List<PostDto> posts = postRepository.findAllByUserId(new UserId(userId))
-            .stream().map(Post::toDto).collect(Collectors.toList());
+        List<PostDto> posts = posts(user);
 
-        List<CommentDto> comments = commentRepository.findAllByUserId(userId)
-            .stream().map(Comment::toDto).collect(Collectors.toList());
+        List<CommentDto> comments = comments(user);
 
-        List<ReCommentDto> reCommentDtos = recommentRepository.findAllByUserId(userId)
-            .stream().map(Recomment::toDto).collect(Collectors.toList());
+        List<ReCommentDto> reCommentDtos = recomments(user);
 
-        List<Like> likes = likeRepository.findAllByUserId(userId);
+        List<Like> likes = likes(user);
 
         List<PostDto> likedPosts = new ArrayList<>();
 
+        addLikes(likes, likedPosts);
+
+        return new UsersDto(user, posts, comments, reCommentDtos, likedPosts);
+    }
+
+    private List<PostDto> posts(User user) {
+        return postRepository.findAllByUserId(new UserId(user.id()))
+            .stream().map(Post::toDto).collect(Collectors.toList());
+    }
+
+    private List<CommentDto> comments(User user) {
+        return commentRepository.findAllByUserId(user.id())
+            .stream().map(Comment::toDto).collect(Collectors.toList());
+    }
+
+    private List<ReCommentDto> recomments(User user) {
+        return recommentRepository.findAllByUserId(user.id())
+            .stream().map(Recomment::toDto).collect(Collectors.toList());
+    }
+
+    private List<Like> likes(User user) {
+        return likeRepository.findAllByUserId(user.id());
+    }
+
+    private void addLikes(List<Like> likes, List<PostDto> likedPosts) {
         likes.forEach(like -> {
             likedPosts.add(postRepository.findById(like.postId())
                 .orElseThrow(PostNotFound::new)
                 .toDto());
         });
-
-        return new UsersDto(user, posts, comments, reCommentDtos, likedPosts);
     }
 }
