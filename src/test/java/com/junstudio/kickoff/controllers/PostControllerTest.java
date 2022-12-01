@@ -4,6 +4,7 @@ import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.SelectedPostsDto;
 import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
@@ -68,7 +69,7 @@ class PostControllerTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "son7", "image", 1L, false);
+        user = new User(1L, "jel1y", "password", "son7", "image", new Grade("아마추어"), false);
 
         board = Board.fake();
         post = Post.fake();

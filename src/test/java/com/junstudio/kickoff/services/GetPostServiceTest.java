@@ -3,6 +3,7 @@ package com.junstudio.kickoff.services;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Board;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.User;
@@ -82,7 +83,7 @@ class GetPostServiceTest {
 
         Board board = Board.fake();
         User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L, false);
+            "Jun", "profileImage", new Grade("아마추어"), false);
 
         given(postRepository.findById(any())).willReturn(Optional.of(post));
         given(boardRepository.findById(any())).willReturn(Optional.of(board));

@@ -4,7 +4,6 @@ import com.junstudio.kickoff.dtos.LoginResultDto;
 import com.junstudio.kickoff.exceptions.LoginFailed;
 import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.repositories.GradeRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
 import com.junstudio.kickoff.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,8 +25,6 @@ class LoginServiceTest {
     @MockBean
     private UserRepository userRepository;
 
-    @MockBean
-    private GradeRepository gradeRepository;
 
     @MockBean
     private JwtUtil jwtUtil;
@@ -38,24 +35,21 @@ class LoginServiceTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "jun", "url", 1L, false);
+        user = new User(1L, "jel1y", "password", "jun", "url", new Grade("아마추어"), false);
 
-        gradeRepository = mock(GradeRepository.class);
         userRepository = mock(UserRepository.class);
         passwordEncoder = new Argon2PasswordEncoder();
         jwtUtil = mock(JwtUtil.class);
 
         loginService = new LoginService(
-            userRepository, passwordEncoder, gradeRepository, jwtUtil);
+            userRepository, passwordEncoder, jwtUtil);
     }
 
     @Test
     void login() {
         user.changePassword("password", passwordEncoder);
-        Grade grade = new Grade(1L, "world class");
 
         given(userRepository.findByIdentification("jel1y")).willReturn(Optional.of(user));
-        given(gradeRepository.getReferenceById(user.gradeId())).willReturn(grade);
 
         LoginResultDto loginResultDto = loginService.login("jel1y", "password");
 

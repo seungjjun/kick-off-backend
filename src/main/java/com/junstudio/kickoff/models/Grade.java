@@ -1,32 +1,42 @@
 package com.junstudio.kickoff.models;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
+import java.util.Objects;
 
-@Entity
+@Embeddable
 public class Grade {
-    @Id
-    @GeneratedValue
-    @Column(name = "grade_id")
-    private Long id;
-
+    @Column(name = "user_grade")
     private String name;
 
     public Grade() {
     }
 
-    public Grade(Long id, String name) {
-        this.id = id;
+    public Grade(String name) {
         this.name = name;
     }
 
-    public Long getId() {
-        return id;
+    public String name() {
+        return name;
     }
 
-    public String getName() {
-        return name;
+    @Override
+    public String toString() {
+        return "Grade{" +
+            "name='" + name + '\'' +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Grade grade = (Grade) o;
+        return Objects.equals(name, grade.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

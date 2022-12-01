@@ -42,6 +42,9 @@ public class DeletePostService {
     }
 
     public void deletePosts(List<Long> selectedPosts) {
+        selectedPosts.forEach(this::deleteLikes);
+        selectedPosts.forEach(this::deleteComments);
+        selectedPosts.forEach(this::deleteRecomments);
         selectedPosts.forEach(postRepository::deleteById);
     }
 

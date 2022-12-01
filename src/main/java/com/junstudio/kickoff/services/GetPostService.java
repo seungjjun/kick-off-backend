@@ -14,6 +14,7 @@ import com.junstudio.kickoff.exceptions.BoardNotFound;
 import com.junstudio.kickoff.exceptions.PostNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Board;
+import com.junstudio.kickoff.models.BoardName;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
@@ -195,6 +196,18 @@ public class GetPostService {
         return boardRepository.findAll()
             .stream().map(Board::toDto)
             .collect(Collectors.toList());
+    }
+
+    public void createPost(BoardName boardName, String identification) {
+        User user = userRepository.findByIdentification(identification).orElseThrow();
+
+        if (user.grade().name().equals("매니저")) {
+            throw new BoardNotFound();
+        }
+
+        Board board = new Board(boardName);
+
+        boardRepository.save(board);
     }
 }
 

@@ -33,7 +33,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("users")
 @CrossOrigin
 public class UserController {
     private final GetUserService getUserService;
@@ -48,7 +47,7 @@ public class UserController {
         this.createUserService = createUserService;
     }
 
-    @GetMapping()
+    @GetMapping("/users")
     private UsersDto users() {
         List<UserDto> users = getUserService.users()
             .stream().map(User::toDto)
@@ -57,7 +56,7 @@ public class UserController {
         return new UsersDto(users);
     }
 
-    @PostMapping
+    @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     private RegistrationResultDto register(
         @Valid @RequestBody RegistrationRequestDto registrationRequestDto
@@ -72,25 +71,26 @@ public class UserController {
         return new RegistrationResultDto(user.name());
     }
 
-    @GetMapping("me")
-    public UserDto user(
-        @RequestAttribute("identification") String identification
+    @GetMapping("/user")
+    public UserInformationDto user(
+        @RequestAttribute("identification") String identification,
+        String userName
     ) {
-        User user = getUserService.findMyInformation(identification);
-        return user.toDto();
-    }
-
-    @GetMapping("{userId}")
-    public UserInformationDto information(
-        @PathVariable Long userId,
-        @RequestAttribute("identification") String identification
-    ) {
-        UsersDto usersDto = getUserService.findUser(userId, identification);
+        UsersDto usersDto = getUserService.findUser(userName, identification);
 
         return new UserInformationDto(usersDto);
     }
 
-    @PatchMapping("{userId}")
+    @GetMapping("/users/me")
+    public UserInformationDto information(
+        @RequestAttribute("identification") String identification
+    ) {
+        UsersDto usersDto = getUserService.findMyInformation(identification);
+
+        return new UserInformationDto(usersDto);
+    }
+
+    @PatchMapping("/users/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(
         @RequestBody UserDto userDto,
@@ -98,7 +98,6 @@ public class UserController {
     ) {
         patchUserService.patch(userId, userDto);
     }
-
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -3,6 +3,7 @@ package com.junstudio.kickoff.controllers;
 import com.junstudio.kickoff.dtos.RegistrationRequestDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
@@ -19,7 +20,6 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
@@ -28,6 +28,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -72,8 +73,8 @@ class UserControllerTest {
 
         identification = "je1ly";
 
-        user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", 1L, true);
+        user = new User(1L, identification, "encodedPassword",
+            "Jun", "profileImage", new Grade("아마추어"), true);
 
         post = Post.fake();
         comment = Comment.fake();
@@ -104,29 +105,38 @@ class UserControllerTest {
 
     @Test
     void findMyInformation() throws Exception {
-        given(getUserService.findMyInformation(identification)).willReturn(user);
+        given(getUserService.findMyInformation(identification)).willReturn(new UsersDto(
+            user,
+            List.of(post.toDto()),
+            List.of(comment.toDto()),
+            List.of(recomment.toDto()),
+            List.of(post.toDto())));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/users/me")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
             .andExpect(content().string(
-                containsString("jel1y")
+                containsString("je1ly")
             ));
     }
 
     @Test
     void findUser() throws Exception {
-        given(getUserService.findUser(user.id(), identification))
-            .willReturn(new UsersDto(
-                user,
-                List.of(post.toDto()),
-                List.of(comment.toDto()),
-                List.of(recomment.toDto()),
-                List.of(post.toDto()))
-            );
+        given(getUserService.findUser(any(), any())).willReturn(new UsersDto(
+            user,
+            List.of(post.toDto()),
+            List.of(comment.toDto()),
+            List.of(recomment.toDto()),
+            List.of(post.toDto()))
+        );
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/users/1")
-                .header("Authorization", "Bearer " + token))
+        mockMvc.perform(MockMvcRequestBuilders.get("/user")
+                .header("Authorization", "Bearer " + token)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"userName\":\"Jun\"" +
+                    "}"))
             .andExpect(status().isOk())
             .andExpect(content().string(
                 containsString("title\":\"Son is EPL King")

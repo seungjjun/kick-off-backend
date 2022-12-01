@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class CreateUserServiceTest {
         CreateUserService createUserService
             = new CreateUserService(userRepository, passwordEncoder);
 
-        User user = new User(1L, "jel1y", "jun123", "jun", "profileImage", 1L, false);
+        User user = new User(1L, "jel1y", "jun123", "jun", "profileImage", new Grade("아마추어"), false);
 
         createUserService.register(
             user.name(),

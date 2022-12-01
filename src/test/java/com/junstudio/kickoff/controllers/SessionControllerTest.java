@@ -2,6 +2,7 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.LoginResultDto;
 import com.junstudio.kickoff.exceptions.LoginFailed;
+import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.services.LoginService;
 import com.junstudio.kickoff.utils.JwtUtil;
@@ -34,7 +35,7 @@ class SessionControllerTest {
 
     @BeforeEach
     void setup() {
-        User user = new User(1L, "jel1y", "password", "jun", "url", 1L, false);
+        User user = new User(1L, "jel1y", "password", "jun", "url", new Grade("아마추어"), false);
 
         given(loginService.login("jel1y", "password"))
             .willReturn(new LoginResultDto("accessToken", user.name(), user.profileImage(), "worldClass"));
