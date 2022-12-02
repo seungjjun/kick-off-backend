@@ -13,7 +13,7 @@ import static org.mockito.Mockito.verify;
 
 class PatchGradeServiceTest {
     @Test
-    void patch() {
+    void patchGrade() {
         User user = User.fake();
         String applicationGrade = "프로";
 

@@ -18,7 +18,7 @@ public class AdminGradeController {
         this.patchGradeService = patchGradeService;
     }
 
-    @PatchMapping("/grade")
+    @PatchMapping("/admin-grade")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void patchGrade(
         @RequestBody ApplicationFormDto applicationFormDto

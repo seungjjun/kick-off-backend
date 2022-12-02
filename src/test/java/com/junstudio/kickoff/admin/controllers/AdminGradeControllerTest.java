@@ -22,7 +22,7 @@ class AdminGradeControllerTest {
 
     @Test
     void patchGrade() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.patch("/grade")
+        mockMvc.perform(MockMvcRequestBuilders.patch("/admin-grade")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
