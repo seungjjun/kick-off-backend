@@ -3,7 +3,7 @@ package com.junstudio.kickoff.admin.controllers;
 import com.junstudio.kickoff.admin.services.DeleteApplicationPostAdminService;
 import com.junstudio.kickoff.dtos.ApplicationFormDto;
 import com.junstudio.kickoff.dtos.ApplicationPostsDto;
-import com.junstudio.kickoff.admin.services.GetApplicationPostService;
+import com.junstudio.kickoff.admin.services.GetApplicationPostAdminService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,18 +15,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @CrossOrigin
 public class AdminApplicationPostController {
-    private final GetApplicationPostService getApplicationPostService;
+    private final GetApplicationPostAdminService getApplicationPostAdminService;
     private final DeleteApplicationPostAdminService deleteApplicationPostAdminService;
 
-    public AdminApplicationPostController(GetApplicationPostService getApplicationPostService,
+    public AdminApplicationPostController(GetApplicationPostAdminService getApplicationPostAdminService,
                                           DeleteApplicationPostAdminService deleteApplicationPostAdminService) {
-        this.getApplicationPostService = getApplicationPostService;
+        this.getApplicationPostAdminService = getApplicationPostAdminService;
         this.deleteApplicationPostAdminService = deleteApplicationPostAdminService;
     }
 
     @GetMapping("/admin-posts")
     private ApplicationPostsDto applicationPosts() {
-        return getApplicationPostService.applicationPosts();
+        return getApplicationPostAdminService.applicationPosts();
     }
 
     @DeleteMapping("/admin-post")

@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-public class GetApplicationPostService {
+public class GetApplicationPostAdminService {
     private final ApplicationPostRepository applicationPostRepository;
 
-    public GetApplicationPostService(ApplicationPostRepository applicationPostRepository) {
+    public GetApplicationPostAdminService(ApplicationPostRepository applicationPostRepository) {
         this.applicationPostRepository = applicationPostRepository;
     }
 

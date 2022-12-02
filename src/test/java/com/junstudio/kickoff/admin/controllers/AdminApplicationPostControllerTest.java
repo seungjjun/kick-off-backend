@@ -1,7 +1,7 @@
 package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.DeleteApplicationPostAdminService;
-import com.junstudio.kickoff.admin.services.GetApplicationPostService;
+import com.junstudio.kickoff.admin.services.GetApplicationPostAdminService;
 import com.junstudio.kickoff.dtos.ApplicationFormDto;
 import com.junstudio.kickoff.dtos.ApplicationPostDto;
 import com.junstudio.kickoff.dtos.ApplicationPostsDto;
@@ -30,7 +30,7 @@ class AdminApplicationPostControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private GetApplicationPostService getApplicationPostService;
+    private GetApplicationPostAdminService getApplicationPostAdminService;
 
     @MockBean
     private DeleteApplicationPostAdminService deleteApplicationPostAdminService;
@@ -46,7 +46,7 @@ class AdminApplicationPostControllerTest {
 
     @Test
     void applicationPosts() throws Exception {
-        given(getApplicationPostService.applicationPosts())
+        given(getApplicationPostAdminService.applicationPosts())
             .willReturn(new ApplicationPostsDto(
                 List.of(new ApplicationPostDto(
                     applicationPost.id(),
