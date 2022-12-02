@@ -6,6 +6,7 @@ import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
@@ -60,7 +61,7 @@ class GetUserAdminServiceTest {
     @Test
     void users() {
         given(userRepository.findAll()).willReturn(List.of(user));
-        given(postRepository.findAllByUserId(any())).willReturn(List.of(post));
+        given(postRepository.findAllByUserId(any(UserId.class))).willReturn(List.of(post));
         given(commentRepository.findAllByUserId(any())).willReturn(List.of(comment));
         given(recommentRepository.findAllByUserId(any())).willReturn(List.of(recomment));
 
@@ -75,7 +76,7 @@ class GetUserAdminServiceTest {
     void search() {
         given(userRepository.findByName(any())).willReturn(Optional.ofNullable(user));
 
-        given(postRepository.findAllByUserId(any())).willReturn(List.of(post));
+        given(postRepository.findAllByUserId(any(UserId.class))).willReturn(List.of(post));
         given(commentRepository.findAllByUserId(any())).willReturn(List.of(comment));
         given(recommentRepository.findAllByUserId(any())).willReturn(List.of(recomment));
 

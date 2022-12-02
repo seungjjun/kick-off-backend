@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.admin.controllers;
 
+import com.junstudio.kickoff.admin.services.DeleteUserAdminService;
 import com.junstudio.kickoff.admin.services.GetUserAdminService;
 import com.junstudio.kickoff.admin.services.PatchUserAdminService;
 import com.junstudio.kickoff.dtos.ManagingUsersDto;
@@ -35,6 +36,9 @@ class AdminUserControllerTest {
 
     @MockBean
     private PatchUserAdminService patchUserAdminService;
+
+    @MockBean
+    private DeleteUserAdminService deleteUserAdminService;
 
     User user;
 
@@ -83,5 +87,18 @@ class AdminUserControllerTest {
             .andExpect(status().isNoContent());
 
         verify(patchUserAdminService).patch(selectedUsersDto.usersId, selectedUsersDto.getGrade());
+    }
+
+    @Test
+    void deleteUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/admin-users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"usersId\": [40, 41, 42]" +
+                    "}"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteUserAdminService).delete(List.of(40L, 41L, 42L));
     }
 }

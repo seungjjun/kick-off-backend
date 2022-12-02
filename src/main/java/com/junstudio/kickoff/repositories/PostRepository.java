@@ -24,4 +24,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByBoardIdAndPostInformation_ContentContaining(Long boardId, String keyword, Pageable pageable);
 
     Page<Post> findByUserId(UserId userId, Pageable pageable);
+
+    boolean existsByUserId(UserId userId);
 }

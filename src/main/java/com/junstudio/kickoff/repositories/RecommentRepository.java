@@ -17,4 +17,6 @@ public interface RecommentRepository extends JpaRepository<Recomment, Long> {
     boolean existsByPostId(Long postId);
 
     List<Recomment> findAllByUserId(Long userId);
+
+    boolean existsByUserId(Long userId);
 }
