@@ -7,17 +7,21 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
-  Optional<Like> findByPostId(Long postId);
+    Optional<Like> findByPostId(Long postId);
 
-  List<Like> findAllByPostId(Long postId);
+    List<Like> findAllByPostId(Long postId);
 
-  void deleteAllById(Long postId);
+    void deleteAllById(Long postId);
 
-  Like getReferenceByPostId(Long postId);
+    Like getReferenceByPostId(Long postId);
 
     boolean existsByPostId(Long postId);
 
     List<Like> findAllByUserId(Long userId);
 
     void deleteByPostId(Long postId);
+
+    boolean existsByUserId(Long userId);
+
+//    void deleteAllByUserId(List<Long> usersId);
 }
