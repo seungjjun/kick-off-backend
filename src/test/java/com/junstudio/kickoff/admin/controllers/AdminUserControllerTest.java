@@ -1,13 +1,16 @@
 package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.GetUserAdminService;
+import com.junstudio.kickoff.admin.services.PatchUserAdminService;
 import com.junstudio.kickoff.dtos.ManagingUsersDto;
+import com.junstudio.kickoff.dtos.SelectedUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -15,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,6 +29,9 @@ class AdminUserControllerTest {
 
     @MockBean
     private GetUserAdminService getUserAdminService;
+
+    @MockBean
+    private PatchUserAdminService patchUserAdminService;
 
     @Test
     void users() throws Exception {
@@ -40,5 +47,21 @@ class AdminUserControllerTest {
             .andExpect(content().string(
                 containsString("\"name\":\"Jun\"")
             ));
+    }
+
+    @Test
+    void changeGrade() throws Exception {
+        SelectedUsersDto selectedUsersDto = new SelectedUsersDto(List.of(1L, 2L), "pro");
+
+        mockMvc.perform(MockMvcRequestBuilders.patch("/admin-users")
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{" +
+                    "\"usersId\": [1, 2]," +
+                    "\"grade\":\"pro\"" +
+                    "}"))
+            .andExpect(status().isNoContent());
+
+        verify(patchUserAdminService).patch(selectedUsersDto.usersId, selectedUsersDto.getGrade());
     }
 }
