@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
-class GetApplicationPostServiceTest {
+class GetApplicationPostAdminServiceTest {
     @Test
     void applicationPosts() {
         ApplicationPost applicationPost = ApplicationPost.fake();
@@ -19,8 +19,8 @@ class GetApplicationPostServiceTest {
         ApplicationPostRepository applicationPostRepository =
             mock(ApplicationPostRepository.class);
 
-        GetApplicationPostService getApplicationPostService =
-            new GetApplicationPostService(applicationPostRepository);
+        GetApplicationPostAdminService getApplicationPostAdminService =
+            new GetApplicationPostAdminService(applicationPostRepository);
 
         given(applicationPostRepository.findAll())
             .willReturn(List.of(new ApplicationPost(
@@ -31,7 +31,7 @@ class GetApplicationPostServiceTest {
             )));
 
         ApplicationPostsDto applicationPosts =
-            getApplicationPostService.applicationPosts();
+            getApplicationPostAdminService.applicationPosts();
 
         assertThat(applicationPosts.getApplicationPosts().size()).isEqualTo(1);
     }
