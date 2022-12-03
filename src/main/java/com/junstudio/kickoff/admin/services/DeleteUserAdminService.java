@@ -72,7 +72,42 @@ public class DeleteUserAdminService {
         if(postRepository.existsByUserId(new UserId(userId))) {
             List<Post> posts = postRepository.findAllByUserId(new UserId(userId));
 
+            deleteLikesByPostId(posts);
+            deleteCommentsByPostId(posts);
+
             postRepository.deleteAll(posts);
         }
+    }
+
+    private void deleteLikesByPostId(List<Post> posts) {
+        posts.forEach(post -> {
+            if(likeRepository.existsByPostId(post.id())) {
+                List<Like> likes = likeRepository.findAllByPostId(post.id());
+
+                likeRepository.deleteAll(likes);
+            }
+        });
+    }
+
+    private void deleteCommentsByPostId(List<Post> posts) {
+        posts.forEach(post -> {
+            if(commentRepository.existsByPostId(post.id())) {
+                List<Comment> comments = commentRepository.findAllByPostId(post.id());
+
+                deleteRecommentsByCommentId(comments);
+
+                commentRepository.deleteAll(comments);
+            }
+        });
+    }
+
+    private void deleteRecommentsByCommentId(List<Comment> comments) {
+        comments.forEach(comment -> {
+            if(recommentRepository.existsByCommentId(comment.id())) {
+                List<Recomment> recomments = recommentRepository.findAllByCommentId(comment.id());
+
+                recommentRepository.deleteAll(recomments);
+            }
+        });
     }
 }
