@@ -59,7 +59,7 @@ public class AdminUserController {
     }
 
     @ExceptionHandler(UserNotFound.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     private String userNotFound() {
         return "유저를 찾을 수 없습니다.";
     }

@@ -7,6 +7,7 @@ import com.junstudio.kickoff.dtos.ManagingUsersDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.SelectedUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
+import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -71,6 +72,14 @@ class AdminUserControllerTest {
             .andExpect(content().string(
                 containsString("\"name\":\"Jun\"")
             ));
+    }
+
+    @Test
+    void notFoundUser() throws Exception {
+        given(getUserAdminService.search(any())).willThrow(new UserNotFound());
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-user"))
+            .andExpect(status().isNotFound());
     }
 
     @Test

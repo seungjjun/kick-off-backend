@@ -8,15 +8,17 @@ import java.util.List;
 public interface RecommentRepository extends JpaRepository<Recomment, Long> {
     List<Recomment> findAllByPostId(Long postId);
 
-    void deleteAllById(Long postId);
-
     Recomment getReferenceByPostId(Long postId);
+
+    List<Recomment> findAllByUserId(Long userId);
+
+    List<Recomment> findAllByCommentId(Long id);
+
+    void deleteAllById(Long postId);
 
     boolean existsByCommentId(Long commentId);
 
     boolean existsByPostId(Long postId);
-
-    List<Recomment> findAllByUserId(Long userId);
 
     boolean existsByUserId(Long userId);
 }

@@ -33,6 +33,11 @@ public class Board {
         this.boardName = boardName;
     }
 
+    public Board(Long parentId, BoardName boardName) {
+        this.parentId = parentId;
+        this.boardName = boardName;
+    }
+
     public Long id() {
         return id;
     }
