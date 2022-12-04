@@ -1,24 +1,40 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.ApplicationFormDto;
+import com.junstudio.kickoff.dtos.ApplicationPostsDto;
 import com.junstudio.kickoff.exceptions.AlreadyAppliedUser;
 import com.junstudio.kickoff.services.CreateApplicationPostService;
+import com.junstudio.kickoff.services.GetApplicationPostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequestMapping("/application")
 public class ApplicationPostController {
     private final CreateApplicationPostService createApplicationPostService;
+    private final GetApplicationPostService getApplicationPostService;
 
-    public ApplicationPostController(CreateApplicationPostService createApplicationPostService) {
+    public ApplicationPostController(CreateApplicationPostService createApplicationPostService,
+                                     GetApplicationPostService getApplicationPostService) {
         this.createApplicationPostService = createApplicationPostService;
+        this.getApplicationPostService = getApplicationPostService;
     }
 
-    @PostMapping("/application")
+    @GetMapping
+    private ApplicationPostsDto applicationPosts(
+        @RequestAttribute("identification") String identification
+    ) {
+        return getApplicationPostService.posts(identification);
+    }
+
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     private String application(
         @RequestBody ApplicationFormDto applicationFormDto) {

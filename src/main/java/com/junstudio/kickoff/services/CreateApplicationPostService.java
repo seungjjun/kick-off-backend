@@ -15,6 +15,7 @@ import com.junstudio.kickoff.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -40,9 +41,14 @@ public class CreateApplicationPostService {
     public void createApplicationPost(Long userId, String grade, String reason) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
 
-        if(applicationPostRepository.existsByApplicant_Name(user.name())) {
-            throw new AlreadyAppliedUser();
-        }
+       List<ApplicationPost> applicationPosts =
+           applicationPostRepository.findAllByApplicant_Name(user.name());
+
+       applicationPosts.forEach(applicationPost -> {
+           if(applicationPost.state().equals("processing")) {
+               throw new AlreadyAppliedUser();
+           }
+       });
 
         Long postNumber = (long) postRepository.findAllByUserId(new UserId(user.id())).size();
 

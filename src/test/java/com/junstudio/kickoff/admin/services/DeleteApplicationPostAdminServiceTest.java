@@ -9,12 +9,13 @@ import java.util.Optional;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 class DeleteApplicationPostAdminServiceTest {
     @Test
     void delete() {
-        ApplicationPost applicationPost = ApplicationPost.fake();
+        ApplicationPost applicationPost = spy(ApplicationPost.fake());
 
         ApplicationPostRepository applicationPostRepository
             = mock(ApplicationPostRepository.class);
@@ -27,6 +28,6 @@ class DeleteApplicationPostAdminServiceTest {
 
         deleteApplicationPostAdminService.delete(applicationPost.id());
 
-        verify(applicationPostRepository).delete(applicationPost);
+        verify(applicationPost).changeState(any(String.class));
     }
 }

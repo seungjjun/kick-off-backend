@@ -23,26 +23,29 @@ public class ApplicationPost {
     @Embedded
     private CreationNumber creationNumber;
 
+    private String state;
+
     public ApplicationPost() {
     }
 
-    public ApplicationPost(Long id, String reason, Applicant applicant, CreationNumber creationNumber) {
+    public ApplicationPost(Long id,
+                           String reason,
+                           Applicant applicant,
+                           CreationNumber creationNumber,
+                           String state
+    ) {
         this.id = id;
         this.reason = reason;
         this.applicant = applicant;
         this.creationNumber = creationNumber;
-    }
-
-    public ApplicationPost(Long id, Applicant applicant, CreationNumber creationNumber) {
-        this.id = id;
-        this.applicant = applicant;
-        this.creationNumber = creationNumber;
+        this.state = state;
     }
 
     public ApplicationPost(String reason, Applicant applicant, CreationNumber creationNumber) {
         this.reason = reason;
         this.applicant = applicant;
         this.creationNumber = creationNumber;
+        this.state = "processing";
     }
 
     public Long id() {
@@ -61,8 +64,16 @@ public class ApplicationPost {
         return applicant;
     }
 
+    public String state() {
+        return state;
+    }
+
     public ApplicationPostDto toDto() {
-        return new ApplicationPostDto(id, reason, applicant, creationNumber);
+        return new ApplicationPostDto(id, reason, applicant, creationNumber, state);
+    }
+
+    public void changeState(String state) {
+        this.state = state;
     }
 
     public static ApplicationPost fake() {
@@ -70,6 +81,7 @@ public class ApplicationPost {
             1L,
             "reason",
             new Applicant("son", "아마추어", "프로"),
-            new CreationNumber(1L, 1L));
+            new CreationNumber(1L, 1L),
+            "processing");
     }
 }

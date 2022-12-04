@@ -27,7 +27,8 @@ class GetApplicationPostAdminServiceTest {
                 applicationPost.id(),
                 applicationPost.reason(),
                 applicationPost.applicant(),
-                applicationPost.creationNumber()
+                applicationPost.creationNumber(),
+                applicationPost.state()
             )));
 
         ApplicationPostsDto applicationPosts =

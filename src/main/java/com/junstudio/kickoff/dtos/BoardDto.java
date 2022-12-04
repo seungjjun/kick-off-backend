@@ -9,10 +9,13 @@ public class BoardDto {
 
     private final Long parentId;
 
-    public BoardDto(Long id, BoardName boardName, Long parentId) {
+    private final boolean isDeleted;
+
+    public BoardDto(Long id, BoardName boardName, Long parentId, boolean isDeleted) {
         this.id = id;
         this.boardName = boardName.toDto();
         this.parentId = parentId;
+        this.isDeleted = isDeleted;
     }
 
     public Long getId() {
@@ -27,7 +30,11 @@ public class BoardDto {
         return parentId;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
     public BoardDto toDto() {
-        return new BoardDto(id, boardName, parentId);
+        return new BoardDto(id, boardName, parentId, isDeleted);
     }
 }
