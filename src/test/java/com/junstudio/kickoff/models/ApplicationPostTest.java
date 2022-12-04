@@ -8,7 +8,7 @@ class ApplicationPostTest {
     @Test
     void creation() {
         ApplicationPost applicationPost =
-            new ApplicationPost(1L,
+            new ApplicationPost("reason",
                 new Applicant("Jun", "아마추어", "프로"),
                 new CreationNumber(1L, 1L));
 

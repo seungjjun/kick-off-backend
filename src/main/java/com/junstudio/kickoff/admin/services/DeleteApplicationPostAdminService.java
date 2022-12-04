@@ -21,6 +21,6 @@ public class DeleteApplicationPostAdminService {
             applicationPostRepository.findById(applicationPostId)
                 .orElseThrow(ApplicationPostNotFound::new);
 
-        applicationPostRepository.delete(applicationPost);
+        applicationPost.changeState("refuse");
     }
 }

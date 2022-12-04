@@ -52,7 +52,8 @@ class AdminApplicationPostControllerTest {
                     applicationPost.id(),
                     applicationPost.reason(),
                     applicationPost.applicant(),
-                    applicationPost.creationNumber()
+                    applicationPost.creationNumber(),
+                    applicationPost.state()
                 ))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/admin-posts"))

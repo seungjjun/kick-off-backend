@@ -1,6 +1,8 @@
 package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.CreateBoardAdminService;
+import com.junstudio.kickoff.admin.services.DeleteBoardAdminService;
+import com.junstudio.kickoff.models.BoardName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -9,6 +11,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AdminBoardController.class)
@@ -18,6 +22,9 @@ class AdminBoardControllerTest {
 
     @MockBean
     private CreateBoardAdminService createBoardAdminService;
+
+    @MockBean
+    private DeleteBoardAdminService deleteBoardAdminService;
 
     @Test
     void createBoard() throws Exception {
@@ -29,5 +36,15 @@ class AdminBoardControllerTest {
                     ",\"boardName\":\"testBoard\"" +
                     "}"))
             .andExpect(status().isCreated());
+
+        verify(createBoardAdminService).create(1L, new BoardName("testBoard"));
+    }
+
+    @Test
+    void deleteBoard() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/admin-board/1"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteBoardAdminService).delete(1L);
     }
 }

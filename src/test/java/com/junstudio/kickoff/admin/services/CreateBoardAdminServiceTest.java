@@ -7,6 +7,8 @@ import com.junstudio.kickoff.repositories.BoardRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -43,6 +45,9 @@ class CreateBoardAdminServiceTest {
     @Test
     void createWithExistingBoardName() {
         given(boardRepository.existsByBoardName(board.boardName())).willReturn(true);
+
+        given(boardRepository.findAllByBoardName(board.boardName()))
+            .willReturn(List.of(board));
 
         assertThrows(AlreadyExistingBoardName.class, () -> {
             createBoardAdminService.create(board.parentId(), board.boardName());

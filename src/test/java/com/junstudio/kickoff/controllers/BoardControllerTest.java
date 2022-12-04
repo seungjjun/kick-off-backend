@@ -68,7 +68,7 @@ class BoardControllerTest {
     @Test
     void board() throws Exception {
         given(getBoardService.boards()).willReturn(new BoardsDto(
-            List.of(new BoardDto(board.id(), new BoardName("EPL"), board.parentId()))));
+            List.of(new BoardDto(board.id(), new BoardName("EPL"), board.parentId(), false))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/boards"))
             .andExpect(status().isOk())
