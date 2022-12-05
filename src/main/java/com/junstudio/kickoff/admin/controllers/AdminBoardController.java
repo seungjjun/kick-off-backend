@@ -30,10 +30,12 @@ public class AdminBoardController {
 
     @PostMapping("admin-board")
     @ResponseStatus(HttpStatus.CREATED)
-    private void createBoard(
+    private String createBoard(
         @RequestBody BoardDto boardDto
     ) {
         createBoardAdminService.create(boardDto.getParentId(), boardDto.getBoardName());
+
+        return "생성이 완료되었습니다.";
     }
 
     @DeleteMapping("admin-board/{boardId}")
