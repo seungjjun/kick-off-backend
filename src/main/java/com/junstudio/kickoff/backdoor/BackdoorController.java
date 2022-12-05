@@ -126,4 +126,54 @@ public class BackdoorController {
 
         return "Ok";
     }
+
+    @GetMapping("setting-searchedPosts")
+    public String searchedPosts() {
+        jdbcTemplate.execute("DELETE FROM likes");
+        jdbcTemplate.execute("DELETE FROM recomment");
+        jdbcTemplate.execute("DELETE FROM comment");
+        jdbcTemplate.execute("DELETE FROM post");
+        jdbcTemplate.execute("DELETE FROM person");
+
+        jdbcTemplate.update("" +
+                "INSERT INTO person" +
+                "(user_id, identification, encoded_password, name, profile_image, user_grade)" +
+                " VALUES(1, ?, ?, '피카츄', 'null'," +
+                " '아마추어')"
+            , "jel1y", passwordEncoder.encode("Qwe1234!")
+        );
+
+        jdbcTemplate.update("" +
+                "INSERT INTO person" +
+                "(user_id, identification, encoded_password, name, profile_image, user_grade)" +
+                " VALUES(2, ?, ?, '라이츄', 'null'," +
+                " '세미프로')"
+            , "stw550", passwordEncoder.encode("Qwe1234!")
+        );
+
+        for (long i = 1; i <= 11; i += 1) {
+            jdbcTemplate.update("" +
+                    "INSERT INTO post" +
+                    "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
+                    " VALUES(?, '김민재는 이탈리아 올해의 선수상', '김장하다 굉민재!!', 2, 1, 10, 'null'," +
+                    " '2022-11-14')"
+                , i
+            );
+        }
+
+        jdbcTemplate.execute("" +
+            "INSERT INTO post" +
+            "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
+            " VALUES(12, '손흥민 발롱도르', '아시아인 최초 발롱도르 수상', 1, 1, 10, 'null'," +
+            " '2022-11-14')"
+        );
+
+        jdbcTemplate.execute("" +
+            "INSERT INTO comment" +
+            "(comment_id, comment_date, content, post_id, user_id, is_deleted)" +
+            " VALUES(1, '2022-11-14', '이강인도 대단하다', 12, 1, 'false')"
+        );
+
+        return "ok";
+    }
 }
