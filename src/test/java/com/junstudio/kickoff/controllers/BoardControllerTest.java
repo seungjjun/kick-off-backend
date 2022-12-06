@@ -56,7 +56,7 @@ class BoardControllerTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "son7", "image", new Grade("아마추어"), false);
+        user = new User(1L, "jel1y", "password", "son7", "image", new Grade("아마추어"), false, LocalDateTime.now());
 
         post = Post.fake();
         comment = Comment.fake();

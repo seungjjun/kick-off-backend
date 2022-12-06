@@ -2,6 +2,7 @@ package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.GetPostAdminService;
 import com.junstudio.kickoff.dtos.StatisticsPostsDto;
+import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,5 +17,10 @@ public class AdminPostController {
     @GetMapping("/admin-most-hit-posts")
     private StatisticsPostsDto mostViewedPosts() {
         return getPostAdminService.mostViewedPosts();
+    }
+
+    @GetMapping("/admin-today-posts")
+    private TodayCreatePostsDto todayCreatedPosts() {
+        return getPostAdminService.todayCreatedPosts();
     }
 }

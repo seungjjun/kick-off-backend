@@ -6,6 +6,7 @@ import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -22,8 +23,7 @@ class PatchUserServiceTest {
         userRepository = mock(UserRepository.class);
         PatchUserService patchUserService = new PatchUserService(userRepository);
 
-        User user = spy(new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", new Grade("아마추어"), false));
+        User user = spy(User.fake());
 
         given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
 
@@ -33,7 +33,8 @@ class PatchUserServiceTest {
             user.name(),
             user.profileImage(),
             user.grade().name(),
-            user.isMyToken()
+            user.isMyToken(),
+            user.createdAt().toString()
         );
 
         patchUserService.patch(user.id(), userDto);

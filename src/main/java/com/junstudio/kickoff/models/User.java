@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.models;
 
 import com.junstudio.kickoff.dtos.UserDto;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.Column;
@@ -10,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Table(name = "PERSON")
@@ -33,6 +36,9 @@ public class User {
     @Transient
     private boolean isMyToken = false;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
     public User() {
     }
 
@@ -43,7 +49,8 @@ public class User {
     }
 
     public User(Long id, String identification, String encodedPassword,
-                String name, String profileImage, Grade grade, boolean isMyToken) {
+                String name, String profileImage, Grade grade, boolean isMyToken,
+                LocalDateTime createdAt) {
         this.id = id;
         this.identification = identification;
         this.encodedPassword = encodedPassword;
@@ -51,11 +58,7 @@ public class User {
         this.profileImage = profileImage;
         this.grade = grade;
         this.isMyToken = isMyToken;
-    }
-
-    public static User fake() {
-        return new User(1L, "jel1y", "password",
-            "Jun", "profileImage", new Grade("아마추어"), false);
+        this.createdAt = createdAt;
     }
 
     public Long id() {
@@ -86,8 +89,20 @@ public class User {
         return isMyToken;
     }
 
+    public LocalDateTime createdAt() {
+        return createdAt;
+    }
+
     public UserDto toDto() {
-        return new UserDto(id, identification, name, profileImage, grade.name(), isMyToken);
+        return new UserDto(
+            id,
+            identification,
+            name,
+            profileImage,
+            grade.name(),
+            isMyToken,
+            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        );
     }
 
     public boolean authenticate(String password, PasswordEncoder passwordEncoder) {
@@ -116,5 +131,10 @@ public class User {
 
     public void changeGrade(String grade) {
         this.grade = new Grade(grade);
+    }
+
+    public static User fake() {
+        return new User(1L, "jel1y", "password",
+            "Jun", "profileImage", new Grade("아마추어"), false, LocalDateTime.now());
     }
 }

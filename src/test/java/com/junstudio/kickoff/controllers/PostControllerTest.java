@@ -25,6 +25,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -69,7 +70,7 @@ class PostControllerTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "son7", "image", new Grade("아마추어"), false);
+        user = new User(1L, "jel1y", "password", "son7", "image", new Grade("아마추어"), false, LocalDateTime.now());
 
         board = Board.fake();
         post = Post.fake();

@@ -3,8 +3,10 @@ package com.junstudio.kickoff.admin.controllers;
 import com.junstudio.kickoff.admin.services.GetPostAdminService;
 import com.junstudio.kickoff.dtos.StatisticsPostDto;
 import com.junstudio.kickoff.dtos.StatisticsPostsDto;
+import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,11 +30,17 @@ class AdminPostControllerTest {
     @MockBean
     private GetPostAdminService getPostAdminService;
 
+    Post post;
+    User user;
+
+    @BeforeEach
+    void setup() {
+        post = Post.fake();
+        user = User.fake();
+    }
+
     @Test
     void mostViewedPosts() throws Exception {
-        Post post = Post.fake();
-        User user = User.fake();
-
         StatisticsPostDto statisticsPostDto =
             new StatisticsPostDto(
                 post.id(),
@@ -55,5 +63,19 @@ class AdminPostControllerTest {
             ));
 
         verify(getPostAdminService).mostViewedPosts();
+    }
+
+    @Test
+    void todayCreatedPosts() throws Exception {
+        given(getPostAdminService.todayCreatedPosts())
+            .willReturn(new TodayCreatePostsDto(List.of(post)));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-today-posts"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("boardId\":1")
+            ));
+
+        verify(getPostAdminService).todayCreatedPosts();
     }
 }
