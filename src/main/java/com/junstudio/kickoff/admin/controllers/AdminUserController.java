@@ -5,6 +5,7 @@ import com.junstudio.kickoff.admin.services.GetUserAdminService;
 import com.junstudio.kickoff.admin.services.PatchUserAdminService;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.SelectedUsersDto;
+import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,11 @@ public class AdminUserController {
     @GetMapping("/admin-user")
     private SearchedUserDto searchedUser(String userName) {
         return getUserAdminService.search(userName);
+    }
+
+    @GetMapping("/admin-today-signup-users")
+    private TodaySignupUsersDto todaySignupUser() {
+        return getUserAdminService.todaySignupUser();
     }
 
     @PatchMapping("/admin-users")
