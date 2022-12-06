@@ -17,7 +17,7 @@ class PostTest {
 
         post = new Post(1L, new UserId(1L), 1L,
             new PostInformation("손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕"),
-            3L, 1L, "imageUrl", LocalDateTime.now());
+            3L, "imageUrl", LocalDateTime.now());
     }
 
     @Test

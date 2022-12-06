@@ -15,20 +15,17 @@ public class PostDetailDto {
 
     private final Long hit;
 
-    private final Long likeNumber;
-
     private final String createdAt;
 
     private final String imageUrl;
 
-    public PostDetailDto(Long id, PostInformation postInformation, Long hit, Long likeNumber,
+    public PostDetailDto(Long id, PostInformation postInformation, Long hit,
                          Board board, User user, String createdAt, String imageUrl) {
         this.id = id;
         this.postInformation = postInformation;
         this.board = board.toDto();
         this.user = user.toDto();
         this.hit = hit;
-        this.likeNumber = likeNumber;
         this.createdAt = createdAt;
         this.imageUrl = imageUrl;
     }
@@ -51,10 +48,6 @@ public class PostDetailDto {
 
     public Long getHit() {
         return hit;
-    }
-
-    public Long getLikeNumber() {
-        return likeNumber;
     }
 
     public String getCreatedAt() {

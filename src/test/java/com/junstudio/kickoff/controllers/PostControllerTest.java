@@ -84,7 +84,7 @@ class PostControllerTest {
             .willReturn(
                 new PostDetailDto(
                     1L, new PostInformation("World Cup", "content"),
-                    1L, 1L, board, user, "2022", "imageUrl")
+                    1L, board, user, "2022", "imageUrl")
             );
 
         mockMvc.perform(MockMvcRequestBuilders.get("/posts/1"))

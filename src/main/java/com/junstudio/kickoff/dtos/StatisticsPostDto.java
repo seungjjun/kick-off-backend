@@ -3,12 +3,10 @@ package com.junstudio.kickoff.dtos;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.UserId;
 
-public class PostDto {
+public class StatisticsPostDto {
     private final Long id;
 
     private final PostInformationDto postInformation;
-
-    private final Long boardId;
 
     private final UserId userId;
 
@@ -16,17 +14,16 @@ public class PostDto {
 
     private final String createdAt;
 
-    private final String imageUrl;
-
-    public PostDto(Long id, PostInformation postInformation, Long boardId,
-                   UserId userId, Long hit, String createdAt, String imageUrl) {
+    public StatisticsPostDto(Long id,
+                             PostInformation postInformation,
+                             UserId userId,
+                             Long hit,
+                             String createdAt) {
         this.id = id;
         this.postInformation = postInformation.toDto();
-        this.boardId = boardId;
         this.userId = userId;
         this.hit = hit;
         this.createdAt = createdAt;
-        this.imageUrl = imageUrl;
     }
 
     public Long getId() {
@@ -35,10 +32,6 @@ public class PostDto {
 
     public PostInformationDto getPostInformation() {
         return postInformation;
-    }
-
-    public Long getBoardId() {
-        return boardId;
     }
 
     public UserId getUserId() {
@@ -51,14 +44,5 @@ public class PostDto {
 
     public String getCreatedAt() {
         return createdAt;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public PostDto toDto() {
-        return new PostDto(id, new PostInformation(postInformation.getTitle(),
-            postInformation.getContent()), boardId, userId, hit, createdAt, imageUrl);
     }
 }
