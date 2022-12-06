@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.admin.services;
 
 import com.junstudio.kickoff.dtos.SearchedUserDto;
+import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Post;
@@ -8,7 +9,6 @@ import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.CommentRepository;
-import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.RecommentRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
@@ -22,7 +22,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 class GetUserAdminServiceTest {
     private UserRepository userRepository;
@@ -70,6 +69,15 @@ class GetUserAdminServiceTest {
         assertThat(foundUsers.getMembers().getUsers().size()).isEqualTo(1);
 
         assertThat(foundUsers.getMembers().getUsers().get(0).getGrade()).isEqualTo("아마추어");
+    }
+
+    @Test
+    void todaySignupUser() {
+        given(userRepository.findByCreatedAtBetween(any(), any())).willReturn(List.of(user));
+
+        TodaySignupUsersDto todaySignupUsers = getUserAdminService.todaySignupUser();
+
+        assertThat(todaySignupUsers.getUsers().size()).isEqualTo(1);
     }
 
     @Test

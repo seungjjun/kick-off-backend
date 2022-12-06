@@ -6,6 +6,7 @@ import com.junstudio.kickoff.admin.services.PatchUserAdminService;
 import com.junstudio.kickoff.dtos.ManagingUsersDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.SelectedUsersDto;
+import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.User;
@@ -80,6 +81,20 @@ class AdminUserControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/admin-user"))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void todaySignupUser() throws Exception {
+        given(getUserAdminService.todaySignupUser())
+            .willReturn(new TodaySignupUsersDto(List.of(user)));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-today-signup-users"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("users")
+            ));
+
+        verify(getUserAdminService).todaySignupUser();
     }
 
     @Test

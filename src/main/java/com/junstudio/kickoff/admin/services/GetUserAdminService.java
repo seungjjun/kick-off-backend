@@ -2,6 +2,7 @@ package com.junstudio.kickoff.admin.services;
 
 import com.junstudio.kickoff.dtos.ManagingUsersDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
+import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Comment;
@@ -16,6 +17,9 @@ import com.junstudio.kickoff.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +67,14 @@ public class GetUserAdminService {
              findRecommentsByUserId(user).size());
 
         return new SearchedUserDto(user, postNumber, commentNumber);
+    }
+
+    public TodaySignupUsersDto todaySignupUser() {
+        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0,0,0));
+        LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59));
+
+        List<User> users = userRepository.findByCreatedAtBetween(startDatetime, endDatetime);
+        return new TodaySignupUsersDto(users);
     }
 
     private List<Post> findPostsByUserId(User user) {
