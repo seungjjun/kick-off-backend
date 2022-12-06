@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
@@ -21,4 +22,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findAllByUserId(Long userId);
 
     boolean existsByUserId(Long userId);
+
+    List<Comment> findByCommentDateBetween(LocalDateTime startDatetime, LocalDateTime endDatetime);
 }

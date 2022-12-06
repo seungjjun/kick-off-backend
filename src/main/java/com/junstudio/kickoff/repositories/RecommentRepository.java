@@ -3,6 +3,7 @@ package com.junstudio.kickoff.repositories;
 import com.junstudio.kickoff.models.Recomment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RecommentRepository extends JpaRepository<Recomment, Long> {
@@ -21,4 +22,6 @@ public interface RecommentRepository extends JpaRepository<Recomment, Long> {
     boolean existsByPostId(Long postId);
 
     boolean existsByUserId(Long userId);
+
+    List<Recomment> findByCommentDateBetween(LocalDateTime startDatetime, LocalDateTime endDatetime);
 }
