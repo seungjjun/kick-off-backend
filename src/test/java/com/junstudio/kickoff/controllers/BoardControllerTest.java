@@ -99,7 +99,7 @@ class BoardControllerTest {
         Post post = new Post(
             1L, new UserId(1L), 1L,
             new PostInformation("search post", "content"),
-            1L, 1L, "imageUrl", LocalDateTime.now());
+            1L, "imageUrl", LocalDateTime.now());
 
         given(getPostService.search(any(), any(), any(), any()))
             .willReturn(new PostsDto(
@@ -128,7 +128,7 @@ class BoardControllerTest {
         Post post = new Post(
             1L, new UserId(1L), 1L,
             new PostInformation("almond", "almond is delicious"),
-            1L, 1L, "imageUrl", LocalDateTime.now());
+            1L, "imageUrl", LocalDateTime.now());
 
         given(getPostService.search(any(), any(), any(), any()))
             .willReturn(new PostsDto(

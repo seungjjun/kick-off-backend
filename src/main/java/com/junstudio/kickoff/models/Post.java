@@ -3,6 +3,7 @@ package com.junstudio.kickoff.models;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostWrittenDto;
+import com.junstudio.kickoff.dtos.StatisticsPostDto;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
@@ -30,8 +31,6 @@ public class Post {
 
     private Long hit;
 
-    private Long likeNumber;
-
     @Column(name = "imageUrl", length = 2048)
     private String imageUrl;
 
@@ -43,14 +42,13 @@ public class Post {
 
     public Post(Long id, UserId userId, Long boardId,
                 PostInformation postInformation,
-                Long hit, Long likeNumber, String imageUrl,
+                Long hit, String imageUrl,
                 LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.boardId = boardId;
         this.postInformation = postInformation;
         this.hit = hit;
-        this.likeNumber = likeNumber;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
     }
@@ -62,7 +60,6 @@ public class Post {
         this.imageUrl = imageUrl;
         this.userId = new UserId(userId);
         this.boardId = boardId;
-        this.likeNumber = 0L;
     }
 
     public Long id() {
@@ -85,10 +82,6 @@ public class Post {
         return hit;
     }
 
-    public Long likeNumber() {
-        return likeNumber;
-    }
-
     public String imageUrl() {
         return imageUrl;
     }
@@ -98,7 +91,7 @@ public class Post {
     }
 
     public PostDto toDto() {
-        return new PostDto(id, postInformation, boardId, userId, hit, likeNumber,
+        return new PostDto(id, postInformation, boardId, userId, hit,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
     }
 
@@ -111,7 +104,7 @@ public class Post {
     }
 
     public PostDetailDto toDetailDto(Board board, User user) {
-        return new PostDetailDto(id, postInformation, hit, likeNumber, board, user,
+        return new PostDetailDto(id, postInformation, hit, board, user,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
     }
 
@@ -119,12 +112,22 @@ public class Post {
         return new Post(1L, new UserId(1L), 1L,
             new PostInformation("Son is EPL King",
                 "Son is the first Asian to score EPL"),
-            3L, 1L, "imageUrl", LocalDateTime.now());
+            3L, "imageUrl", LocalDateTime.now());
     }
 
     public void patch(String title, String content, Long boardId, String imageUrl) {
         this.postInformation = new PostInformation(title, content);
         this.boardId = boardId;
         this.imageUrl = imageUrl;
+    }
+
+    public StatisticsPostDto toStatisticsDto() {
+        return new StatisticsPostDto(
+            id,
+            postInformation,
+            userId,
+            hit,
+            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        );
     }
 }

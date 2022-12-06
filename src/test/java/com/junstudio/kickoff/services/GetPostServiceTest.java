@@ -79,7 +79,7 @@ class GetPostServiceTest {
     void findPost() {
         Post post = new Post(1L, new UserId(1L), 1L,
             new PostInformation("EPL start", "손흥민 아시아인 최초 EPL 득점왕"),
-            3L, 1L, "imageUrl", LocalDateTime.now());
+            3L, "imageUrl", LocalDateTime.now());
 
         Board board = Board.fake();
         User user = new User(1L, "jel1y", "encodedPassword",
@@ -100,7 +100,7 @@ class GetPostServiceTest {
     void searchWithTitle() {
         Post post = new Post(1L, new UserId(1L), 2L,
             new PostInformation("Laliga start", "이강인 개막전 득점"),
-            3L, 1L, "imageUrl", LocalDateTime.now());
+            3L, "imageUrl", LocalDateTime.now());
 
         List<Post> posts = new ArrayList<>();
         posts.add(post);
@@ -129,7 +129,7 @@ class GetPostServiceTest {
     void searchWithContent() {
         Post post = new Post(1L, new UserId(1L), 1L,
             new PostInformation("Laliga start", "이강인 개막전 득점"),
-            3L, 1L, "imageUrl", LocalDateTime.now());
+            3L, "imageUrl", LocalDateTime.now());
 
         List<Post> posts = new ArrayList<>();
         posts.add(post);
