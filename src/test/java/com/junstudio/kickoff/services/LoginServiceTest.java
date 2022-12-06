@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +36,7 @@ class LoginServiceTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "jun", "url", new Grade("아마추어"), false);
+        user = new User(1L, "jel1y", "password", "jun", "url", new Grade("아마추어"), false, LocalDateTime.now());
 
         userRepository = mock(UserRepository.class);
         passwordEncoder = new Argon2PasswordEncoder();

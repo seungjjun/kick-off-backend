@@ -7,8 +7,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.time.LocalDateTime;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -22,7 +23,7 @@ class CreateUserServiceTest {
         CreateUserService createUserService
             = new CreateUserService(userRepository, passwordEncoder);
 
-        User user = new User(1L, "jel1y", "jun123", "jun", "profileImage", new Grade("아마추어"), false);
+        User user = User.fake();
 
         createUserService.register(
             user.name(),

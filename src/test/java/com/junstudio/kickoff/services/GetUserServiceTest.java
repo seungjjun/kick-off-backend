@@ -14,6 +14,7 @@ import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,9 +45,7 @@ class GetUserServiceTest {
         post = Post.fake();
         comment = Comment.fake();
         like = Like.fake();
-
-        user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", new Grade("아마추어"), false);
+        user = User.fake();
 
         given(userRepository.findByIdentification(any()))
             .willReturn(Optional.of(user));

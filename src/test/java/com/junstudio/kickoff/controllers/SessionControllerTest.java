@@ -16,6 +16,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.LocalDateTime;
+
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -35,7 +37,16 @@ class SessionControllerTest {
 
     @BeforeEach
     void setup() {
-        User user = new User(1L, "jel1y", "password", "jun", "url", new Grade("아마추어"), false);
+        User user = new User(
+            1L,
+            "jel1y",
+            "password",
+            "jun",
+            "url",
+            new Grade("아마추어"),
+            false,
+            LocalDateTime.now()
+        );
 
         given(loginService.login("jel1y", "password"))
             .willReturn(new LoginResultDto("accessToken", user.name(), user.profileImage(), "worldClass"));

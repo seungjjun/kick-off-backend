@@ -12,9 +12,6 @@ class PostTest {
 
     @BeforeEach
     void setup() {
-        User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", new Grade("아마추어"), false);
-
         post = new Post(1L, new UserId(1L), 1L,
             new PostInformation("손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕"),
             3L, "imageUrl", LocalDateTime.now());

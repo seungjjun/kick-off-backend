@@ -82,8 +82,7 @@ class GetPostServiceTest {
             3L, "imageUrl", LocalDateTime.now());
 
         Board board = Board.fake();
-        User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", new Grade("아마추어"), false);
+        User user = User.fake();
 
         given(postRepository.findById(any())).willReturn(Optional.of(post));
         given(boardRepository.findById(any())).willReturn(Optional.of(board));

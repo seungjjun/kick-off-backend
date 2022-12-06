@@ -13,13 +13,16 @@ public class UserDto {
 
     private final boolean isMyToken;
 
+    private final String createdAt;
+
     public UserDto(
         Long id,
         String identification,
         String name,
         String profileImage,
         String grade,
-        boolean isMyToken
+        boolean isMyToken,
+        String createdAt
     ) {
         this.id = id;
         this.identification = identification;
@@ -27,6 +30,7 @@ public class UserDto {
         this.profileImage = profileImage;
         this.grade = grade;
         this.isMyToken = isMyToken;
+        this.createdAt = createdAt;
     }
 
     public Long getId() {
@@ -50,6 +54,10 @@ public class UserDto {
     }
 
     public boolean getIsMyToken() {
+        return isMyToken;
+    }
+
+    public boolean isMyToken() {
         return isMyToken;
     }
 }
