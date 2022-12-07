@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.GetPostAdminService;
+import com.junstudio.kickoff.dtos.PostsByDateDto;
 import com.junstudio.kickoff.dtos.StatisticsPostDto;
 import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
@@ -77,5 +78,27 @@ class AdminPostControllerTest {
             ));
 
         verify(getPostAdminService).todayCreatedPosts();
+    }
+
+    @Test
+    void weekPosts() throws Exception {
+        given(getPostAdminService.weekPosts())
+            .willReturn(new PostsByDateDto(1, 2, 3, 4, 5, 6, 7));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-week-posts"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("{" +
+                    "\"todayPostsNumber\":1," +
+                    "\"aDayAgoPostsNumber\":2," +
+                    "\"twoDaysAgoPostsNumber\":3," +
+                    "\"threeDaysAgoPostsNumber\":4," +
+                    "\"fourDaysAgoPostsNumber\":5," +
+                    "\"fiveDaysAgoPostsNumber\":6," +
+                    "\"sixDaysAgoPostsNumber\":7" +
+                    "}")
+            ));
+
+        verify(getPostAdminService).weekPosts();
     }
 }

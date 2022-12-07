@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.admin.services;
 
+import com.junstudio.kickoff.dtos.CommentsByDateDto;
 import com.junstudio.kickoff.dtos.TodayWrittenCommentsDto;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Recomment;
@@ -26,7 +27,7 @@ public class GetCommentAdminService {
     }
 
     public TodayWrittenCommentsDto todayWrittenComments() {
-        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now().minusDays(1), LocalTime.of(0,0,0));
+        LocalDateTime startDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(0,0,0));
         LocalDateTime endDatetime = LocalDateTime.of(LocalDate.now(), LocalTime.of(23,59,59));
 
         List<Comment> comments = commentRepository.findByCommentDateBetween(startDatetime, endDatetime);
@@ -34,5 +35,44 @@ public class GetCommentAdminService {
         List<Recomment> recomments = recommentRepository.findByCommentDateBetween(startDatetime, endDatetime);
 
         return new TodayWrittenCommentsDto(comments.size() + recomments.size());
+    }
+
+    public CommentsByDateDto weekComments() {
+        int todayCommentsNumber = commentsNumber(0);
+        int aDayAgoCommentsNumber = commentsNumber(1);
+        int twoDaysAgoCommentsNumber = commentsNumber(2);
+        int threeDaysAgoCommentsNumber = commentsNumber(3);
+        int fourDaysAgoCommentsNumber = commentsNumber(4);
+        int fiveDaysAgoCommentsNumber = commentsNumber(5);
+        int sixDaysAgoCommentsNumber = commentsNumber(6);
+
+        return new CommentsByDateDto(
+            todayCommentsNumber,
+            aDayAgoCommentsNumber,
+            twoDaysAgoCommentsNumber,
+            threeDaysAgoCommentsNumber,
+            fourDaysAgoCommentsNumber,
+            fiveDaysAgoCommentsNumber,
+            sixDaysAgoCommentsNumber
+        );
+    }
+
+    private int commentsNumber(int day) {
+        LocalDateTime startDatetime = startTime(day);
+        LocalDateTime endDatetime = endTime(day);
+        return commentsNumber(startDatetime, endDatetime);
+    }
+
+    private int commentsNumber(LocalDateTime startDatetime, LocalDateTime endDatetime) {
+        return commentRepository.findByCommentDateBetween(startDatetime, endDatetime).size()
+            + recommentRepository.findByCommentDateBetween(startDatetime, endDatetime).size();
+    }
+
+    private LocalDateTime startTime(int day) {
+        return LocalDateTime.of(LocalDate.now().minusDays(day), LocalTime.of(0, 0, 0));
+    }
+
+    private LocalDateTime endTime(int day) {
+        return LocalDateTime.of(LocalDate.now().minusDays(day), LocalTime.of(23, 59, 59));
     }
 }
