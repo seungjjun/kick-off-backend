@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.GetCommentAdminService;
+import com.junstudio.kickoff.dtos.CommentsByDateDto;
 import com.junstudio.kickoff.dtos.TodayWrittenCommentsDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +36,27 @@ class AdminCommentControllerTest {
             ));
 
         verify(getCommentAdminService).todayWrittenComments();
+    }
+
+    @Test
+    void weekComments() throws Exception {
+        given(getCommentAdminService.weekComments())
+            .willReturn(new CommentsByDateDto(1, 2, 3, 4, 5, 6, 7));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-week-comments"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("{" +
+                    "\"todayCommentsNumber\":1," +
+                    "\"aDayAgoCommentsNumber\":2," +
+                    "\"twoDaysAgoCommentsNumber\":3," +
+                    "\"threeDaysAgoCommentsNumber\":4," +
+                    "\"fourDaysAgoCommentsNumber\":5," +
+                    "\"fiveDaysAgoCommentsNumber\":6," +
+                    "\"sixDaysAgoCommentsNumber\":7" +
+                    "}"))
+            );
+
+        verify(getCommentAdminService).weekComments();
     }
 }

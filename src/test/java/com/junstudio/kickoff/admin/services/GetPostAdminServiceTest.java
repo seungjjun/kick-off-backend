@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.admin.services;
 
+import com.junstudio.kickoff.dtos.PostsByDateDto;
 import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import com.junstudio.kickoff.models.Post;
@@ -58,5 +59,14 @@ class GetPostAdminServiceTest {
 
         assertThat(todayCreatePostsDto.getPosts().get(0).postInformation().getTitle())
             .isEqualTo("Son is EPL King");
+    }
+
+    @Test
+    void weekPosts() {
+        given(postRepository.findByCreatedAtBetween(any(), any())).willReturn(List.of(post));
+
+        PostsByDateDto postsNumber = getPostAdminService.weekPosts();
+
+        assertThat(postsNumber.getTodayPostsNumber()).isEqualTo(1);
     }
 }
