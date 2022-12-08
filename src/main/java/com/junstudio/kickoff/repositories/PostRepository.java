@@ -14,6 +14,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     Page<Post> findAllByBoardId(Long boardId, Pageable pageable);
 
+    List<Post> findAllByBoardId(Long boardId);
+
     List<Post> findAllByUserId(UserId userId);
 
     Page<Post> findByPostInformation_TitleContaining(String keyword, Pageable pageable);
@@ -31,4 +33,5 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findTop3ByOrderByHitDesc();
 
     List<Post> findByCreatedAtBetween(LocalDateTime createdAt, LocalDateTime endDatetime);
+
 }

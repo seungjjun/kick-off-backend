@@ -2,7 +2,9 @@ package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.CreateBoardAdminService;
 import com.junstudio.kickoff.admin.services.DeleteBoardAdminService;
+import com.junstudio.kickoff.admin.services.GetBoardAdminService;
 import com.junstudio.kickoff.dtos.BoardDto;
+import com.junstudio.kickoff.dtos.BoardRateDto;
 import com.junstudio.kickoff.exceptions.AlreadyExistingBoardName;
 import com.junstudio.kickoff.exceptions.BoardNotFound;
 import com.junstudio.kickoff.exceptions.CreateBoardFailed;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,11 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 public class AdminBoardController {
     private final CreateBoardAdminService createBoardAdminService;
     private final DeleteBoardAdminService deleteBoardAdminService;
+    private final GetBoardAdminService getBoardAdminService;
 
     public AdminBoardController(CreateBoardAdminService createBoardAdminService,
-                                DeleteBoardAdminService deleteBoardAdminService) {
+                                DeleteBoardAdminService deleteBoardAdminService,
+                                GetBoardAdminService getBoardAdminService) {
         this.createBoardAdminService = createBoardAdminService;
         this.deleteBoardAdminService = deleteBoardAdminService;
+        this.getBoardAdminService = getBoardAdminService;
+    }
+
+    @GetMapping("admin-boards-rate")
+    private BoardRateDto rateBoard() {
+        return getBoardAdminService.rate();
     }
 
     @PostMapping("admin-board")
