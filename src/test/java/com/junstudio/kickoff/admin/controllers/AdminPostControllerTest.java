@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -100,5 +101,18 @@ class AdminPostControllerTest {
             ));
 
         verify(getPostAdminService).weekPosts();
+    }
+
+    @Test
+    void posts() throws Exception {
+        given(getPostAdminService.posts()).willReturn(5);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-total-posts"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("5")
+            ));
+
+        verify(getPostAdminService).posts();
     }
 }

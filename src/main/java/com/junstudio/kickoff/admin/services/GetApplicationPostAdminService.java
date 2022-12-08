@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,5 +25,10 @@ public class GetApplicationPostAdminService {
             .stream().map(ApplicationPost::toDto).collect(Collectors.toList());
 
         return new ApplicationPostsDto(applicationPosts);
+    }
+
+    public int processingPosts() {
+        return (int) applicationPostRepository.findAll().stream()
+            .filter(applicationPost -> Objects.equals(applicationPost.state(), "processing")).count();
     }
 }

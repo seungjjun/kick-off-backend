@@ -69,4 +69,13 @@ class GetPostAdminServiceTest {
 
         assertThat(postsNumber.getTodayPostsNumber()).isEqualTo(1);
     }
+
+    @Test
+    void posts() {
+        given(postRepository.findAll()).willReturn(List.of(post));
+
+        int totalPostNumber = getPostAdminService.posts();
+
+        assertThat(totalPostNumber).isEqualTo(1);
+    }
 }
