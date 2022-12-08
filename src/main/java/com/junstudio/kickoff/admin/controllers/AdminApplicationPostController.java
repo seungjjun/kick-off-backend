@@ -29,6 +29,11 @@ public class AdminApplicationPostController {
         return getApplicationPostAdminService.applicationPosts();
     }
 
+    @GetMapping("/admin-processing-posts")
+    private int processingPosts() {
+        return getApplicationPostAdminService.processingPosts();
+    }
+
     @DeleteMapping("/admin-post")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void deletePost(

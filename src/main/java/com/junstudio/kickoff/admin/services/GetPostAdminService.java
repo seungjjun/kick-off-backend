@@ -90,4 +90,8 @@ public class GetPostAdminService {
     private LocalDateTime endTime(int day) {
         return LocalDateTime.of(LocalDate.now().minusDays(day), LocalTime.of(23, 59, 59));
     }
+
+    public int posts() {
+        return postRepository.findAll().size();
+    }
 }

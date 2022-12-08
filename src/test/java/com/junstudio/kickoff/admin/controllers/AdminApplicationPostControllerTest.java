@@ -64,6 +64,19 @@ class AdminApplicationPostControllerTest {
     }
 
     @Test
+    void processingPosts() throws Exception {
+        given(getApplicationPostAdminService.processingPosts()).willReturn(2);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-processing-posts"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("2")
+            ));
+
+        verify(getApplicationPostAdminService).processingPosts();
+    }
+
+    @Test
     void deletePost() throws Exception {
         ApplicationFormDto applicationFormDto =
             new ApplicationFormDto(applicationPost.id(), user.grade().name(), user.name());
