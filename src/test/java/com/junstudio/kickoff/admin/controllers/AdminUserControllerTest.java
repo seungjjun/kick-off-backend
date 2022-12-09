@@ -3,18 +3,22 @@ package com.junstudio.kickoff.admin.controllers;
 import com.junstudio.kickoff.admin.services.DeleteUserAdminService;
 import com.junstudio.kickoff.admin.services.GetUserAdminService;
 import com.junstudio.kickoff.admin.services.PatchUserAdminService;
+import com.junstudio.kickoff.dtos.AdminDto;
 import com.junstudio.kickoff.dtos.ManagingUsersDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.SelectedUsersDto;
 import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.exceptions.UserNotFound;
+import com.junstudio.kickoff.models.Admin;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -42,11 +46,37 @@ class AdminUserControllerTest {
     @MockBean
     private DeleteUserAdminService deleteUserAdminService;
 
+    @SpyBean
+    private JwtUtil jwtUtil;
+
     User user;
+    Admin admin;
+
+    String token;
 
     @BeforeEach
     void setup() {
         user = User.fake();
+        admin = Admin.fake();
+
+        token = jwtUtil.encode(admin.identification());
+    }
+
+    @Test
+    void admin() throws Exception {
+        given(getUserAdminService.admin(admin.identification()))
+            .willReturn(new AdminDto(admin.identification(), admin.name(), admin.profileImage()));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin")
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("{" +
+                    "\"identification\":\"jel1y\"," +
+                    "\"name\":\"jun\"," +
+                    "\"profileImage\":\"profileImage\"" +
+                    "}")
+            ));
     }
 
     @Test

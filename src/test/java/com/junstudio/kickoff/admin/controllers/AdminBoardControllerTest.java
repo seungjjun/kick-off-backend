@@ -50,12 +50,7 @@ class AdminBoardControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/admin-boards-rate"))
             .andExpect(status().isOk())
             .andExpect(content().string(
-                containsString("{" +
-                    "\"eplBoardValue\":1," +
-                    "\"laligaBoardValue\":1," +
-                    "\"serieaBoardValue\":1," +
-                    "\"bundesligaBoardValue\":1" +
-                    "}")
+                containsString("eplBoardValue\":1")
             ));
 
         verify(getBoardAdminService).rate();

@@ -26,7 +26,6 @@ class LoginServiceTest {
     @MockBean
     private UserRepository userRepository;
 
-
     @MockBean
     private JwtUtil jwtUtil;
 

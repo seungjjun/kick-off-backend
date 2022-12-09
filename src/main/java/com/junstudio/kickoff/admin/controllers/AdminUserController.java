@@ -3,6 +3,7 @@ package com.junstudio.kickoff.admin.controllers;
 import com.junstudio.kickoff.admin.services.DeleteUserAdminService;
 import com.junstudio.kickoff.admin.services.GetUserAdminService;
 import com.junstudio.kickoff.admin.services.PatchUserAdminService;
+import com.junstudio.kickoff.dtos.AdminDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.SelectedUsersDto;
 import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,6 +33,13 @@ public class AdminUserController {
         this.getUserAdminService = getUserAdminService;
         this.patchUserAdminService = patchUserAdminService;
         this.deleteUserAdminService = deleteUserAdminService;
+    }
+
+    @GetMapping("/admin")
+    private AdminDto admin(
+        @RequestAttribute("identification") String identification
+    ) {
+        return getUserAdminService.admin(identification);
     }
 
     @GetMapping("/admin-users")
