@@ -1,15 +1,18 @@
 package com.junstudio.kickoff.admin.services;
 
+import com.junstudio.kickoff.dtos.AdminDto;
 import com.junstudio.kickoff.dtos.ManagingUsersDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.exceptions.UserNotFound;
+import com.junstudio.kickoff.models.Admin;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.models.UserId;
+import com.junstudio.kickoff.repositories.AdminRepository;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.RecommentRepository;
@@ -30,15 +33,18 @@ public class GetUserAdminService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
     private final RecommentRepository recommentRepository;
+    private final AdminRepository adminRepository;
 
     public GetUserAdminService(UserRepository userRepository,
                                PostRepository postRepository,
                                CommentRepository commentRepository,
-                               RecommentRepository recommentRepository) {
+                               RecommentRepository recommentRepository,
+                               AdminRepository adminRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
         this.recommentRepository = recommentRepository;
+        this.adminRepository = adminRepository;
     }
 
     public UsersDto users() {
@@ -67,6 +73,13 @@ public class GetUserAdminService {
              findRecommentsByUserId(user).size());
 
         return new SearchedUserDto(user, postNumber, commentNumber);
+    }
+
+    public AdminDto admin(String identification) {
+        Admin admin = adminRepository.findByIdentification(identification)
+            .orElseThrow(UserNotFound::new);
+
+        return new AdminDto(admin.identification(), admin.name(), admin.profileImage());
     }
 
     public TodaySignupUsersDto todaySignupUser() {

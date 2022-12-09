@@ -8,6 +8,5 @@ import java.util.List;
 public interface ApplicationPostRepository extends JpaRepository<ApplicationPost, Long> {
     boolean existsByApplicant_Name(String name);
 
-
     List<ApplicationPost> findAllByApplicant_Name(String name);
 }
