@@ -39,7 +39,7 @@ public class AdminBoardController {
         return getBoardAdminService.rate();
     }
 
-    @PostMapping("admin-board")
+    @PostMapping("admin-boards")
     @ResponseStatus(HttpStatus.CREATED)
     private String createBoard(
         @RequestBody BoardDto boardDto
@@ -49,7 +49,7 @@ public class AdminBoardController {
         return "생성이 완료되었습니다.";
     }
 
-    @DeleteMapping("admin-board/{boardId}")
+    @DeleteMapping("admin-boards/{boardId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     private void deleteBoard(
         @PathVariable Long boardId

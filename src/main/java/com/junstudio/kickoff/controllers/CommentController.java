@@ -60,7 +60,7 @@ public class CommentController {
         return getCommentService.findComment(postId, pageable);
     }
 
-    @PostMapping("/comment")
+    @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     private String comment(
         @RequestBody CommentDto commentDto

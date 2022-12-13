@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -58,7 +57,7 @@ class AdminBoardControllerTest {
 
     @Test
     void createBoard() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/admin-board")
+        mockMvc.perform(MockMvcRequestBuilders.post("/admin-boards")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
@@ -72,7 +71,7 @@ class AdminBoardControllerTest {
 
     @Test
     void deleteBoard() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/admin-board/1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/admin-boards/1"))
             .andExpect(status().isNoContent());
 
         verify(deleteBoardAdminService).delete(1L);

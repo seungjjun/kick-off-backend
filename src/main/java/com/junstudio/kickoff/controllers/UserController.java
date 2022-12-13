@@ -1,5 +1,6 @@
 package com.junstudio.kickoff.controllers;
 
+import com.junstudio.kickoff.dtos.FoundUserDto;
 import com.junstudio.kickoff.dtos.RegistrationRequestDto;
 import com.junstudio.kickoff.dtos.RegistrationResultDto;
 import com.junstudio.kickoff.dtos.UserDto;
@@ -71,13 +72,13 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public UserInformationDto user(
+    public FoundUserDto user(
         @RequestAttribute("identification") String identification,
         String userName
     ) {
         UsersDto usersDto = getUserService.findUser(userName, identification);
 
-        return new UserInformationDto(usersDto);
+        return new FoundUserDto(usersDto);
     }
 
     @GetMapping("/users/me")

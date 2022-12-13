@@ -60,7 +60,7 @@ public class RecommentController {
         return new RecommentsDto(recomments);
     }
 
-    @PostMapping("/recomment")
+    @PostMapping("/recomments")
     @ResponseStatus(HttpStatus.CREATED)
     private String recomment(
         @RequestBody ReCommentDto reCommentDto

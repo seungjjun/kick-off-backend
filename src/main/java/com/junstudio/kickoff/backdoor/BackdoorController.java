@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("backdoor")
@@ -32,20 +33,20 @@ public class BackdoorController {
 
         jdbcTemplate.update("" +
                 "INSERT INTO person" +
-                "(user_id, identification, encoded_password, name, profile_image, user_grade)" +
+                "(user_id, identification, encoded_password, name, profile_image, user_grade, created_at)" +
                 " VALUES(1, ?, ?, 'son7'," +
                 " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/7fb14f2b-f348-426b-a9af-c54e410941da%E1%84%91%E1%85%B5%E1%84%8F%E1%85%A1%E1%84%8E%E1%85%B2.jpeg'," +
-                " '아마추어')"
+                " '아마추어', '2022-11-14')"
             , "jel1y", passwordEncoder.encode("Qwe1234!")
         );
 
         jdbcTemplate.update("" +
                 "INSERT INTO person" +
-                "(user_id, identification, encoded_password, name, profile_image, user_grade)" +
+                "(user_id, identification, encoded_password, name, profile_image, user_grade, created_at)" +
                 " VALUES(2, ?, ?, 'Jun'," +
                 " 'https://kickoffproject.s3.ap-northeast-2.amazonaws.com/kickoffproject/7fb14f2b-f348-426b-a9af-c54e410941da%E1%84%91%E1%85%B5%E1%84%8F%E1%85%A1%E1%84%8E%E1%85%B2.jpeg'," +
-                " '아마추어')"
-            , "stw550", passwordEncoder.encode("Qwe1234!")
+                " '아마추어', ?)"
+            , "stw550", passwordEncoder.encode("Qwe1234!"), LocalDateTime.now()
         );
 
         jdbcTemplate.execute("" +
@@ -137,25 +138,25 @@ public class BackdoorController {
 
         jdbcTemplate.update("" +
                 "INSERT INTO person" +
-                "(user_id, identification, encoded_password, name, profile_image, user_grade)" +
-                " VALUES(1, ?, ?, '피카츄', 'null'," +
-                " '아마추어')"
-            , "jel1y", passwordEncoder.encode("Qwe1234!")
+                "(user_id, identification, encoded_password, name, profile_image, user_grade, created_at)" +
+                " VALUES(1, ?, ?, '피카츄', ''," +
+                " '아마추어', ?)"
+            , "jel1y", passwordEncoder.encode("Qwe1234!"), LocalDateTime.now()
         );
 
         jdbcTemplate.update("" +
                 "INSERT INTO person" +
-                "(user_id, identification, encoded_password, name, profile_image, user_grade)" +
-                " VALUES(2, ?, ?, '라이츄', 'null'," +
-                " '세미프로')"
-            , "stw550", passwordEncoder.encode("Qwe1234!")
+                "(user_id, identification, encoded_password, name, profile_image, user_grade, created_at)" +
+                " VALUES(2, ?, ?, '라이츄', ''," +
+                " '세미프로', ?)"
+            , "stw550", passwordEncoder.encode("Qwe1234!"), LocalDateTime.now()
         );
 
         for (long i = 1; i <= 11; i += 1) {
             jdbcTemplate.update("" +
                     "INSERT INTO post" +
                     "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
-                    " VALUES(?, '김민재는 이탈리아 올해의 선수상', '김장하다 굉민재!!', 2, 1, 10, 'null'," +
+                    " VALUES(?, '김민재는 이탈리아 올해의 선수상', '김장하다 굉민재!!', 2, 1, 10, ''," +
                     " '2022-11-14')"
                 , i
             );
@@ -164,7 +165,7 @@ public class BackdoorController {
         jdbcTemplate.execute("" +
             "INSERT INTO post" +
             "(post_id, post_title, post_content, user_id, board_id, hit, image_url, created_at)" +
-            " VALUES(12, '손흥민 발롱도르', '아시아인 최초 발롱도르 수상', 1, 1, 10, 'null'," +
+            " VALUES(12, '손흥민 발롱도르', '아시아인 최초 발롱도르 수상', 1, 1, 10, ''," +
             " '2022-11-14')"
         );
 

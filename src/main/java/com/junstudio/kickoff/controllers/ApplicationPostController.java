@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/application")
+@RequestMapping("/applications")
 public class ApplicationPostController {
     private final CreateApplicationPostService createApplicationPostService;
     private final GetApplicationPostService getApplicationPostService;

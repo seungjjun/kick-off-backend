@@ -75,7 +75,7 @@ class RecommentControllerTest {
 
     @Test
     void writeRecomment() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/recomment")
+        mockMvc.perform(MockMvcRequestBuilders.post("/recomments")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +

@@ -26,7 +26,7 @@ public class MessageService {
         String headers = headerAccessor.getMessageHeaders().get("nativeHeaders").toString();
 
         String accessToken = headers.substring(
-            "Authorization=[Bearer  ".length(),  headers.indexOf("]"));
+            "Authorization=[Bearer  ".length(), headers.indexOf("]"));
 
         String identification = jwtUtil.decode(accessToken);
 
