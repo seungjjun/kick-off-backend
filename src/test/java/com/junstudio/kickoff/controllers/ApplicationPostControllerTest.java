@@ -13,9 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ApplicationPostController.class)
@@ -45,7 +43,7 @@ class ApplicationPostControllerTest {
 
     @Test
     void applicationPosts() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get("/application")
+        mockMvc.perform(MockMvcRequestBuilders.get("/applications")
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk());
 
@@ -54,7 +52,7 @@ class ApplicationPostControllerTest {
 
     @Test
     void application() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/application")
+        mockMvc.perform(MockMvcRequestBuilders.post("/applications")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +

@@ -78,17 +78,9 @@ class AdminApplicationPostControllerTest {
 
     @Test
     void deletePost() throws Exception {
-        ApplicationFormDto applicationFormDto =
-            new ApplicationFormDto(applicationPost.id(), user.grade().name(), user.name());
-
-        mockMvc.perform(MockMvcRequestBuilders.delete("/admin-post")
-                .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON)
-                .content("{" +
-                    "\"applicationPostId\":\"1\"" +
-                    "}"))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/admin-posts/1"))
             .andExpect(status().isNoContent());
 
-        verify(deleteApplicationPostAdminService).delete(applicationFormDto.getApplicationPostId());
+        verify(deleteApplicationPostAdminService).delete(applicationPost.id());
     }
 }

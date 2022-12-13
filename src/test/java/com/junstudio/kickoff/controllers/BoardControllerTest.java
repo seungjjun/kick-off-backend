@@ -86,13 +86,12 @@ class BoardControllerTest {
                     List.of(user.toDto()), List.of(board.toDto())),
                 new PostPageDto(1, 1L)));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/board/1/posts"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/boards/1/posts"))
             .andExpect(status().isOk())
             .andExpect(content().string(
                 containsString("\"title\":\"Son is EPL King\"")
             ));
     }
-
 
     @Test
     void searchPostWithTitle() throws Exception {
@@ -110,7 +109,7 @@ class BoardControllerTest {
                 new PostPageDto(1, 1L))
             );
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/search")
+        mockMvc.perform(MockMvcRequestBuilders.get("/boards/1/posts/search")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
@@ -139,7 +138,7 @@ class BoardControllerTest {
                 new PostPageDto(1, 1L))
             );
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/search")
+        mockMvc.perform(MockMvcRequestBuilders.get("/boards/1/posts/search")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
@@ -163,7 +162,7 @@ class BoardControllerTest {
                 new PostPageDto(1, 1L))
             );
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/search")
+        mockMvc.perform(MockMvcRequestBuilders.get("/boards/1/posts/search")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +

@@ -5,6 +5,7 @@ import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -33,7 +33,7 @@ public class BoardController {
         return getBoardService.boards();
     }
 
-    @GetMapping("/board/{boardId}/posts")
+    @GetMapping("/boards/{boardId}/posts")
     private PostsDto posts(
         @PathVariable Long boardId,
         @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
@@ -41,8 +41,7 @@ public class BoardController {
         return getPostService.posts(boardId, pageable);
     }
 
-//    /boards/{boardId}/posts/search
-    @GetMapping("/posts/{boardId}/search")
+    @GetMapping("/boards/{boardId}/posts/search")
     private PostsDto searchedPosts(
         @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable,
         @PathVariable Long boardId,

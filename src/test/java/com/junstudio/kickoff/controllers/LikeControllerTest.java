@@ -41,7 +41,7 @@ class LikeControllerTest {
 
     @Test
     void like() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.post("/like")
+        mockMvc.perform(MockMvcRequestBuilders.post("/likes")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +

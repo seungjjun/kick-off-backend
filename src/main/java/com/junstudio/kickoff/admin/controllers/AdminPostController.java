@@ -2,7 +2,6 @@ package com.junstudio.kickoff.admin.controllers;
 
 import com.junstudio.kickoff.admin.services.GetPostAdminService;
 import com.junstudio.kickoff.dtos.PostsByDateDto;
-import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -43,7 +43,7 @@ public class LikeController {
         return new LikesDto(likes);
     }
 
-    @PostMapping("/like")
+    @PostMapping("/likes")
     @ResponseStatus(HttpStatus.CREATED)
     public String like(
         @RequestBody LikeDto likeDto
