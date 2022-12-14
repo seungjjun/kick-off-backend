@@ -2,9 +2,10 @@ package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.dtos.CommentsDto;
 import com.junstudio.kickoff.models.Comment;
-import com.junstudio.kickoff.models.Post;
+import com.junstudio.kickoff.models.Content;
+import com.junstudio.kickoff.models.PostId;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.CommentRepository;
-import com.junstudio.kickoff.repositories.PostRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,16 +20,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 class GetCommentServiceTest {
     @MockBean
     private CommentRepository commentRepository;
-
-    @MockBean
-    private PostRepository postRepository;
 
     @MockBean
     private GetCommentService getCommentService;
@@ -39,9 +36,8 @@ class GetCommentServiceTest {
     @BeforeEach
     void setup() {
         commentRepository = mock(CommentRepository.class);
-        postRepository = mock(PostRepository.class);
 
-        getCommentService = new GetCommentService(commentRepository, postRepository);
+        getCommentService = new GetCommentService(commentRepository);
     }
 
     @Test
@@ -57,7 +53,7 @@ class GetCommentServiceTest {
 
     @Test
     void findComment() {
-        Comment comment = new Comment(1L, "댓긍릐 댓글", 1L, 1L, LocalDateTime.now());
+        Comment comment = new Comment(1L, new Content("댓글의 댓글"), new UserId(1L), new PostId(1L), LocalDateTime.now());
 
         pageable = PageRequest.of(1, 10);
 
@@ -66,10 +62,10 @@ class GetCommentServiceTest {
 
         Page<Comment> page = new PageImpl<>(comments);
 
-        given(commentRepository.findAllByPostId(comment.postId(), pageable))
+        given(commentRepository.findAllByPostId_Value(comment.postId().value(), pageable))
             .willReturn(page);
 
-        CommentsDto commentsDto = getCommentService.findComment(comment.postId(), pageable);
+        CommentsDto commentsDto = getCommentService.findComment(comment.postId().value(), pageable);
 
         assertThat(commentsDto.getComments()).hasSize(1);
     }

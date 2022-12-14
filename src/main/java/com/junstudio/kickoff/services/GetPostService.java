@@ -14,7 +14,6 @@ import com.junstudio.kickoff.exceptions.BoardNotFound;
 import com.junstudio.kickoff.exceptions.PostNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Board;
-import com.junstudio.kickoff.models.BoardName;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
@@ -72,7 +71,7 @@ public class GetPostService {
         List<BoardDto> boards = boardDto();
 
         if (boardId != 1) {
-            List<PostDto> posts = postRepository.findAllByBoardId(boardId, pageable)
+            List<PostDto> posts = postRepository.findAllByBoardId_Value(boardId, pageable)
                 .stream().map(Post::toDto).collect(Collectors.toList());
 
             CreatePostsDto createPostsDto =
@@ -96,13 +95,13 @@ public class GetPostService {
     public PostDetailDto findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        Board board = boardRepository.findById(post.getBoardId())
+        Board board = boardRepository.findById(post.getBoardId().value())
             .orElseThrow(BoardNotFound::new);
 
-        User user = userRepository.findById(post.userId().getUserId())
+        User user = userRepository.findById(post.userId().value())
             .orElseThrow(UserNotFound::new);
 
-        post.updateHit(post.hit());
+        post.updateHit(post.hit().number());
 
         return post.toDetailDto(board, user);
     }
@@ -198,7 +197,7 @@ public class GetPostService {
             .collect(Collectors.toList());
     }
 
-    public void createPost(BoardName boardName, String identification) {
+    public void createPost(String boardName, String identification) {
         User user = userRepository.findByIdentification(identification).orElseThrow();
 
         if (user.grade().name().equals("매니저")) {

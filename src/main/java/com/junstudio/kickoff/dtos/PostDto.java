@@ -1,7 +1,6 @@
 package com.junstudio.kickoff.dtos;
 
 import com.junstudio.kickoff.models.PostInformation;
-import com.junstudio.kickoff.models.UserId;
 
 public class PostDto {
     private final Long id;
@@ -10,7 +9,7 @@ public class PostDto {
 
     private final Long boardId;
 
-    private final UserId userId;
+    private final Long userId;
 
     private final Long hit;
 
@@ -19,7 +18,7 @@ public class PostDto {
     private final String imageUrl;
 
     public PostDto(Long id, PostInformation postInformation, Long boardId,
-                   UserId userId, Long hit, String createdAt, String imageUrl) {
+                   Long userId, Long hit, String createdAt, String imageUrl) {
         this.id = id;
         this.postInformation = postInformation.toDto();
         this.boardId = boardId;
@@ -41,7 +40,7 @@ public class PostDto {
         return boardId;
     }
 
-    public UserId getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

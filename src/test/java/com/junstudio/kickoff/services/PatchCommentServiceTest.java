@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Content;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,8 +26,8 @@ class PatchCommentServiceTest {
 
         given(commentRepository.getReferenceById(any(Long.class))).willReturn(comment);
 
-        patchCommentService.patchComment(comment.id(), comment.content());
+        patchCommentService.patchComment(comment.id(), "new comment");
 
-        verify(comment).patch(comment.content());
+        verify(comment).patch("new comment");
     }
 }

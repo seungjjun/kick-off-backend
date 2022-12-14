@@ -4,7 +4,6 @@ import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
-import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
@@ -45,32 +44,32 @@ public class DeleteUserAdminService {
     }
 
     private void deleteLikes(Long userId) {
-        if(likeRepository.existsByUserId(userId)) {
-            List<Like> likes = likeRepository.findAllByUserId(userId);
+        if (likeRepository.existsByUserId_Value(userId)) {
+            List<Like> likes = likeRepository.findAllByUserId_Value(userId);
 
             likeRepository.deleteAll(likes);
         }
     }
 
     private void deleteRecomments(Long userId) {
-        if(recommentRepository.existsByUserId(userId)) {
-            List<Recomment> recomments = recommentRepository.findAllByUserId(userId);
+        if (recommentRepository.existsByUserId_Value(userId)) {
+            List<Recomment> recomments = recommentRepository.findAllByUserId_Value(userId);
 
             recommentRepository.deleteAll(recomments);
         }
     }
 
     private void deleteComments(Long userId) {
-        if(commentRepository.existsByUserId(userId)) {
-            List<Comment> comments = commentRepository.findAllByUserId(userId);
+        if (commentRepository.existsByUserId_Value(userId)) {
+            List<Comment> comments = commentRepository.findAllByUserId_Value(userId);
 
             commentRepository.deleteAll(comments);
         }
     }
 
     private void deletePosts(Long userId) {
-        if(postRepository.existsByUserId(new UserId(userId))) {
-            List<Post> posts = postRepository.findAllByUserId(new UserId(userId));
+        if (postRepository.existsByUserId_Value(userId)) {
+            List<Post> posts = postRepository.findAllByUserId_Value(userId);
 
             deleteLikesByPostId(posts);
             deleteCommentsByPostId(posts);
@@ -81,8 +80,8 @@ public class DeleteUserAdminService {
 
     private void deleteLikesByPostId(List<Post> posts) {
         posts.forEach(post -> {
-            if(likeRepository.existsByPostId(post.id())) {
-                List<Like> likes = likeRepository.findAllByPostId(post.id());
+            if (likeRepository.existsByPostId_Value(post.id())) {
+                List<Like> likes = likeRepository.findAllByPostId_Value(post.id());
 
                 likeRepository.deleteAll(likes);
             }
@@ -91,8 +90,8 @@ public class DeleteUserAdminService {
 
     private void deleteCommentsByPostId(List<Post> posts) {
         posts.forEach(post -> {
-            if(commentRepository.existsByPostId(post.id())) {
-                List<Comment> comments = commentRepository.findAllByPostId(post.id());
+            if (commentRepository.existsByPostId_Value(post.id())) {
+                List<Comment> comments = commentRepository.findAllByPostId_Value(post.id());
 
                 deleteRecommentsByCommentId(comments);
 
@@ -103,7 +102,7 @@ public class DeleteUserAdminService {
 
     private void deleteRecommentsByCommentId(List<Comment> comments) {
         comments.forEach(comment -> {
-            if(recommentRepository.existsByCommentId(comment.id())) {
+            if (recommentRepository.existsByCommentId(comment.id())) {
                 List<Recomment> recomments = recommentRepository.findAllByCommentId(comment.id());
 
                 recommentRepository.deleteAll(recomments);

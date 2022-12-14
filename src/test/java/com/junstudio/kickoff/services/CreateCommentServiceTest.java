@@ -26,9 +26,9 @@ class CreateCommentServiceTest {
 
     @Test
     void createComment() {
-        Comment comment = mock(Comment.class);
+        Comment comment = Comment.fake();
 
-        createCommentService.createComment(comment.content(), comment.userId(), comment.postId());
+        createCommentService.createComment(comment.content().value(), comment.userId().value(), comment.postId().value());
 
         verify(commentRepository).save(any(Comment.class));
     }

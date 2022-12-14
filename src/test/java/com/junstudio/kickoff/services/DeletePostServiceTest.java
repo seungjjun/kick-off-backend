@@ -62,9 +62,9 @@ class DeletePostServiceTest {
     @Test
     void delete() {
         given(postRepository.getReferenceById(post.id())).willReturn(post);
-        given(likeRepository.getReferenceByPostId(post.id())).willReturn(like);
-        given(commentRepository.getReferenceByPostId(post.id())).willReturn(comment);
-        given(recommentRepository.getReferenceByPostId(post.id())).willReturn(recomment);
+        given(likeRepository.getReferenceByPostId_Value(post.id())).willReturn(like);
+        given(commentRepository.getReferenceByPostId_Value(post.id())).willReturn(comment);
+        given(recommentRepository.getReferenceByPostId_Value(post.id())).willReturn(recomment);
 
         deletePostService.delete(post.id());
 

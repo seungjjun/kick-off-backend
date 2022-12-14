@@ -44,20 +44,20 @@ class DeleteUserAdminServiceTest {
         usersId.add(1L);
 
         Like like = Like.fake();
-        given(likeRepository.existsByUserId(any())).willReturn(true);
-        given(likeRepository.findAllByUserId(any())).willReturn(List.of(like));
+        given(likeRepository.existsByUserId_Value(any())).willReturn(true);
+        given(likeRepository.findAllByUserId_Value(any())).willReturn(List.of(like));
 
         Post post = Post.fake();
-        given(postRepository.existsByUserId(any(UserId.class))).willReturn(true);
-        given(postRepository.findAllByUserId(any(UserId.class))).willReturn(List.of(post));
+        given(postRepository.existsByUserId_Value(any(Long.class))).willReturn(true);
+        given(postRepository.findAllByUserId_Value(any(Long.class))).willReturn(List.of(post));
 
         Recomment recomment = Recomment.fake();
-        given(recommentRepository.existsByUserId(any())).willReturn(true);
-        given(recommentRepository.findAllByUserId(any())).willReturn(List.of(recomment));
+        given(recommentRepository.existsByUserId_Value(any())).willReturn(true);
+        given(recommentRepository.findAllByUserId_Value(any())).willReturn(List.of(recomment));
 
         Comment comment = Comment.fake();
-        given(commentRepository.existsByUserId(any())).willReturn(true);
-        given(commentRepository.findAllByUserId(any())).willReturn(List.of(comment));
+        given(commentRepository.existsByUserId_Value(any())).willReturn(true);
+        given(commentRepository.findAllByUserId_Value(any())).willReturn(List.of(comment));
 
         deleteUserAdminService.delete(usersId);
 

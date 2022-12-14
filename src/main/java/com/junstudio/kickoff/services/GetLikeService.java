@@ -21,6 +21,6 @@ public class GetLikeService {
     }
 
     public List<Like> findLike(Long postId) {
-        return likeRepository.findAllByPostId(postId);
+        return likeRepository.findAllByPostId_Value(postId);
     }
 }

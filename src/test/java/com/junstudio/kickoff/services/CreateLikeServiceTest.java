@@ -2,7 +2,9 @@ package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
+import com.junstudio.kickoff.models.PostId;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
@@ -10,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -22,12 +25,6 @@ class CreateLikeServiceTest {
     private LikeRepository likeRepository;
 
     @MockBean
-    private PostRepository postRepository;
-
-    @MockBean
-    private UserRepository userRepository;
-
-    @MockBean
     private CreateLikeService createLikeService;
 
     User user;
@@ -36,36 +33,31 @@ class CreateLikeServiceTest {
 
     @BeforeEach
     void setup() {
+        like = Like.fake();
+
         likeRepository = mock(LikeRepository.class);
-        postRepository = mock(PostRepository.class);
-        userRepository = mock(UserRepository.class);
 
-        createLikeService = new CreateLikeService(
-            postRepository, userRepository, likeRepository);
+        createLikeService = new CreateLikeService(likeRepository);
 
-        user = mock(User.class);
-        given(userRepository.findById(any(Long.class))).willReturn(Optional.of(user));
-
-        post = mock(Post.class);
-        given(postRepository.findById(any(Long.class))).willReturn(Optional.of(post));
+        user = User.fake();
+        post = Post.fake();
     }
 
     @Test
     void countLike() {
-        like = new Like(1L, post.id(), user.id());
-
         createLikeService.countLike(user.id(), post.id());
         verify(likeRepository).save(any());
     }
 
     @Test
     void deleteLike() {
-        like = new Like(1L, post.id(), user.id());
+        given(likeRepository.existsByPostId_Value(post.id())).willReturn(true);
 
-        given(likeRepository.findByPostId(any(Long.class)))
-            .willReturn(Optional.of(like));
+        given(likeRepository.findAllByUserId_Value(user.id()))
+            .willReturn(List.of(like));
 
         createLikeService.countLike(post.id(), user.id());
+
         verify(likeRepository).deleteById(any(Long.class));
     }
 }

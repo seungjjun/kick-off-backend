@@ -2,28 +2,41 @@ package com.junstudio.kickoff.models;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
-public class UserId implements Serializable {
+public class UserId {
     @Column(name = "user_id")
-    private Long userId;
+    private Long value;
 
     private UserId() {
     }
 
-    public UserId(Long userId) {
-        this.userId = userId;
+    public UserId(Long value) {
+        this.value = value;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long value() {
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserId userId = (UserId) o;
+        return Objects.equals(value, userId.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 
     @Override
     public String toString() {
         return "UserId{" +
-            "userId =" + userId +
+            "value=" + value +
             '}';
     }
 }

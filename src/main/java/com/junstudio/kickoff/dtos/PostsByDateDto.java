@@ -1,7 +1,7 @@
 package com.junstudio.kickoff.dtos;
 
 public class PostsByDateDto {
-    private int todayPostsNumber;
+    private final int todayPostsNumber;
     private final int aDayAgoPostsNumber;
     private final int twoDaysAgoPostsNumber;
     private final int threeDaysAgoPostsNumber;

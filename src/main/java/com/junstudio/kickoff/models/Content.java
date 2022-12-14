@@ -5,14 +5,14 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class BoardName {
-    @Column(name = "board_name")
+public class Content {
+    @Column(name = "content")
     private String value;
 
-    public BoardName() {
+    public Content() {
     }
 
-    public BoardName(String value) {
+    public Content(String value) {
         this.value = value;
     }
 
@@ -24,8 +24,8 @@ public class BoardName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BoardName boardName = (BoardName) o;
-        return Objects.equals(value, boardName.value);
+        Content content = (Content) o;
+        return Objects.equals(value, content.value);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class BoardName {
 
     @Override
     public String toString() {
-        return "BoardName{" +
+        return "Content{" +
             "value='" + value + '\'' +
             '}';
     }

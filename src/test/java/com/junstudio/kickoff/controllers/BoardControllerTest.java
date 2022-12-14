@@ -6,9 +6,11 @@ import com.junstudio.kickoff.dtos.CreatePostsDto;
 import com.junstudio.kickoff.dtos.PostPageDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Board;
-import com.junstudio.kickoff.models.BoardName;
+import com.junstudio.kickoff.models.BoardId;
 import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Grade;
+import com.junstudio.kickoff.models.Hit;
+import com.junstudio.kickoff.models.Image;
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
@@ -68,12 +70,18 @@ class BoardControllerTest {
     @Test
     void board() throws Exception {
         given(getBoardService.boards()).willReturn(new BoardsDto(
-            List.of(new BoardDto(board.id(), new BoardName("EPL"), board.parentId(), false))));
+            List.of(new BoardDto(board.id(), "EPL", board.parentId().value(), false))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/boards"))
             .andExpect(status().isOk())
             .andExpect(content().string(
-                containsString("boardName\":{\"value\":\"EPL\"}")
+                containsString("{" +
+                    "\"board\":[" +
+                    "{\"id\":1," +
+                    "\"boardName\":\"EPL\"," +
+                    "\"parentId\":1," +
+                    "\"deleted\":false" +
+                    "}")
             ));
     }
 
@@ -96,9 +104,9 @@ class BoardControllerTest {
     @Test
     void searchPostWithTitle() throws Exception {
         Post post = new Post(
-            1L, new UserId(1L), 1L,
+            1L, new UserId(1L), new BoardId(1L),
             new PostInformation("search post", "content"),
-            1L, "imageUrl", LocalDateTime.now());
+            new Hit(1L), new Image("imageUrl"), LocalDateTime.now());
 
         given(getPostService.search(any(), any(), any(), any()))
             .willReturn(new PostsDto(
@@ -125,9 +133,9 @@ class BoardControllerTest {
     @Test
     void searchPostWithContent() throws Exception {
         Post post = new Post(
-            1L, new UserId(1L), 1L,
+            1L, new UserId(1L), new BoardId(1L),
             new PostInformation("almond", "almond is delicious"),
-            1L, "imageUrl", LocalDateTime.now());
+            new Hit(1L), new Image("imageUrl"), LocalDateTime.now());
 
         given(getPostService.search(any(), any(), any(), any()))
             .willReturn(new PostsDto(

@@ -45,8 +45,12 @@ class CreatePostServiceTest {
 
         Post post = Post.fake();
 
-        createPostService.write(post.postInformation().getTitle(), post.postInformation().getContent(),
-            post.imageUrl(), user.id(), board.id());
+        createPostService.write(
+            post.postInformation().getTitle(),
+            post.postInformation().getContent(),
+            post.image().url(),
+            user.id(),
+            board.id());
 
         verify(postRepository).save(any(Post.class));
     }

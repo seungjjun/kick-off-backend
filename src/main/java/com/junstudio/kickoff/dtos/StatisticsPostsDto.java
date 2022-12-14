@@ -9,7 +9,8 @@ public class StatisticsPostsDto {
     private final List<StatisticsPostDto> posts;
     private final List<UserDto> users;
 
-    public StatisticsPostsDto(List<StatisticsPostDto> posts, List<User> users) {
+    public
+    StatisticsPostsDto(List<StatisticsPostDto> posts, List<User> users) {
         this.posts = posts;
         this.users = users.stream().map(User::toDto).collect(Collectors.toList());
     }

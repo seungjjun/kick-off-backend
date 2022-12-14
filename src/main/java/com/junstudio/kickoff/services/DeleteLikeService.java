@@ -16,6 +16,6 @@ public class DeleteLikeService {
     }
 
     public void deleteLike(List<Long> likeId) {
-        likeId.forEach(likeRepository::deleteByPostId);
+        likeId.forEach(likeRepository::deleteByPostId_Value);
     }
 }

@@ -3,7 +3,10 @@ package com.junstudio.kickoff.services;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Board;
+import com.junstudio.kickoff.models.BoardId;
 import com.junstudio.kickoff.models.Grade;
+import com.junstudio.kickoff.models.Hit;
+import com.junstudio.kickoff.models.Image;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.User;
@@ -70,16 +73,16 @@ class GetPostServiceTest {
 
         given(postRepository.findAll(Pageable.ofSize(1))).willReturn(page);
 
-        PostsDto postsDto = getPostService.posts(post.getBoardId(), Pageable.ofSize(1));
+        PostsDto postsDto = getPostService.posts(post.getBoardId().value(), Pageable.ofSize(1));
 
         assertThat(postsDto).isNotNull();
     }
 
     @Test
     void findPost() {
-        Post post = new Post(1L, new UserId(1L), 1L,
+        Post post = new Post(1L, new UserId(1L), new BoardId(1L),
             new PostInformation("EPL start", "손흥민 아시아인 최초 EPL 득점왕"),
-            3L, "imageUrl", LocalDateTime.now());
+            new Hit(3L), new Image("imageUrl"), LocalDateTime.now());
 
         Board board = Board.fake();
         User user = User.fake();
@@ -97,9 +100,9 @@ class GetPostServiceTest {
 
     @Test
     void searchWithTitle() {
-        Post post = new Post(1L, new UserId(1L), 2L,
+        Post post = new Post(1L, new UserId(1L), new BoardId(2L),
             new PostInformation("Laliga start", "이강인 개막전 득점"),
-            3L, "imageUrl", LocalDateTime.now());
+            new Hit(3L), new Image("imageUrl"), LocalDateTime.now());
 
         List<Post> posts = new ArrayList<>();
         posts.add(post);
@@ -126,9 +129,9 @@ class GetPostServiceTest {
 
     @Test
     void searchWithContent() {
-        Post post = new Post(1L, new UserId(1L), 1L,
+        Post post = new Post(1L, new UserId(1L), new BoardId(1L),
             new PostInformation("Laliga start", "이강인 개막전 득점"),
-            3L, "imageUrl", LocalDateTime.now());
+            new Hit(3L), new Image("imageUrl"), LocalDateTime.now());
 
         List<Post> posts = new ArrayList<>();
         posts.add(post);

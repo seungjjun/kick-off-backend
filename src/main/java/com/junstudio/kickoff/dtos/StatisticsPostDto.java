@@ -1,14 +1,13 @@
 package com.junstudio.kickoff.dtos;
 
 import com.junstudio.kickoff.models.PostInformation;
-import com.junstudio.kickoff.models.UserId;
 
 public class StatisticsPostDto {
     private final Long id;
 
     private final PostInformationDto postInformation;
 
-    private final UserId userId;
+    private final Long userId;
 
     private final Long hit;
 
@@ -16,7 +15,7 @@ public class StatisticsPostDto {
 
     public StatisticsPostDto(Long id,
                              PostInformation postInformation,
-                             UserId userId,
+                             Long userId,
                              Long hit,
                              String createdAt) {
         this.id = id;
@@ -34,7 +33,7 @@ public class StatisticsPostDto {
         return postInformation;
     }
 
-    public UserId getUserId() {
+    public Long getUserId() {
         return userId;
     }
 

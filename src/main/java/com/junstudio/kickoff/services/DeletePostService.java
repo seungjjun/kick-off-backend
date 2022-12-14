@@ -49,8 +49,8 @@ public class DeletePostService {
     }
 
     private void deleteRecomments(Long postId) {
-        if (recommentRepository.existsByPostId(postId)) {
-            List<Recomment> recomments = recommentRepository.findAllByPostId(postId);
+        if (recommentRepository.existsByPostId_Value(postId)) {
+            List<Recomment> recomments = recommentRepository.findAllByPostId_Value(postId);
 
             for (int i = 0; i < recomments.size(); i += 1) {
                 recommentRepository.deleteAllById(recomments.get(i).id());
@@ -59,8 +59,8 @@ public class DeletePostService {
     }
 
     private void deleteComments(Long postId) {
-        if(commentRepository.existsByPostId(postId)) {
-            List<Comment> comments = commentRepository.findAllByPostId(postId);
+        if(commentRepository.existsByPostId_Value(postId)) {
+            List<Comment> comments = commentRepository.findAllByPostId_Value(postId);
 
             for (int i = 0; i < comments.size(); i += 1) {
                 commentRepository.deleteAllById(comments.get(i).id());
@@ -69,8 +69,8 @@ public class DeletePostService {
     }
 
     private void deleteLikes(Long postId) {
-        if(likeRepository.existsByPostId(postId)) {
-            List<Like> likes = likeRepository.findAllByPostId(postId);
+        if(likeRepository.existsByPostId_Value(postId)) {
+            List<Like> likes = likeRepository.findAllByPostId_Value(postId);
 
             for (int i = 0; i < likes.size(); i += 1) {
                 likeRepository.deleteAllById(likes.get(i).id());

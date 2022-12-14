@@ -11,7 +11,6 @@ import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.CommentRepository;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
@@ -98,27 +97,27 @@ public class GetUserService {
     }
 
     private List<PostDto> posts(User user) {
-        return postRepository.findAllByUserId(new UserId(user.id()))
+        return postRepository.findAllByUserId_Value(user.id())
             .stream().map(Post::toDto).collect(Collectors.toList());
     }
 
     private List<CommentDto> comments(User user) {
-        return commentRepository.findAllByUserId(user.id())
+        return commentRepository.findAllByUserId_Value(user.id())
             .stream().map(Comment::toDto).collect(Collectors.toList());
     }
 
     private List<ReCommentDto> recomments(User user) {
-        return recommentRepository.findAllByUserId(user.id())
+        return recommentRepository.findAllByUserId_Value(user.id())
             .stream().map(Recomment::toDto).collect(Collectors.toList());
     }
 
     private List<Like> likes(User user) {
-        return likeRepository.findAllByUserId(user.id());
+        return likeRepository.findAllByUserId_Value(user.id());
     }
 
     private void addLikes(List<Like> likes, List<PostDto> likedPosts) {
         likes.forEach(like -> {
-            likedPosts.add(postRepository.findById(like.postId())
+            likedPosts.add(postRepository.findById(like.postId().value())
                 .orElseThrow(PostNotFound::new)
                 .toDto());
         });

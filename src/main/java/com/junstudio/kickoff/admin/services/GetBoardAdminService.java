@@ -49,29 +49,29 @@ public class GetBoardAdminService {
     }
 
     private void addLeagueBoardPostsNumber(AtomicInteger leagueBoardPostsNumber, Long boardId) {
-        List<Post> eplBoardPosts =  postRepository.findAllByBoardId(boardId);
+        List<Post> eplBoardPosts =  postRepository.findAllByBoardId_Value(boardId);
         leagueBoardPostsNumber.addAndGet(eplBoardPosts.size());
     }
 
     private List<Board> addTeamBoardPostsNumber(AtomicInteger teamBoardPostsNumber, Long boardId) {
-        List<Board> teamBoards = boardRepository.findAllByParentId(boardId);
+        List<Board> teamBoards = boardRepository.findAllByParentId_value(boardId);
 
         teamBoardPostsNumber.addAndGet(teamBoards.stream()
             .filter(eplTeamBoard -> !eplTeamBoard.isDeleted())
             .collect(Collectors.toList())
             .stream()
-            .mapToInt(eplTeamBoard -> postRepository.findAllByBoardId(eplTeamBoard.id())
+            .mapToInt(eplTeamBoard -> postRepository.findAllByBoardId_Value(eplTeamBoard.id())
                 .size()).sum());
         return teamBoards;
     }
 
     private void addPlayerBoardPostsNumber(AtomicInteger playerBoardPostsNumber, List<Board> teamBoards) {
         teamBoards.forEach(teamBoard -> {
-            boardRepository.findAllByParentId(teamBoard.id())
+            boardRepository.findAllByParentId_value(teamBoard.id())
                 .stream()
                 .filter(eplPlayerBoard -> !eplPlayerBoard.isDeleted())
                 .forEach(eplPlayerBoard -> {
-                    playerBoardPostsNumber.addAndGet(postRepository.findAllByBoardId(eplPlayerBoard.id()).size());
+                    playerBoardPostsNumber.addAndGet(postRepository.findAllByBoardId_Value(eplPlayerBoard.id()).size());
                 });
         });
     }

@@ -11,8 +11,8 @@ class LikeTest {
 
         Post post = Post.fake();
 
-        Like like = new Like(1L, post.id(), user.id());
+        Like like = new Like(1L, new PostId(post.id()), new UserId(user.id()));
 
-        assertThat(like.postId()).isEqualTo(1L);
+        assertThat(like.postId().value()).isEqualTo(1L);
     }
 }

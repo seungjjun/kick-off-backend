@@ -3,6 +3,7 @@ package com.junstudio.kickoff.models;
 import com.junstudio.kickoff.dtos.LikeDto;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -16,45 +17,43 @@ public class Like {
     @Column(name = "like_id")
     private Long id;
 
-    private Long postId;
+    @Embedded
+    private PostId postId;
 
-    private Long userId;
+    @Embedded
+    private UserId userId;
 
     private Like() {
     }
 
-    public Like(Long id, Long postId, Long userId) {
+    public Like(Long id, PostId postId, UserId userId) {
         this.id = id;
         this.postId = postId;
         this.userId = userId;
     }
 
     public Like(Long postId, Long userId) {
-        this.postId = postId;
-        this.userId = userId;
+        this.postId = new PostId(postId);
+        this.userId = new UserId(userId);
     }
 
     public Long id() {
         return id;
     }
 
-    public Long postId() {
+    public PostId postId() {
         return postId;
     }
 
-    public Long userId() {
+    public UserId userId() {
         return userId;
     }
 
     public LikeDto toDto() {
-        return new LikeDto(id, postId, userId);
-    }
-
-    public LikeDto toLikeDto() {
-        return new LikeDto(id, postId, userId);
+        return new LikeDto(id, postId.value(), userId.value());
     }
 
     public static Like fake() {
-        return new Like(1L, 1L, 1L);
+        return new Like(1L, new PostId(1L), new UserId(1L));
     }
 }

@@ -1,7 +1,9 @@
 package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.models.Like;
+import com.junstudio.kickoff.models.PostId;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.LikeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +30,7 @@ class GetLikeServiceTest {
 
     @BeforeEach
     void setup() {
-        like = new Like(1L, 1L, 1L);
+        like = new Like(1L, new PostId(1L), new UserId(1L));
 
         likeRepository = mock(LikeRepository.class);
 
@@ -46,7 +48,7 @@ class GetLikeServiceTest {
 
     @Test
     void findLike() {
-        given(likeRepository.findAllByPostId(any(Long.class))).willReturn(List.of(like));
+        given(likeRepository.findAllByPostId_Value(any(Long.class))).willReturn(List.of(like));
 
         List<Like> foundLike = getLikeService.findLike(any(Long.class));
 

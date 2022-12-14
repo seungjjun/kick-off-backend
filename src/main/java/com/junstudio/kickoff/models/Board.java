@@ -18,27 +18,28 @@ public class Board {
     @Embedded
     private BoardName boardName;
 
-    private Long parentId;
+    @Embedded
+    private ParentId parentId;
 
     private boolean isDeleted;
 
     public Board() {
     }
 
-    public Board(Long id, BoardName boardName, Long parentId) {
+    public Board(Long id, BoardName boardName, ParentId parentId) {
         this.id = id;
         this.boardName = boardName;
         this.parentId = parentId;
         this.isDeleted = false;
     }
 
-    public Board(BoardName boardName) {
-        this.boardName = boardName;
+    public Board(String boardName) {
+        this.boardName = new BoardName(boardName);
     }
 
-    public Board(Long parentId, BoardName boardName) {
-        this.parentId = parentId;
-        this.boardName = boardName;
+    public Board(Long parentId, String boardName) {
+        this.parentId = new ParentId(parentId);
+        this.boardName = new BoardName(boardName);
     }
 
     public Long id() {
@@ -49,7 +50,7 @@ public class Board {
         return boardName;
     }
 
-    public Long parentId() {
+    public ParentId parentId() {
         return parentId;
     }
 
@@ -58,11 +59,11 @@ public class Board {
     }
 
     public BoardDto toDto() {
-        return new BoardDto(id, boardName, parentId, isDeleted);
+        return new BoardDto(id, boardName.value(), parentId.value(), isDeleted);
     }
 
     public static Board fake() {
-        return new Board(1L, new BoardName("전체 게시판"), 1L);
+        return new Board(1L, new BoardName("전체 게시판"), new ParentId(1L));
     }
 
     public void delete() {

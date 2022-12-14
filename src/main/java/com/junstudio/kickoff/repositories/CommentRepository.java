@@ -9,19 +9,19 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    Page<Comment> findAllByPostId(Long postId, Pageable pageable);
+    Page<Comment> findAllByPostId_Value(Long postId, Pageable pageable);
 
     void deleteAllById(Long postId);
 
-    Comment getReferenceByPostId(Long postId);
+    Comment getReferenceByPostId_Value(Long postId);
 
-    boolean existsByPostId(Long postId);
+    boolean existsByPostId_Value(Long postId);
 
-    List<Comment> findAllByPostId(Long postId);
+    List<Comment> findAllByPostId_Value(Long postId);
 
-    List<Comment> findAllByUserId(Long userId);
+    List<Comment> findAllByUserId_Value(Long userId);
 
-    boolean existsByUserId(Long userId);
+    boolean existsByUserId_Value(Long userId);
 
     List<Comment> findByCommentDateBetween(LocalDateTime startDatetime, LocalDateTime endDatetime);
 }

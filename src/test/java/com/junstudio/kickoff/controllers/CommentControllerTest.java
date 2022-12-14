@@ -4,6 +4,9 @@ import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CommentsDto;
 import com.junstudio.kickoff.dtos.SelectedCommentDto;
 import com.junstudio.kickoff.models.Comment;
+import com.junstudio.kickoff.models.Content;
+import com.junstudio.kickoff.models.PostId;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.services.CreateCommentService;
 import com.junstudio.kickoff.services.DeleteCommentService;
 import com.junstudio.kickoff.services.GetCommentService;
@@ -49,12 +52,12 @@ CommentControllerTest {
 
     @Test
     void comment() throws Exception {
-        Comment comment = new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
+        Comment comment = new Comment(1L, new Content("reply"), new UserId(1L), new PostId(1L), LocalDateTime.now());
 
         given(getCommentService.findComment(any(Long.class), any(Pageable.class)))
             .willReturn(new CommentsDto
-                (List.of(new CommentDto(comment.id(), comment.content(),
-                    comment.userId(), comment.postId(), comment.isDeleted(),
+                (List.of(new CommentDto(comment.id(), comment.content().value(),
+                    comment.userId().value(), comment.postId().value(), comment.isDeleted(),
                     comment.commentDate().toString()))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/posts/1/comments")

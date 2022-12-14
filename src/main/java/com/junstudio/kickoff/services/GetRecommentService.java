@@ -21,6 +21,6 @@ public class GetRecommentService {
     }
 
     public List<Recomment> findRecomment(Long postId) {
-        return recommentRepository.findAllByPostId(postId);
+        return recommentRepository.findAllByPostId_Value(postId);
     }
 }

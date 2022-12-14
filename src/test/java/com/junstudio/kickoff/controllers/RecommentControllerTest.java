@@ -1,7 +1,10 @@
 package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.SelectedRecommentDto;
+import com.junstudio.kickoff.models.Content;
+import com.junstudio.kickoff.models.PostId;
 import com.junstudio.kickoff.models.Recomment;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.services.CreateRecommentService;
 import com.junstudio.kickoff.services.DeleteRecommentService;
 import com.junstudio.kickoff.services.GetRecommentService;
@@ -47,7 +50,7 @@ class RecommentControllerTest {
 
     @BeforeEach()
     void setup() {
-        recomment = new Recomment(1L, 1L, "reply", 1L, 1L, LocalDateTime.now());
+        recomment = new Recomment(1L, 1L, new Content("reply"), new UserId(1L), new PostId(1L), LocalDateTime.now());
     }
 
     @Test

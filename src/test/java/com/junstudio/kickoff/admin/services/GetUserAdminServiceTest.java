@@ -68,9 +68,9 @@ class GetUserAdminServiceTest {
     @Test
     void users() {
         given(userRepository.findAll()).willReturn(List.of(user));
-        given(postRepository.findAllByUserId(any(UserId.class))).willReturn(List.of(post));
-        given(commentRepository.findAllByUserId(any())).willReturn(List.of(comment));
-        given(recommentRepository.findAllByUserId(any())).willReturn(List.of(recomment));
+        given(postRepository.findAllByUserId_Value(any())).willReturn(List.of(post));
+        given(commentRepository.findAllByUserId_Value(any())).willReturn(List.of(comment));
+        given(recommentRepository.findAllByUserId_Value(any())).willReturn(List.of(recomment));
 
         UsersDto foundUsers = getUserAdminService.users();
 
@@ -92,9 +92,9 @@ class GetUserAdminServiceTest {
     void search() {
         given(userRepository.findByName(any())).willReturn(Optional.ofNullable(user));
 
-        given(postRepository.findAllByUserId(any(UserId.class))).willReturn(List.of(post));
-        given(commentRepository.findAllByUserId(any())).willReturn(List.of(comment));
-        given(recommentRepository.findAllByUserId(any())).willReturn(List.of(recomment));
+        given(postRepository.findAllByUserId_Value(any())).willReturn(List.of(post));
+        given(commentRepository.findAllByUserId_Value(any())).willReturn(List.of(comment));
+        given(recommentRepository.findAllByUserId_Value(any())).willReturn(List.of(recomment));
 
         SearchedUserDto searchedUser = getUserAdminService.search(user.name());
 
