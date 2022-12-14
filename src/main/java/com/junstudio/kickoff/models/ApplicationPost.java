@@ -15,13 +15,13 @@ public class ApplicationPost {
     @Column(name = "application_id")
     private Long id;
 
-    private String reason;
-
     @Embedded
     private Applicant applicant;
 
     @Embedded
     private CreationNumber creationNumber;
+
+    private String reason;
 
     private String state;
 

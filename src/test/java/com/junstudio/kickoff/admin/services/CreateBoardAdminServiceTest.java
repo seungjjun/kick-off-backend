@@ -30,7 +30,7 @@ class CreateBoardAdminServiceTest {
 
     @Test
     void create() {
-        createBoardAdminService.create(board.parentId(), board.boardName());
+        createBoardAdminService.create(board.parentId().value(), board.boardName().value());
 
         verify(boardRepository).save(any(Board.class));
     }
@@ -38,19 +38,19 @@ class CreateBoardAdminServiceTest {
     @Test
     void createWithParentIdZero() {
         assertThrows(CreateBoardFailed.class, () -> {
-            createBoardAdminService.create(0L, board.boardName());
+            createBoardAdminService.create(0L, board.boardName().value());
         });
     }
 
     @Test
     void createWithExistingBoardName() {
-        given(boardRepository.existsByBoardName(board.boardName())).willReturn(true);
+        given(boardRepository.existsByBoardName_value(board.boardName().value())).willReturn(true);
 
-        given(boardRepository.findAllByBoardName(board.boardName()))
+        given(boardRepository.findAllByBoardName_value(board.boardName().value()))
             .willReturn(List.of(board));
 
         assertThrows(AlreadyExistingBoardName.class, () -> {
-            createBoardAdminService.create(board.parentId(), board.boardName());
+            createBoardAdminService.create(board.parentId().value(), board.boardName().value());
         });
     }
 }

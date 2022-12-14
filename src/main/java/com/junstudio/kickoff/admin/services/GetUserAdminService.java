@@ -91,14 +91,14 @@ public class GetUserAdminService {
     }
 
     private List<Post> findPostsByUserId(User user) {
-        return postRepository.findAllByUserId(new UserId(user.id()));
+        return postRepository.findAllByUserId_Value(user.id());
     }
 
     private List<Comment> findCommentsByUserId(User user) {
-        return commentRepository.findAllByUserId(user.id());
+        return commentRepository.findAllByUserId_Value(user.id());
     }
 
     private List<Recomment> findRecommentsByUserId(User user) {
-        return recommentRepository.findAllByUserId(user.id());
+        return recommentRepository.findAllByUserId_Value(user.id());
     }
 }

@@ -50,11 +50,11 @@ public class CreateApplicationPostService {
            }
        });
 
-        Long postNumber = (long) postRepository.findAllByUserId(new UserId(user.id())).size();
+        Long postNumber = (long) postRepository.findAllByUserId_Value(user.id()).size();
 
-        Long commentNumber = (long) commentRepository.findAllByUserId(user.id()).size();
+        Long commentNumber = (long) commentRepository.findAllByUserId_Value(user.id()).size();
 
-        Long recommentNumber = (long) recommentRepository.findAllByUserId(user.id()).size();
+        Long recommentNumber = (long) recommentRepository.findAllByUserId_Value(user.id()).size();
 
         ApplicationPost applicationPost =
             new ApplicationPost(

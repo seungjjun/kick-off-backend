@@ -3,7 +3,6 @@ package com.junstudio.kickoff.admin.services;
 import com.junstudio.kickoff.exceptions.AlreadyExistingBoardName;
 import com.junstudio.kickoff.exceptions.CreateBoardFailed;
 import com.junstudio.kickoff.models.Board;
-import com.junstudio.kickoff.models.BoardName;
 import com.junstudio.kickoff.repositories.BoardRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,13 +18,13 @@ public class CreateBoardAdminService {
         this.boardRepository = boardRepository;
     }
 
-    public void create(Long parentId, BoardName boardName) {
+    public void create(Long parentId, String boardName) {
         if(parentId == 0) {
             throw new CreateBoardFailed();
         }
 
-        if(boardRepository.existsByBoardName(boardName)) {
-            List<Board> foundBoards = boardRepository.findAllByBoardName(boardName);
+        if(boardRepository.existsByBoardName_value(boardName)) {
+            List<Board> foundBoards = boardRepository.findAllByBoardName_value(boardName);
 
             foundBoards.forEach(foundBoard -> {
                 if(!foundBoard.isDeleted()) {

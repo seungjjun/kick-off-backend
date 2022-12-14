@@ -31,14 +31,14 @@ public class GetPostAdminService {
     }
 
     public StatisticsPostsDto mostViewedPosts() {
-        List<StatisticsPostDto> posts = postRepository.findTop3ByOrderByHitDesc()
+        List<StatisticsPostDto> posts = postRepository.findTop3ByOrderByHit_NumberDesc()
             .stream().map(Post::toStatisticsDto)
             .collect(Collectors.toList());
 
         List<User> users = new ArrayList<>();
 
         posts.forEach(post -> users.add(
-            userRepository.findById(post.getUserId().getUserId())
+            userRepository.findById(post.getUserId())
                 .orElseThrow(UserNotFound::new)
         ));
 

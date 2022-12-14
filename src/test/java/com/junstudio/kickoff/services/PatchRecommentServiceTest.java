@@ -25,8 +25,8 @@ class PatchRecommentServiceTest {
 
         given(recommentRepository.getReferenceById(recomment.id())).willReturn(recomment);
 
-        patchRecommentService.patch(recomment.id(), recomment.getContent());
+        patchRecommentService.patch(recomment.id(), "수정 대댓글");
 
-        verify(recomment).patch(recomment.getContent());
+        verify(recomment).patch("수정 대댓글");
     }
 }

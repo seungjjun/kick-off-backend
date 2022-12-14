@@ -27,12 +27,14 @@ public class Post {
     @Embedded
     private PostInformation postInformation;
 
-    private Long boardId;
+    @Embedded
+    private Hit hit;
 
-    private Long hit;
+    @Embedded
+    private BoardId boardId;
 
-    @Column(name = "imageUrl", length = 2048)
-    private String imageUrl;
+    @Embedded
+    private Image image;
 
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -40,25 +42,25 @@ public class Post {
     public Post() {
     }
 
-    public Post(Long id, UserId userId, Long boardId,
+    public Post(Long id, UserId userId, BoardId boardId,
                 PostInformation postInformation,
-                Long hit, String imageUrl,
+                Hit hit, Image image,
                 LocalDateTime createdAt) {
         this.id = id;
         this.userId = userId;
         this.boardId = boardId;
         this.postInformation = postInformation;
         this.hit = hit;
-        this.imageUrl = imageUrl;
+        this.image = image;
         this.createdAt = createdAt;
     }
 
-    public Post(PostInformation postInformation, Long hit,
-                String imageUrl, Long userId, Long boardId) {
+    public Post(PostInformation postInformation, Hit hit,
+                Image image, UserId userId, BoardId boardId) {
         this.postInformation = postInformation;
         this.hit = hit;
-        this.imageUrl = imageUrl;
-        this.userId = new UserId(userId);
+        this.image = image;
+        this.userId = userId;
         this.boardId = boardId;
     }
 
@@ -70,7 +72,7 @@ public class Post {
         return userId;
     }
 
-    public Long getBoardId() {
+    public BoardId getBoardId() {
         return boardId;
     }
 
@@ -78,12 +80,12 @@ public class Post {
         return postInformation;
     }
 
-    public Long hit() {
+    public Hit hit() {
         return hit;
     }
 
-    public String imageUrl() {
-        return imageUrl;
+    public Image image() {
+        return image;
     }
 
     public LocalDateTime createdAt() {
@@ -91,12 +93,12 @@ public class Post {
     }
 
     public PostDto toDto() {
-        return new PostDto(id, postInformation, boardId, userId, hit,
-            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
+        return new PostDto(id, postInformation, boardId.value(), userId.value(), hit.number(),
+            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), image.url());
     }
 
     public void updateHit(Long hit) {
-        this.hit = hit + 1L;
+        this.hit = new Hit(hit + 1L);
     }
 
     public PostWrittenDto postWrittenDto() {
@@ -104,29 +106,29 @@ public class Post {
     }
 
     public PostDetailDto toDetailDto(Board board, User user) {
-        return new PostDetailDto(id, postInformation, hit, board, user,
-            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), imageUrl);
+        return new PostDetailDto(id, postInformation, hit.number(), board, user,
+            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), image.url());
     }
 
     public static Post fake() {
-        return new Post(1L, new UserId(1L), 1L,
+        return new Post(1L, new UserId(1L), new BoardId(1L),
             new PostInformation("Son is EPL King",
                 "Son is the first Asian to score EPL"),
-            3L, "imageUrl", LocalDateTime.now());
+            new Hit(3L), new Image("imageUrl"), LocalDateTime.now());
     }
 
     public void patch(String title, String content, Long boardId, String imageUrl) {
         this.postInformation = new PostInformation(title, content);
-        this.boardId = boardId;
-        this.imageUrl = imageUrl;
+        this.boardId = new BoardId(boardId);
+        this.image = new Image(imageUrl);
     }
 
     public StatisticsPostDto toStatisticsDto() {
         return new StatisticsPostDto(
             id,
             postInformation,
-            userId,
-            hit,
+            userId.value(),
+            hit.number(),
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }

@@ -12,9 +12,9 @@ class PostTest {
 
     @BeforeEach
     void setup() {
-        post = new Post(1L, new UserId(1L), 1L,
+        post = new Post(1L, new UserId(1L), new BoardId(1L),
             new PostInformation("손흥민 득점왕 수상", "손흥민 아시아인 최초 EPL 득점왕"),
-            3L, "imageUrl", LocalDateTime.now());
+            new Hit(3L), new Image("imageUrl"), LocalDateTime.now());
     }
 
     @Test
@@ -24,8 +24,8 @@ class PostTest {
 
     @Test
     void updateHit() {
-        post.updateHit(post.hit());
+        post.updateHit(post.hit().number());
 
-        assertThat(post.hit()).isEqualTo(4L);
+        assertThat(post.hit().number()).isEqualTo(4L);
     }
 }

@@ -26,13 +26,13 @@ class CreateRecommentServiceTest {
 
     @Test
     void createRecomment() {
-        Recomment recomment = mock(Recomment.class);
+        Recomment recomment = Recomment.fake();
 
         createRecommentService.createRecomment(
-            recomment.getContent(),
+            recomment.getContent().value(),
             recomment.commentId(),
-            recomment.getUserId(),
-            recomment.getPostId());
+            recomment.getUserId().value(),
+            recomment.getPostId().value());
 
         verify(recommentRepository).save(any(Recomment.class));
     }

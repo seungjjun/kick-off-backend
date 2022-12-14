@@ -4,6 +4,7 @@ import com.junstudio.kickoff.dtos.CommentDto;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,11 +18,14 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
 
-    private String content;
+    @Embedded
+    private Content content;
 
-    private Long userId;
+    @Embedded
+    private UserId userId;
 
-    private Long postId;
+    @Embedded
+    private PostId postId;
 
     private boolean isDeleted;
 
@@ -31,7 +35,7 @@ public class Comment {
     public Comment() {
     }
 
-    public Comment(Long id, String content, Long userId, Long postId,
+    public Comment(Long id, Content content, UserId userId, PostId postId,
                    LocalDateTime commentDate) {
         this.id = id;
         this.content = content;
@@ -41,7 +45,7 @@ public class Comment {
         this.commentDate = commentDate;
     }
 
-    public Comment(String content, Long userId, Long postId) {
+    public Comment(Content content, UserId userId, PostId postId) {
         this.content = content;
         this.userId = userId;
         this.postId = postId;
@@ -52,15 +56,15 @@ public class Comment {
         return id;
     }
 
-    public String content() {
+    public Content content() {
         return content;
     }
 
-    public Long userId() {
+    public UserId userId() {
         return userId;
     }
 
-    public Long postId() {
+    public PostId postId() {
         return postId;
     }
 
@@ -73,16 +77,16 @@ public class Comment {
     }
 
     public CommentDto toDto() {
-        return new CommentDto(id, content, userId, postId, isDeleted,
+        return new CommentDto(id, content.value(), userId.value(), postId.value(), isDeleted,
             commentDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
 
     public static Comment fake() {
-        return new Comment(1L, "reply", 1L, 1L, LocalDateTime.now());
+        return new Comment(1L, new Content("reply"), new UserId(1L), new PostId(1L), LocalDateTime.now());
     }
 
     public void patch(String content) {
-        this.content = content;
+        this.content = new Content(content);
     }
 
     public void delete() {

@@ -5,18 +5,18 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class BoardName {
-    @Column(name = "board_name")
-    private String value;
+public class ParentId {
+    @Column(name = "parent_id")
+    private Long value;
 
-    public BoardName() {
+    public ParentId() {
     }
 
-    public BoardName(String value) {
+    public ParentId(Long value) {
         this.value = value;
     }
 
-    public String value() {
+    public Long value() {
         return value;
     }
 
@@ -24,8 +24,8 @@ public class BoardName {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BoardName boardName = (BoardName) o;
-        return Objects.equals(value, boardName.value);
+        ParentId parentId = (ParentId) o;
+        return Objects.equals(value, parentId.value);
     }
 
     @Override
@@ -35,8 +35,8 @@ public class BoardName {
 
     @Override
     public String toString() {
-        return "BoardName{" +
-            "value='" + value + '\'' +
+        return "ParentId{" +
+            "value=" + value +
             '}';
     }
 }

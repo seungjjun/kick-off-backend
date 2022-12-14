@@ -47,8 +47,8 @@ class AdminPostControllerTest {
             new StatisticsPostDto(
                 post.id(),
                 post.postInformation(),
-                post.userId(),
-                post.hit(),
+                post.userId().value(),
+                post.hit().number(),
                 post.createdAt().toString()
             );
 

@@ -3,9 +3,13 @@ package com.junstudio.kickoff.services;
 import com.junstudio.kickoff.exceptions.BoardNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Board;
+import com.junstudio.kickoff.models.BoardId;
+import com.junstudio.kickoff.models.Hit;
+import com.junstudio.kickoff.models.Image;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.BoardRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
@@ -33,7 +37,12 @@ public class CreatePostService {
         User user = userRepository.findById(userId).orElseThrow(UserNotFound::new);
         Board board = boardRepository.findById(categoryId).orElseThrow(BoardNotFound::new);
 
-        Post post = new Post(new PostInformation(title, content), 0L, imageUrl, user.id(), board.id());
+        Post post = new Post(
+            new PostInformation(title, content),
+            new Hit(0L),
+            new Image(imageUrl),
+            new UserId(user.id()),
+            new BoardId(board.id()));
 
         postRepository.save(post);
         return post;

@@ -5,7 +5,6 @@ import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.repositories.LikeRepository;
 import com.junstudio.kickoff.repositories.PostRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,7 +40,7 @@ class GetPostAdminServiceTest {
 
     @Test
     void mostViewedPosts() {
-        given(postRepository.findTop3ByOrderByHitDesc()).willReturn(List.of(post));
+        given(postRepository.findTop3ByOrderByHit_NumberDesc()).willReturn(List.of(post));
         given(userRepository.findById(any())).willReturn(Optional.of(user));
 
         StatisticsPostsDto mostViewedPosts = getPostAdminService.mostViewedPosts();
@@ -58,7 +57,7 @@ class GetPostAdminServiceTest {
 
         assertThat(todayCreatePostsDto.getPosts().size()).isEqualTo(1);
 
-        assertThat(todayCreatePostsDto.getPosts().get(0).postInformation().getTitle())
+        assertThat(todayCreatePostsDto.getPosts().get(0).getPostInformation().getTitle())
             .isEqualTo("Son is EPL King");
     }
 

@@ -5,38 +5,38 @@ import javax.persistence.Embeddable;
 import java.util.Objects;
 
 @Embeddable
-public class BoardName {
-    @Column(name = "board_name")
-    private String value;
+public class Hit {
+    @Column(name = "hit")
+    private Long number;
 
-    public BoardName() {
+    public Hit() {
     }
 
-    public BoardName(String value) {
-        this.value = value;
+    public Hit(Long number) {
+        this.number = number;
     }
 
-    public String value() {
-        return value;
+    public Long number() {
+        return number;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        BoardName boardName = (BoardName) o;
-        return Objects.equals(value, boardName.value);
+        Hit hit = (Hit) o;
+        return Objects.equals(number, hit.number);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(value);
+        return Objects.hash(number);
     }
 
     @Override
     public String toString() {
-        return "BoardName{" +
-            "value='" + value + '\'' +
+        return "Hit{" +
+            "number=" + number +
             '}';
     }
 }

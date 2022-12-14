@@ -26,10 +26,10 @@ class GetBoardAdminServiceTest {
         GetBoardAdminService getBoardAdminService =
             new GetBoardAdminService(boardRepository, postRepository);
 
-        given(postRepository.findAllByBoardId(any(Long.class)))
+        given(postRepository.findAllByBoardId_Value(any(Long.class)))
             .willReturn(List.of(post));
 
-        given(boardRepository.findAllByParentId(any(Long.class)))
+        given(boardRepository.findAllByParentId_value(any(Long.class)))
             .willReturn(List.of(board));
 
         BoardRateDto boardRateDto = getBoardAdminService.rate();

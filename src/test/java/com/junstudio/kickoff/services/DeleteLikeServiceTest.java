@@ -18,8 +18,8 @@ class DeleteLikeServiceTest {
 
         DeleteLikeService deleteLikeService = new DeleteLikeService(likeRepository);
 
-        deleteLikeService.deleteLike(List.of(like.postId()));
+        deleteLikeService.deleteLike(List.of(like.postId().value()));
 
-        verify(likeRepository).deleteByPostId(like.postId());
+        verify(likeRepository).deleteByPostId_Value(like.postId().value());
     }
 }

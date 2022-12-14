@@ -66,7 +66,7 @@ class AdminBoardControllerTest {
                     "}"))
             .andExpect(status().isCreated());
 
-        verify(createBoardAdminService).create(1L, new BoardName("testBoard"));
+        verify(createBoardAdminService).create(1L, "testBoard");
     }
 
     @Test

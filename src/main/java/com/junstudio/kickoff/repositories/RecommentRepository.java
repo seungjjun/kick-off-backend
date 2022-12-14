@@ -7,11 +7,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface RecommentRepository extends JpaRepository<Recomment, Long> {
-    List<Recomment> findAllByPostId(Long postId);
+    List<Recomment> findAllByPostId_Value(Long postId);
 
-    Recomment getReferenceByPostId(Long postId);
+    Recomment getReferenceByPostId_Value(Long postId);
 
-    List<Recomment> findAllByUserId(Long userId);
+    List<Recomment> findAllByUserId_Value(Long userId);
 
     List<Recomment> findAllByCommentId(Long id);
 
@@ -19,9 +19,9 @@ public interface RecommentRepository extends JpaRepository<Recomment, Long> {
 
     boolean existsByCommentId(Long commentId);
 
-    boolean existsByPostId(Long postId);
+    boolean existsByPostId_Value(Long postId);
 
-    boolean existsByUserId(Long userId);
+    boolean existsByUserId_Value(Long userId);
 
     List<Recomment> findByCommentDateBetween(LocalDateTime startDatetime, LocalDateTime endDatetime);
 }
