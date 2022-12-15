@@ -7,6 +7,7 @@ import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.services.CreateCommentService;
 import com.junstudio.kickoff.services.DeleteCommentService;
 import com.junstudio.kickoff.services.GetCommentService;
+import com.junstudio.kickoff.services.NotificationService;
 import com.junstudio.kickoff.services.PatchCommentService;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -32,15 +33,18 @@ public class CommentController {
     private final CreateCommentService createCommentService;
     private final PatchCommentService patchCommentService;
     private final DeleteCommentService deleteCommentService;
+    private final NotificationService notificationService;
 
     public CommentController(GetCommentService getCommentService,
                              CreateCommentService createCommentService,
                              PatchCommentService patchCommentService,
-                             DeleteCommentService deleteCommentService) {
+                             DeleteCommentService deleteCommentService,
+                             NotificationService notificationService) {
         this.getCommentService = getCommentService;
         this.createCommentService = createCommentService;
         this.patchCommentService = patchCommentService;
         this.deleteCommentService = deleteCommentService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/comments")
@@ -69,6 +73,13 @@ public class CommentController {
             commentDto.getContent(),
             commentDto.getUserId(),
             commentDto.getPostId());
+
+        notificationService.sendNotification(
+            commentDto.getReceiverId(),
+            commentDto.getUserId(),
+            commentDto.getContent()
+        );
+
         return "ok";
     }
 

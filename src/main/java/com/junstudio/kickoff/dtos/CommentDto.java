@@ -1,17 +1,22 @@
 package com.junstudio.kickoff.dtos;
 
 public class CommentDto {
-  private final Long id;
+  private Long id;
 
-  private final String content;
+  private String content;
 
-  private final Long userId;
+  private Long userId;
 
-  private final Long postId;
+  private Long postId;
 
-  private final boolean isDeleted;
+  private Long receiverId;
 
-  private final String commentDate;
+  private boolean isDeleted;
+
+  private String commentDate;
+
+  public CommentDto() {
+  }
 
   public CommentDto(Long id, String content, Long userId, Long postId, boolean isDeleted,
                     String commentDate) {
@@ -19,6 +24,16 @@ public class CommentDto {
     this.content = content;
     this.userId = userId;
     this.postId = postId;
+    this.isDeleted = isDeleted;
+    this.commentDate = commentDate;
+  }
+
+  public CommentDto(Long id, String content, Long userId, Long postId, Long receiverId, boolean isDeleted, String commentDate) {
+    this.id = id;
+    this.content = content;
+    this.userId = userId;
+    this.postId = postId;
+    this.receiverId = receiverId;
     this.isDeleted = isDeleted;
     this.commentDate = commentDate;
   }
@@ -45,5 +60,9 @@ public class CommentDto {
 
   public String getCommentDate() {
     return commentDate;
+  }
+
+  public Long getReceiverId() {
+    return receiverId;
   }
 }

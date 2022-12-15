@@ -35,7 +35,12 @@ public class LoginService {
             throw new LoginFailed();
         }
 
-        return new LoginResultDto(accessToken, user.name(), user.profileImage(), user.grade().name());
+        return new LoginResultDto(
+            accessToken,
+            user.name(),
+            user.profileImage(),
+            user.grade().name()
+        );
     }
 
     public LoginResultDto kakaoLogin(HashMap<String, Object> userInfo) {
