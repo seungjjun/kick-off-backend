@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -67,7 +68,8 @@ public class CommentController {
     @PostMapping("/comments")
     @ResponseStatus(HttpStatus.CREATED)
     private String comment(
-        @RequestBody CommentDto commentDto
+        @RequestBody CommentDto commentDto,
+        @RequestAttribute("identification") String identification
     ) {
         createCommentService.createComment(
             commentDto.getContent(),
@@ -77,7 +79,9 @@ public class CommentController {
         notificationService.sendNotification(
             commentDto.getReceiverId(),
             commentDto.getUserId(),
-            commentDto.getContent()
+            commentDto.getPostId(),
+            commentDto.getContent(),
+            identification
         );
 
         return "ok";
