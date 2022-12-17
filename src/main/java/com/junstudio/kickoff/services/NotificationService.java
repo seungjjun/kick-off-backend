@@ -2,9 +2,11 @@ package com.junstudio.kickoff.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.junstudio.kickoff.dtos.ResponseDto;
+import com.junstudio.kickoff.dtos.NotificationDto;
+import com.junstudio.kickoff.exceptions.NotificationNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Notification;
+import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.NotificationRepository;
 import com.junstudio.kickoff.repositories.SseEmitterRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
@@ -40,7 +42,14 @@ public class NotificationService {
         emitter.onCompletion(() -> sseEmitterRepository.deleteById(id));
         emitter.onTimeout(() -> sseEmitterRepository.deleteById(id));
 
-        sendToClient(emitter, id, "Connected!");
+//        sendToClient(emitter, id, "Connected!");
+
+        if (!lastEventId.isEmpty()) {
+            Map<String, Object> events = sseEmitterRepository.findAllEventCacheStartWithId(String.valueOf(userId));
+            events.entrySet().stream()
+                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
+                .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
+        }
 
         return emitter;
     }
@@ -57,10 +66,16 @@ public class NotificationService {
         }
     }
 
-    public void sendNotification(Long receiverId, Long userId, String content) {
+    public void sendNotification(Long receiverId, Long userId, Long postId, String content, String identification) {
         String sender = userRepository.findById(userId).orElseThrow(UserNotFound::new).name();
 
-        Notification notification = createNotification(sender, content);
+        User receiver = userRepository.findById(receiverId).orElseThrow(UserNotFound::new);
+
+        if(receiver.identification().equals(identification)) {
+            return;
+        }
+
+        Notification notification = createNotification(receiverId, postId, sender, content);
 
         String id = String.valueOf(receiverId);
 
@@ -80,16 +95,30 @@ public class NotificationService {
         );
     }
 
-    private Notification createNotification(String sender, String content) {
-        return new Notification(sender, content);
+    public Notification createNotification(Long receiverId, Long postId, String sender, String content) {
+        return new Notification(receiverId, postId, sender, content);
     }
 
     public String from(Notification notification) throws JsonProcessingException {
-        ResponseDto responseDto =
-            new ResponseDto(notification.sender(), notification.content());
+        NotificationDto notificationDto =
+            new NotificationDto(
+                notification.id(),
+                notification.sender(),
+                notification.content(),
+                notification.postId(),
+                notification.isRead()
+            );
 
         ObjectMapper objectMapper = new ObjectMapper();
 
-        return objectMapper.writeValueAsString(responseDto);
+        return objectMapper.writeValueAsString(notificationDto);
+    }
+
+    public void read(Long notificationId) {
+        Notification notification = notificationRepository
+            .findById(notificationId)
+            .orElseThrow(NotificationNotFound::new);
+
+        notification.read();
     }
 }

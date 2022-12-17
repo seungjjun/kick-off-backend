@@ -10,17 +10,22 @@ import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.services.CreateCommentService;
 import com.junstudio.kickoff.services.DeleteCommentService;
 import com.junstudio.kickoff.services.GetCommentService;
+import com.junstudio.kickoff.services.NotificationService;
 import com.junstudio.kickoff.services.PatchCommentService;
+import com.junstudio.kickoff.utils.JwtUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import javax.persistence.Embedded;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -50,6 +55,21 @@ CommentControllerTest {
     @MockBean
     private DeleteCommentService deleteCommentService;
 
+    @MockBean
+    private NotificationService notificationService;
+
+    @SpyBean
+    private JwtUtil jwtUtil;
+
+    String token;
+
+    @BeforeEach
+    void setup() {
+        String identification = "je1ly";
+
+        token = jwtUtil.encode(identification);
+    }
+
     @Test
     void comment() throws Exception {
         Comment comment = new Comment(1L, new Content("reply"), new UserId(1L), new PostId(1L), LocalDateTime.now());
@@ -71,14 +91,18 @@ CommentControllerTest {
     @Test
     void writeComment() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/comments")
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +
+                    "\"receiverId\":\"1\"," +
                     "\"content\":\"comment\"," +
                     "\"userId\":\"1\"," +
                     "\"postId\":\"1\"" +
                     "}"))
             .andExpect(status().isCreated());
+
+        verify(notificationService).sendNotification(1L, 1L, 1L, "comment", "je1ly");
     }
 
     @Test

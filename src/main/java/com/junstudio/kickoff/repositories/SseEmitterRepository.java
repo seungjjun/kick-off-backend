@@ -31,4 +31,10 @@ public class SseEmitterRepository {
     public void saveEventCache(String id, Notification notification) {
         eventCache.put(id, notification);
     }
+
+    public Map<String, Object> findAllEventCacheStartWithId(String id) {
+        return eventCache.entrySet().stream()
+            .filter(entry -> entry.getKey().startsWith(id))
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
 }
