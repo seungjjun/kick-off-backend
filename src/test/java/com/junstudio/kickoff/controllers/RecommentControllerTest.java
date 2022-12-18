@@ -8,12 +8,15 @@ import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.services.CreateRecommentService;
 import com.junstudio.kickoff.services.DeleteRecommentService;
 import com.junstudio.kickoff.services.GetRecommentService;
+import com.junstudio.kickoff.services.NotificationService;
 import com.junstudio.kickoff.services.PatchRecommentService;
+import com.junstudio.kickoff.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,11 +49,23 @@ class RecommentControllerTest {
     @MockBean
     private PatchRecommentService patchRecommentService;
 
+    @MockBean
+    private NotificationService notificationService;
+
+    @SpyBean
+    private JwtUtil jwtUtil;
+
     Recomment recomment;
+
+    String token;
 
     @BeforeEach()
     void setup() {
         recomment = new Recomment(1L, 1L, new Content("reply"), new UserId(1L), new PostId(1L), LocalDateTime.now());
+
+        String identification = "je1ly";
+
+        token = jwtUtil.encode(identification);
     }
 
     @Test
@@ -79,6 +94,7 @@ class RecommentControllerTest {
     @Test
     void writeRecomment() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/recomments")
+                .header("Authorization", "Bearer " + token)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{" +

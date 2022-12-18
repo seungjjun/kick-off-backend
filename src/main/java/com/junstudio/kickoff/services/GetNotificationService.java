@@ -7,6 +7,7 @@ import com.junstudio.kickoff.models.Notification;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.NotificationRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -29,7 +30,7 @@ public class GetNotificationService {
         User user = userRepository.findByIdentification(identification)
             .orElseThrow(UserNotFound::new);
 
-        List<NotificationDto> notifications = notificationRepository.findAllByReceiverId(user.id())
+        List<NotificationDto> notifications = notificationRepository.findAllByReceiverId(user.id(), Sort.by(Sort.Direction.DESC, "id"))
             .stream()
             .map(Notification::toDto)
             .collect(Collectors.toList());

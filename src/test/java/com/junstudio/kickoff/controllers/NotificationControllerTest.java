@@ -3,6 +3,7 @@ package com.junstudio.kickoff.controllers;
 import com.junstudio.kickoff.dtos.NotificationDto;
 import com.junstudio.kickoff.dtos.NotificationsDto;
 import com.junstudio.kickoff.models.Notification;
+import com.junstudio.kickoff.services.DeleteNotificationService;
 import com.junstudio.kickoff.services.GetNotificationService;
 import com.junstudio.kickoff.services.NotificationService;
 import com.junstudio.kickoff.utils.JwtUtil;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
@@ -33,6 +35,9 @@ class NotificationControllerTest {
 
     @MockBean
     private GetNotificationService getNotificationService;
+
+    @MockBean
+    private DeleteNotificationService deleteNotificationService;
 
     @SpyBean
     private JwtUtil jwtUtil;
@@ -59,20 +64,18 @@ class NotificationControllerTest {
                     notification.sender(),
                     notification.content(),
                     notification.postId(),
-                    notification.isRead()
+                    notification.isRead(),
+                    notification.createdAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
                 ))));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/notifications")
             .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
             .andExpect(content().string(
-                containsString("{" +
-                    "\"id\":1," +
+                containsString("" +
                     "\"sender\":\"pikachu\"," +
-                    "\"content\":\"Million volt\"," +
-                    "\"postId\":null," +
-                    "\"read\":false" +
-                    "}")
+                    "\"content\":\"Million volt\"" +
+                    "")
             ));
 
         verify(getNotificationService).notifications(identification);
@@ -121,5 +124,31 @@ class NotificationControllerTest {
             .andExpect(status().isNoContent());
 
         verify(notificationService).read(1L);
+    }
+
+    @Test
+    void deleteWithSelectedNotification() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/notifications/1"))
+            .andExpect(status().isNoContent());
+
+        verify(deleteNotificationService).deleteNotification(1L);
+    }
+
+    @Test
+    void deleteAll() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/notifications")
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isNoContent());
+
+        verify(deleteNotificationService).deleteAllNotification(identification);
+    }
+
+    @Test
+    void deleteWithReadNotification() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/notifications/read")
+                .header("Authorization", "Bearer " + token))
+            .andExpect(status().isNoContent());
+
+        verify(deleteNotificationService).deleteReadNotification(identification);
     }
 }
