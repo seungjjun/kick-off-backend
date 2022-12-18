@@ -11,6 +11,6 @@ class RecommentTest {
     void recomment() {
         Recomment recomment = new Recomment(1L, 1L, new Content("대댓글"), new UserId(1L), new PostId(1L), LocalDateTime.now());
 
-        assertThat(recomment.getContent().value()).isEqualTo("대댓글");
+        assertThat(recomment.content().value()).isEqualTo("대댓글");
     }
 }

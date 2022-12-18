@@ -1,14 +1,17 @@
 package com.junstudio.kickoff.services;
 
+import com.junstudio.kickoff.dtos.HotPostsDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.BoardId;
+import com.junstudio.kickoff.models.Comment;
 import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Hit;
 import com.junstudio.kickoff.models.Image;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.PostInformation;
+import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.BoardRepository;
@@ -73,7 +76,7 @@ class GetPostServiceTest {
 
         given(postRepository.findAll(Pageable.ofSize(1))).willReturn(page);
 
-        PostsDto postsDto = getPostService.posts(post.getBoardId().value(), Pageable.ofSize(1));
+        PostsDto postsDto = getPostService.posts(post.boardId().value(), Pageable.ofSize(1));
 
         assertThat(postsDto).isNotNull();
     }
@@ -96,6 +99,29 @@ class GetPostServiceTest {
         assertThat(foundPost.getPostInformation().getTitle()).isEqualTo("EPL start");
 
         verify(postRepository).findById(any());
+    }
+
+    @Test
+    void hotPosts() {
+        Post post = Post.fake();
+        Comment comment = Comment.fake();
+        Recomment recomment = Recomment.fake();
+        Board board = Board.fake();
+        User user = User.fake();
+
+        given(postRepository.findTop3ByOrderByHit_NumberDesc()).willReturn(List.of(post));
+
+        given(commentRepository.findAllByPostId_Value(any())).willReturn(List.of(comment));
+        given(recommentRepository.findAllByPostId_Value(any())).willReturn(List.of(recomment));
+        given(boardRepository.findById(post.boardId().value())).willReturn(Optional.of(board));
+        given(userRepository.findById(post.userId().value())).willReturn(Optional.of(user));
+
+        HotPostsDto hotPosts = getPostService.hotPosts();
+
+        assertThat(hotPosts.getPosts().get(0).getPostInformation().getTitle()).isEqualTo("Son is EPL King");
+        assertThat(hotPosts.getBoards().get(0).getBoardName()).isEqualTo("전체 게시판");
+        assertThat(hotPosts.getUsers().get(0).getName()).isEqualTo("Jun");
+        assertThat(hotPosts.getCommentNumber().get(0)).isEqualTo(2);
     }
 
     @Test

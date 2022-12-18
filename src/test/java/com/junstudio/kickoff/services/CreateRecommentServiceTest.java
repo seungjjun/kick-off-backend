@@ -29,10 +29,10 @@ class CreateRecommentServiceTest {
         Recomment recomment = Recomment.fake();
 
         createRecommentService.createRecomment(
-            recomment.getContent().value(),
+            recomment.content().value(),
             recomment.commentId(),
-            recomment.getUserId().value(),
-            recomment.getPostId().value());
+            recomment.userId().value(),
+            recomment.postId().value());
 
         verify(recommentRepository).save(any(Recomment.class));
     }

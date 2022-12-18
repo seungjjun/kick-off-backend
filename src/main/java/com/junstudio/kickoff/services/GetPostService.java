@@ -3,6 +3,7 @@ package com.junstudio.kickoff.services;
 import com.junstudio.kickoff.dtos.BoardDto;
 import com.junstudio.kickoff.dtos.CommentDto;
 import com.junstudio.kickoff.dtos.CreatePostsDto;
+import com.junstudio.kickoff.dtos.HotPostsDto;
 import com.junstudio.kickoff.dtos.LikeDto;
 import com.junstudio.kickoff.dtos.PostDetailDto;
 import com.junstudio.kickoff.dtos.PostDto;
@@ -95,7 +96,7 @@ public class GetPostService {
     public PostDetailDto findPost(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(PostNotFound::new);
 
-        Board board = boardRepository.findById(post.getBoardId().value())
+        Board board = boardRepository.findById(post.boardId().value())
             .orElseThrow(BoardNotFound::new);
 
         User user = userRepository.findById(post.userId().value())
@@ -104,6 +105,43 @@ public class GetPostService {
         post.updateHit(post.hit().number());
 
         return post.toDetailDto(board, user);
+    }
+
+    public HotPostsDto hotPosts() {
+        List<PostDto> posts = postRepository.findTop3ByOrderByHit_NumberDesc()
+            .stream().map(Post::toDto)
+            .collect(Collectors.toList());
+
+        List<Post> hotPosts = postRepository.findTop3ByOrderByHit_NumberDesc();
+
+        List<Integer> commentNumbers = new ArrayList<>();
+        List<Board> boards = new ArrayList<>();
+        List<User> users = new ArrayList<>();
+
+        for (Post hotPost : hotPosts) {
+            commentNumbers.add(commentRepository
+                .findAllByPostId_Value(hotPost.id())
+                .stream()
+                .filter(comment -> !comment.isDeleted())
+                .toArray()
+                .length +
+                recommentRepository
+                    .findAllByPostId_Value(hotPost.id())
+                    .size());
+
+            boards.add(boardRepository
+                .findById(hotPost.boardId().value())
+                .orElseThrow(BoardNotFound::new));
+
+            users.add(userRepository
+                .findById(hotPost.userId().value())
+                .orElseThrow(UserNotFound::new));
+        }
+
+        List<BoardDto> hotBoards = boards.stream().map(Board::toDto).collect(Collectors.toList());
+        List<UserDto> hotUsers =  users.stream().map(User::toDto).collect(Collectors.toList());
+
+        return new HotPostsDto(posts, commentNumbers, hotBoards, hotUsers);
     }
 
     public PostsDto search(Long boardId, String keyword, String keywordType, Pageable pageable) {
@@ -123,7 +161,7 @@ public class GetPostService {
         if (keywordType.equals("content")) {
             searchedPosts = postRepository.findByPostInformation_ContentContaining(keyword, pageable)
                 .map(Post::toDto).stream().collect(Collectors.toList());
-            ;
+
 
             if (boardId != 1) {
                 searchedPosts = postRepository
@@ -193,7 +231,8 @@ public class GetPostService {
 
     private List<BoardDto> boardDto() {
         return boardRepository.findAll()
-            .stream().map(Board::toDto)
+            .stream().filter(board -> !board.isDeleted())
+            .map(Board::toDto)
             .collect(Collectors.toList());
     }
 
@@ -209,4 +248,3 @@ public class GetPostService {
         boardRepository.save(board);
     }
 }
-

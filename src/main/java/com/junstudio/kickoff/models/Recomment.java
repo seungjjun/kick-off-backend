@@ -60,15 +60,15 @@ public class Recomment {
         return commentId;
     }
 
-    public Content getContent() {
+    public Content content() {
         return content;
     }
 
-    public UserId getUserId() {
+    public UserId userId() {
         return userId;
     }
 
-    public PostId getPostId() {
+    public PostId postId() {
         return postId;
     }
 
