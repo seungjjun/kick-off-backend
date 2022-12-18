@@ -2,6 +2,7 @@ package com.junstudio.kickoff.controllers;
 
 import com.junstudio.kickoff.dtos.BoardDto;
 import com.junstudio.kickoff.dtos.BoardsDto;
+import com.junstudio.kickoff.dtos.HotPostsDto;
 import com.junstudio.kickoff.dtos.PostsDto;
 import com.junstudio.kickoff.services.GetBoardService;
 import com.junstudio.kickoff.services.GetPostService;
@@ -39,6 +40,11 @@ public class BoardController {
         @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return getPostService.posts(boardId, pageable);
+    }
+
+    @GetMapping("/boards/posts/hot")
+    private HotPostsDto hotPosts() {
+        return getPostService.hotPosts();
     }
 
     @GetMapping("/boards/{boardId}/posts/search")

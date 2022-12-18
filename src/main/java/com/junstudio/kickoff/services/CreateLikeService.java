@@ -20,9 +20,9 @@ public class CreateLikeService {
         if (likeRepository.existsByPostId_Value(postId)) {
             List<Like> foundLikes = likeRepository.findAllByUserId_Value(userId);
 
-            for (int i = 0; i < foundLikes.size(); i += 1) {
-                if (foundLikes.get(i).userId().value().equals(userId)) {
-                    likeRepository.deleteById(foundLikes.get(i).id());
+            for (Like foundLike : foundLikes) {
+                if (foundLike.userId().value().equals(userId)) {
+                    likeRepository.deleteById(foundLike.id());
                     return;
                 }
             }

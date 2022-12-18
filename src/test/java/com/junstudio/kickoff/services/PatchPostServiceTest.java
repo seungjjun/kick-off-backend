@@ -28,7 +28,7 @@ class PatchPostServiceTest {
 
         PostWriteDto postWriteDto = new PostWriteDto(post.id(),
             post.postInformation().getTitle(), post.postInformation().getContent(),
-            post.image().url(), post.userId().value(), post.getBoardId().value());
+            post.image().url(), post.userId().value(), post.boardId().value());
 
         patchPostService.patch(postWriteDto, post.id());
 

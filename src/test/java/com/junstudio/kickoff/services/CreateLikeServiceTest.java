@@ -2,18 +2,13 @@ package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.models.Like;
 import com.junstudio.kickoff.models.Post;
-import com.junstudio.kickoff.models.PostId;
 import com.junstudio.kickoff.models.User;
-import com.junstudio.kickoff.models.UserId;
 import com.junstudio.kickoff.repositories.LikeRepository;
-import com.junstudio.kickoff.repositories.PostRepository;
-import com.junstudio.kickoff.repositories.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

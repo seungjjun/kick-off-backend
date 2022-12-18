@@ -3,8 +3,11 @@ package com.junstudio.kickoff.controllers;
 import com.junstudio.kickoff.dtos.BoardDto;
 import com.junstudio.kickoff.dtos.BoardsDto;
 import com.junstudio.kickoff.dtos.CreatePostsDto;
+import com.junstudio.kickoff.dtos.HotPostsDto;
+import com.junstudio.kickoff.dtos.PostDto;
 import com.junstudio.kickoff.dtos.PostPageDto;
 import com.junstudio.kickoff.dtos.PostsDto;
+import com.junstudio.kickoff.dtos.UserDto;
 import com.junstudio.kickoff.models.Board;
 import com.junstudio.kickoff.models.BoardId;
 import com.junstudio.kickoff.models.Comment;
@@ -30,11 +33,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -99,6 +104,26 @@ class BoardControllerTest {
             .andExpect(content().string(
                 containsString("\"title\":\"Son is EPL King\"")
             ));
+    }
+
+    @Test
+    void hotPosts() throws Exception {
+        List<PostDto> posts = List.of(post.toDto());
+        List<Integer> commentNumber = new ArrayList<>();
+        List<BoardDto> boards = List.of(board.toDto());
+        List<UserDto> users = List.of(user.toDto());
+
+        HotPostsDto hotPosts = new HotPostsDto(posts, commentNumber, boards, users);
+
+        given(getPostService.hotPosts()).willReturn(hotPosts);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/boards/posts/hot"))
+            .andExpect(status().isOk())
+            .andExpect(content().string(
+                containsString("\"title\":\"Son is EPL King\"")
+            ));
+
+        verify(getPostService).hotPosts();
     }
 
     @Test

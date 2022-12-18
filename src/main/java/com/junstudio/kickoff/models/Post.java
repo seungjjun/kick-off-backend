@@ -72,7 +72,7 @@ public class Post {
         return userId;
     }
 
-    public BoardId getBoardId() {
+    public BoardId boardId() {
         return boardId;
     }
 
@@ -101,26 +101,9 @@ public class Post {
         this.hit = new Hit(hit + 1L);
     }
 
-    public PostWrittenDto postWrittenDto() {
-        return new PostWrittenDto(id);
-    }
-
     public PostDetailDto toDetailDto(Board board, User user) {
         return new PostDetailDto(id, postInformation, hit.number(), board, user,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")), image.url());
-    }
-
-    public static Post fake() {
-        return new Post(1L, new UserId(1L), new BoardId(1L),
-            new PostInformation("Son is EPL King",
-                "Son is the first Asian to score EPL"),
-            new Hit(3L), new Image("imageUrl"), LocalDateTime.now());
-    }
-
-    public void patch(String title, String content, Long boardId, String imageUrl) {
-        this.postInformation = new PostInformation(title, content);
-        this.boardId = new BoardId(boardId);
-        this.image = new Image(imageUrl);
     }
 
     public StatisticsPostDto toStatisticsDto() {
@@ -131,5 +114,27 @@ public class Post {
             hit.number(),
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
+    }
+
+    public PostWrittenDto postWrittenDto() {
+        return new PostWrittenDto(id);
+    }
+
+    public void patch(String title, String content, Long boardId, String imageUrl) {
+        this.postInformation = new PostInformation(title, content);
+        this.boardId = new BoardId(boardId);
+        this.image = new Image(imageUrl);
+    }
+
+    public static Post fake() {
+        return new Post(1L,
+            new UserId(1L),
+            new BoardId(1L),
+            new PostInformation(
+                "Son is EPL King",
+                "Son is the first Asian to score EPL"),
+            new Hit(3L),
+            new Image("imageUrl"),
+            LocalDateTime.now());
     }
 }
