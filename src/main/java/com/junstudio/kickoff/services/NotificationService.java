@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
 @Service
@@ -106,7 +107,8 @@ public class NotificationService {
                 notification.sender(),
                 notification.content(),
                 notification.postId(),
-                notification.isRead()
+                notification.isRead(),
+                notification.createdAt().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             );
 
         ObjectMapper objectMapper = new ObjectMapper();

@@ -55,6 +55,7 @@ public class Notification {
         this.sender = sender;
         this.content = content;
         this.isRead = false;
+        this.createdAt = LocalDateTime.now();
     }
 
     public Long id() {
@@ -86,7 +87,13 @@ public class Notification {
     }
 
     public NotificationDto toDto() {
-        return new NotificationDto(id, sender, content, postId, isRead);
+        return new NotificationDto(
+            id,
+            sender,
+            content,
+            postId,
+            isRead,
+            createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
     }
 
     public void read() {

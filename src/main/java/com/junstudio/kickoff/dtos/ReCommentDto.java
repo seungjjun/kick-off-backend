@@ -11,6 +11,8 @@ public class ReCommentDto {
 
     private final Long userId;
 
+    private Long receiverId;
+
     private final String commentDate;
 
     public ReCommentDto(Long id, String content, Long commentId, Long postId,
@@ -45,5 +47,9 @@ public class ReCommentDto {
 
     public String getCommentDate() {
         return commentDate;
+    }
+
+    public Long getReceiverId() {
+        return receiverId;
     }
 }

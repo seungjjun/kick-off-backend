@@ -7,6 +7,7 @@ import com.junstudio.kickoff.models.Recomment;
 import com.junstudio.kickoff.services.CreateRecommentService;
 import com.junstudio.kickoff.services.DeleteRecommentService;
 import com.junstudio.kickoff.services.GetRecommentService;
+import com.junstudio.kickoff.services.NotificationService;
 import com.junstudio.kickoff.services.PatchRecommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,15 +31,18 @@ public class RecommentController {
     private final CreateRecommentService createRecommentService;
     private final DeleteRecommentService deleteRecommentService;
     private final PatchRecommentService patchRecommentService;
+    private final NotificationService notificationService;
 
     public RecommentController(GetRecommentService getRecommentService,
                                CreateRecommentService createRecommentService,
                                DeleteRecommentService deleteRecommentService,
-                               PatchRecommentService patchRecommentService) {
+                               PatchRecommentService patchRecommentService,
+                               NotificationService notificationService) {
         this.getRecommentService = getRecommentService;
         this.createRecommentService = createRecommentService;
         this.deleteRecommentService = deleteRecommentService;
         this.patchRecommentService = patchRecommentService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/recomments")
@@ -63,13 +68,22 @@ public class RecommentController {
     @PostMapping("/recomments")
     @ResponseStatus(HttpStatus.CREATED)
     private String recomment(
-        @RequestBody ReCommentDto reCommentDto
+        @RequestBody ReCommentDto reCommentDto,
+        @RequestAttribute("identification") String identification
     ) {
         createRecommentService.createRecomment(
             reCommentDto.getContent(),
             reCommentDto.getCommentId(),
             reCommentDto.getUserId(),
             reCommentDto.getPostId()
+        );
+
+        notificationService.sendNotification(
+            reCommentDto.getReceiverId(),
+            reCommentDto.getUserId(),
+            reCommentDto.getPostId(),
+            reCommentDto.getContent(),
+            identification
         );
 
         return "ok";

@@ -11,14 +11,19 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 class NotificationServiceTest {
@@ -34,10 +39,6 @@ class NotificationServiceTest {
     @SpyBean
     private NotificationService notificationService;
 
-    User user;
-    User receiver;
-
-    Post post;
     Notification notification;
 
     @BeforeEach
@@ -49,30 +50,24 @@ class NotificationServiceTest {
         notificationService =
             new NotificationService(sseEmitterRepository, notificationRepository, userRepository);
 
-        user = User.fake();
-        receiver = new User(2L, "pikachu", "password", "jin", "image", new Grade("프로"), false, LocalDateTime.now());
-
-        post = Post.fake();
-        notification = Notification.fake();
+        notification = spy(Notification.fake());
     }
 
     @Test
-    void sendNotification() {
-        given(userRepository.findById(any())).willReturn(Optional.of(user));
+    void createNotification() {
+        Notification notification =
+            notificationService.createNotification(1L, 1L, "son", "test");
 
-        given(userRepository.findById(any())).willReturn(Optional.of(receiver));
+        assertThat(notification.sender()).isEqualTo("son");
+        assertThat(notification.content()).isEqualTo("test");
+    }
 
-        Notification notification1 =
-            notificationService.createNotification(receiver.id(), post.id(), user.name(), notification.content());
+    @Test
+    void read() {
+        given(notificationRepository.findById(any())).willReturn(Optional.of(notification));
 
-        notificationService.sendNotification(
-            receiver.id(),
-            user.id(),
-            post.id(),
-            notification.content(),
-            user.identification()
-        );
+        notificationService.read(notification.id());
 
-        verify(notificationRepository).save(notification1);
+        verify(notification).read();
     }
 }

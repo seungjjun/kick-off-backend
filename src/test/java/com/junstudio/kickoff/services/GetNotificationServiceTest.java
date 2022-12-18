@@ -1,6 +1,5 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.dtos.NotificationDto;
 import com.junstudio.kickoff.dtos.NotificationsDto;
 import com.junstudio.kickoff.models.Notification;
 import com.junstudio.kickoff.models.User;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -42,13 +40,13 @@ class GetNotificationServiceTest {
         notification = Notification.fake();
 
         given(userRepository.findByIdentification(any())).willReturn(Optional.of(user));
-
-        given(notificationRepository.findAllByReceiverId(any(Long.class)))
-            .willReturn(List.of(notification));
     }
 
     @Test
     void notifications() {
+        given(notificationRepository.findAllByReceiverId(any(Long.class), any()))
+            .willReturn(List.of(notification));
+
         NotificationsDto notifications = getNotificationService.notifications(user.identification());
 
         assertThat(notifications.getNotifications().size()).isEqualTo(1);
@@ -56,6 +54,9 @@ class GetNotificationServiceTest {
 
     @Test
     void checkNotification() {
+        given(notificationRepository.findAllByReceiverId(any(Long.class)))
+            .willReturn(List.of(notification));
+
         notification.read();
 
         boolean checkNotifications = getNotificationService.checkNotification(user.identification());
