@@ -147,36 +147,6 @@ public class GetPostService {
     public PostsDto search(Long boardId, String keyword, String keywordType, Pageable pageable) {
         List<PostDto> searchedPosts = new ArrayList<>();
 
-        if (keywordType.equals("title")) {
-            searchedPosts = searchByPostTitle(keyword, pageable)
-                .map(Post::toDto).stream().collect(Collectors.toList());
-
-            if (boardId != 1) {
-                searchedPosts = postRepository
-                    .findByBoardIdAndPostInformation_TitleContaining(boardId, keyword, pageable)
-                    .stream().map(Post::toDto).collect(Collectors.toList());
-            }
-        }
-
-        if (keywordType.equals("content")) {
-            searchedPosts = postRepository.findByPostInformation_ContentContaining(keyword, pageable)
-                .map(Post::toDto).stream().collect(Collectors.toList());
-
-
-            if (boardId != 1) {
-                searchedPosts = postRepository
-                    .findByBoardIdAndPostInformation_ContentContaining(boardId, keyword, pageable)
-                    .stream().map(Post::toDto).collect(Collectors.toList());
-            }
-        }
-
-        if (keywordType.equals("author")) {
-            User user = userRepository.findByName(keyword).orElseThrow(UserNotFound::new);
-
-            searchedPosts = postRepository.findByUserId(new UserId(user.id()), pageable)
-                .stream().map(Post::toDto).collect(Collectors.toList());
-        }
-
         List<CommentDto> comments = commentDto();
 
         List<ReCommentDto> reComments = recommentDto();
@@ -187,8 +157,52 @@ public class GetPostService {
 
         List<BoardDto> boards = boardDto();
 
+        if (keywordType.equals("title")) {
+            searchedPosts = searchByPostTitle(keyword, pageable)
+                .map(Post::toDto).stream().collect(Collectors.toList());
+
+            if (boardId != 1) {
+                searchedPosts = postRepository
+                    .findByBoardId_ValueAndPostInformation_TitleContaining(boardId, keyword, pageable)
+                    .stream().map(Post::toDto).collect(Collectors.toList());
+            }
+        }
+
+        if (keywordType.equals("content")) {
+            searchedPosts = searchByPostContent(keyword, pageable)
+                .map(Post::toDto).stream().collect(Collectors.toList());
+
+
+            if (boardId != 1) {
+                searchedPosts = postRepository
+                    .findByBoardId_ValueAndPostInformation_ContentContaining(boardId, keyword, pageable)
+                    .stream().map(Post::toDto).collect(Collectors.toList());
+            }
+        }
+
+        if (keywordType.equals("author")) {
+            User user = userRepository.findByName(keyword).orElseThrow(UserNotFound::new);
+
+
+            searchedPosts = searchByAuthor(pageable, user)
+                .stream().map(Post::toDto).collect(Collectors.toList());
+
+            CreatePostsDto createPostsDto =
+                new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards);
+
+            return new PostsDto(createPostsDto,
+                new PostPageDto(searchByAuthor(pageable, user).getNumber() + 1,
+                    searchByAuthor(pageable, user).getTotalElements()));
+        }
+
         CreatePostsDto createPostsDto =
             new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards);
+
+        if(keywordType.equals("content")) {
+            return new PostsDto(createPostsDto,
+                new PostPageDto(searchByPostContent(keyword, pageable).getNumber() + 1,
+                    searchByPostContent(keyword, pageable).getTotalElements()));
+        }
 
         return new PostsDto(createPostsDto,
             new PostPageDto(searchByPostTitle(keyword, pageable).getNumber() + 1,
@@ -197,6 +211,14 @@ public class GetPostService {
 
     private Page<Post> searchByPostTitle(String keyword, Pageable pageable) {
         return postRepository.findByPostInformation_TitleContaining(keyword, pageable);
+    }
+
+    private Page<Post> searchByPostContent(String keyword, Pageable pageable) {
+        return postRepository.findByPostInformation_ContentContaining(keyword, pageable);
+    }
+
+    private Page<Post> searchByAuthor(Pageable pageable, User user) {
+        return postRepository.findByUserId(new UserId(user.id()), pageable);
     }
 
     private List<PostDto> postDto(Pageable pageable) {
@@ -234,17 +256,5 @@ public class GetPostService {
             .stream().filter(board -> !board.isDeleted())
             .map(Board::toDto)
             .collect(Collectors.toList());
-    }
-
-    public void createPost(String boardName, String identification) {
-        User user = userRepository.findByIdentification(identification).orElseThrow();
-
-        if (user.grade().name().equals("매니저")) {
-            throw new BoardNotFound();
-        }
-
-        Board board = new Board(boardName);
-
-        boardRepository.save(board);
     }
 }

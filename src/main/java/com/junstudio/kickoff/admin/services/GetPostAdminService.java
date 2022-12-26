@@ -4,6 +4,7 @@ import com.junstudio.kickoff.dtos.PostsByDateDto;
 import com.junstudio.kickoff.dtos.StatisticsPostDto;
 import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
+import com.junstudio.kickoff.exceptions.AdminNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
@@ -53,7 +54,11 @@ public class GetPostAdminService {
         return new TodayCreatePostsDto(posts);
     }
 
-    public PostsByDateDto weekPosts() {
+    public PostsByDateDto weekPosts(String identification) {
+        if(!userRepository.findByIdentification(identification).orElseThrow(UserNotFound::new).identification().equals("jel1y")) {
+            throw new AdminNotFound();
+        }
+
         int todayPostsNumber = postsNumber(0);
         int aDayAgoPostsNumber = postsNumber(1);
         int twoDaysAgoPostsNumber = postsNumber(2);

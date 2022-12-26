@@ -8,6 +8,7 @@ import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.SelectedUsersDto;
 import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
+import com.junstudio.kickoff.exceptions.AdminNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -77,5 +78,11 @@ public class AdminUserController {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     private String userNotFound() {
         return "유저를 찾을 수 없습니다.";
+    }
+
+    @ExceptionHandler(AdminNotFound.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    private AdminNotFound adminNotFound() {
+        return new AdminNotFound();
     }
 }

@@ -7,14 +7,15 @@ import com.junstudio.kickoff.dtos.StatisticsPostsDto;
 import com.junstudio.kickoff.dtos.TodayCreatePostsDto;
 import com.junstudio.kickoff.models.Post;
 import com.junstudio.kickoff.models.User;
+import com.junstudio.kickoff.utils.JwtUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -32,6 +33,12 @@ class AdminPostControllerTest {
     @MockBean
     private GetPostAdminService getPostAdminService;
 
+    @SpyBean
+    private JwtUtil jwtUtil;
+
+    String token;
+    String identification;
+
     Post post;
     User user;
 
@@ -39,6 +46,10 @@ class AdminPostControllerTest {
     void setup() {
         post = Post.fake();
         user = User.fake();
+
+        identification = "je1ly";
+
+        token = jwtUtil.encode(identification);
     }
 
     @Test
@@ -83,10 +94,11 @@ class AdminPostControllerTest {
 
     @Test
     void weekPosts() throws Exception {
-        given(getPostAdminService.weekPosts())
+        given(getPostAdminService.weekPosts(identification))
             .willReturn(new PostsByDateDto(1, 2, 3, 4, 5, 6, 7));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/admin-week-posts"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/admin-week-posts")
+                .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk())
             .andExpect(content().string(
                 containsString("{" +
@@ -100,7 +112,7 @@ class AdminPostControllerTest {
                     "}")
             ));
 
-        verify(getPostAdminService).weekPosts();
+        verify(getPostAdminService).weekPosts(identification);
     }
 
     @Test

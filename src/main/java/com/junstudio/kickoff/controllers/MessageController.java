@@ -22,7 +22,11 @@ public class MessageController {
     public void enter(ChatMessageDto message,
                       SimpMessageHeaderAccessor headerAccessor) {
         message.setMessage(message.getWriter() + "님이 채팅방에 입장하였습니다.");
+
+        message.enter();
+
         messageService.authentication(headerAccessor, message);
+
         template.convertAndSend("/sub/chat/room/" + message.getRoomId(), message);
     }
 

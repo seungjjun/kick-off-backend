@@ -13,12 +13,12 @@ public class SseEmitterRepository {
     public final Map<String, SseEmitter> emitters = new ConcurrentHashMap<>();
     private final Map<String, Object> eventCache = new ConcurrentHashMap<>();
 
-    public SseEmitter save(String id, SseEmitter sseEmitter){
+    public SseEmitter save(String id, SseEmitter sseEmitter) {
         emitters.put(id, sseEmitter);
         return sseEmitter;
     }
 
-    public void deleteById(String id){
+    public void deleteById(String id) {
         emitters.remove(id);
     }
 
