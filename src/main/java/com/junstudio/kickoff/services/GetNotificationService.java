@@ -30,7 +30,8 @@ public class GetNotificationService {
         User user = userRepository.findByIdentification(identification)
             .orElseThrow(UserNotFound::new);
 
-        List<NotificationDto> notifications = notificationRepository.findAllByReceiverId(user.id(), Sort.by(Sort.Direction.DESC, "id"))
+        List<NotificationDto> notifications = notificationRepository
+            .findAllByReceiverId(user.id(), Sort.by(Sort.Direction.DESC, "id"))
             .stream()
             .map(Notification::toDto)
             .collect(Collectors.toList());

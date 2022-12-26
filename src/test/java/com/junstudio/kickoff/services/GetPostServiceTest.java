@@ -35,6 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 class GetPostServiceTest {
@@ -139,7 +140,7 @@ class GetPostServiceTest {
             "Laliga", Pageable.ofSize(1))
         ).willReturn(page);
 
-        given(postRepository.findByBoardIdAndPostInformation_TitleContaining(
+        given(postRepository.findByBoardId_ValueAndPostInformation_TitleContaining(
             2L, "Laliga", Pageable.ofSize(1))
         ).willReturn(page);
 
@@ -150,7 +151,7 @@ class GetPostServiceTest {
             .getPostInformation().getTitle())
             .isEqualTo("Laliga start");
 
-        verify(postRepository).findByBoardIdAndPostInformation_TitleContaining(any(), any(), any());
+        verify(postRepository).findByBoardId_ValueAndPostInformation_TitleContaining(any(), any(), any());
     }
 
     @Test
@@ -164,14 +165,6 @@ class GetPostServiceTest {
 
         Page<Post> page = new PageImpl<>(posts);
 
-        given(postRepository.findByPostInformation_TitleContaining(
-            "이강인", Pageable.ofSize(1))
-        ).willReturn(page);
-
-        given(postRepository.findByPostInformation_ContentContaining(
-            "이강인", Pageable.ofSize(1))
-        ).willReturn(page);
-
         given(postRepository.findByPostInformation_ContentContaining(
             "이강인", Pageable.ofSize(1))
         ).willReturn(page);
@@ -183,6 +176,6 @@ class GetPostServiceTest {
             .getPostInformation().getContent())
             .isEqualTo("이강인 개막전 득점");
 
-        verify(postRepository).findByPostInformation_ContentContaining(any(), any());
+        verify(postRepository, times(3)).findByPostInformation_ContentContaining(any(), any());
     }
 }

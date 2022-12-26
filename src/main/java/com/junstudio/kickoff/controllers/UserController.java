@@ -104,7 +104,7 @@ public class UserController {
     public String InValidRequest(MethodArgumentNotValidException exception) {
         BindingResult errors = exception.getBindingResult();
 
-        for(ObjectError error : errors.getAllErrors()) {
+        for (ObjectError error : errors.getAllErrors()) {
             return error.getDefaultMessage();
         }
         return "Bad Request";

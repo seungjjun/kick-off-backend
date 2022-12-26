@@ -56,15 +56,4 @@ public class BoardController {
     ) {
         return getPostService.search(boardId, keyword, keywordType, pageable);
     }
-
-    @PostMapping("/board")
-    @ResponseStatus(HttpStatus.CREATED)
-    private String createBoard(
-        @RequestBody BoardDto boardDto,
-        @RequestAttribute("identification") String identification
-    ) {
-        getPostService.createPost(boardDto.getBoardName(), identification);
-
-        return "OK";
-    }
 }

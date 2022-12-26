@@ -63,9 +63,11 @@ class GetPostAdminServiceTest {
 
     @Test
     void weekPosts() {
+        given(userRepository.findByIdentification(any())).willReturn(Optional.of(user));
+
         given(postRepository.findByCreatedAtBetween(any(), any())).willReturn(List.of(post));
 
-        PostsByDateDto postsNumber = getPostAdminService.weekPosts();
+        PostsByDateDto postsNumber = getPostAdminService.weekPosts(user.identification());
 
         assertThat(postsNumber.getTodayPostsNumber()).isEqualTo(1);
     }

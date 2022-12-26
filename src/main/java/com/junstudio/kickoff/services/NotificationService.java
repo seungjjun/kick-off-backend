@@ -45,12 +45,12 @@ public class NotificationService {
 
 //        sendToClient(emitter, id, "Connected!");
 
-        if (!lastEventId.isEmpty()) {
-            Map<String, Object> events = sseEmitterRepository.findAllEventCacheStartWithId(String.valueOf(userId));
-            events.entrySet().stream()
-                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-                .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
-        }
+//        if (!lastEventId.isEmpty()) {
+//            Map<String, Object> events = sseEmitterRepository.findAllEventCacheStartWithId(String.valueOf(userId));
+//            events.entrySet().stream()
+//                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
+//                .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
+//        }
 
         return emitter;
     }

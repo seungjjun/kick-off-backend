@@ -5,6 +5,7 @@ import com.junstudio.kickoff.dtos.ManagingUsersDto;
 import com.junstudio.kickoff.dtos.SearchedUserDto;
 import com.junstudio.kickoff.dtos.TodaySignupUsersDto;
 import com.junstudio.kickoff.dtos.UsersDto;
+import com.junstudio.kickoff.exceptions.AdminNotFound;
 import com.junstudio.kickoff.exceptions.UserNotFound;
 import com.junstudio.kickoff.models.Admin;
 import com.junstudio.kickoff.models.Comment;
@@ -76,8 +77,13 @@ public class GetUserAdminService {
     }
 
     public AdminDto admin(String identification) {
+//        adminRepository.existsByIdentification(identification);
         Admin admin = adminRepository.findByIdentification(identification)
             .orElseThrow(UserNotFound::new);
+
+        if(!admin.identification().equals("jel1y")) {
+            throw new AdminNotFound();
+        }
 
         return new AdminDto(admin.identification(), admin.name(), admin.profileImage());
     }
