@@ -94,39 +94,4 @@ public class AdminBackdoorController {
 
         return "ok";
     }
- 
-    @GetMapping("setup-board")
-    public String setupBoard() {
-        jdbcTemplate.execute("" +
-            "INSERT INTO board" +
-            "(board_id, board_name, parent_id, is_delete)" +
-            " VALUES(1, '전체게시판', 0, 'false')"
-        );
-
-        jdbcTemplate.execute("" +
-            "INSERT INTO board" +
-            "(board_id, board_name, parent_id, is_delete)" +
-            " VALUES(2, 'EPL', 0, 'false')"
-        );
-
-        jdbcTemplate.execute("" +
-            "INSERT INTO board" +
-            "(board_id, board_name, parent_id, is_delete)" +
-            " VALUES(3, 'LaLiga', 0, 'false')"
-        );
-
-        jdbcTemplate.execute("" +
-            "INSERT INTO board" +
-            "(board_id, board_name, parent_id, is_delete)" +
-            " VALUES(4, 'SerieA', 0, 'false')"
-        );
-
-        jdbcTemplate.execute("" +
-            "INSERT INTO board" +
-            "(board_id, board_name, parent_id, is_delete)" +
-            " VALUES(5, 'Bundesliga', 0, 'false')"
-        );
-
-        return "ok";
-    }
 }
