@@ -48,6 +48,8 @@ class GetPostServiceTest {
 
     GetPostService getPostService;
 
+    Board board;
+
     @BeforeEach
     void setup() {
         postRepository = mock(PostRepository.class);
@@ -64,6 +66,8 @@ class GetPostServiceTest {
             likeRepository,
             userRepository,
             boardRepository);
+
+        board = Board.fake();
     }
 
     @Test
@@ -76,6 +80,8 @@ class GetPostServiceTest {
         Page<Post> page = new PageImpl<>(posts);
 
         given(postRepository.findAll(Pageable.ofSize(1))).willReturn(page);
+
+        given(boardRepository.findById(any())).willReturn(Optional.of(board));
 
         PostsDto postsDto = getPostService.posts(post.boardId().value(), Pageable.ofSize(1));
 
@@ -107,7 +113,6 @@ class GetPostServiceTest {
         Post post = Post.fake();
         Comment comment = Comment.fake();
         Recomment recomment = Recomment.fake();
-        Board board = Board.fake();
         User user = User.fake();
 
         given(postRepository.findTop3ByOrderByHit_NumberDesc()).willReturn(List.of(post));
@@ -144,6 +149,8 @@ class GetPostServiceTest {
             2L, "Laliga", Pageable.ofSize(1))
         ).willReturn(page);
 
+        given(boardRepository.findById(any())).willReturn(Optional.of(board));
+
         PostsDto searchedPosts =
             getPostService.search(2L, "Laliga", "title", Pageable.ofSize(1));
 
@@ -168,6 +175,8 @@ class GetPostServiceTest {
         given(postRepository.findByPostInformation_ContentContaining(
             "이강인", Pageable.ofSize(1))
         ).willReturn(page);
+
+        given(boardRepository.findById(any())).willReturn(Optional.of(board));
 
         PostsDto searchedPosts =
             getPostService.search(1L, "이강인", "content", Pageable.ofSize(1));

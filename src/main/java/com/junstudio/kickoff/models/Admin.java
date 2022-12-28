@@ -25,7 +25,8 @@ public class Admin {
     public Admin() {
     }
 
-    public Admin(Long id, String identification,
+    public Admin(Long id,
+                 String identification,
                  String encodedPassword,
                  String name,
                  String profileImage) {
@@ -34,6 +35,12 @@ public class Admin {
         this.encodedPassword = encodedPassword;
         this.name = name;
         this.profileImage = profileImage;
+    }
+
+    public Admin(String name, String identification, String encodedPassword) {
+        this.name = name;
+        this.identification = identification;
+        this.encodedPassword = encodedPassword;
     }
 
     public Long id() {

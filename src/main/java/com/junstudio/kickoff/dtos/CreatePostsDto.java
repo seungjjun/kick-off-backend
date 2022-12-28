@@ -9,19 +9,22 @@ public class CreatePostsDto {
     private final List<LikeDto> likes;
     private final List<UserDto> users;
     private final List<BoardDto> boards;
+    private final String boardName;
 
     public CreatePostsDto(List<PostDto> posts,
                           List<CommentDto> comments,
                           List<ReCommentDto> reComments,
                           List<LikeDto> likes,
                           List<UserDto> users,
-                          List<BoardDto> boards) {
+                          List<BoardDto> boards,
+                          String boardName) {
         this.posts = posts;
         this.comments = comments;
         this.reComments = reComments;
         this.likes = likes;
         this.users = users;
         this.boards = boards;
+        this.boardName = boardName;
     }
 
     public List<PostDto> getPosts() {
@@ -46,5 +49,9 @@ public class CreatePostsDto {
 
     public List<BoardDto> getBoards() {
         return boards;
+    }
+
+    public String getBoardName() {
+        return boardName;
     }
 }

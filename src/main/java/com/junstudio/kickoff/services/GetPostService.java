@@ -71,12 +71,15 @@ public class GetPostService {
 
         List<BoardDto> boards = boardDto();
 
+        String boardName =
+            boardRepository.findById(boardId).orElseThrow(BoardNotFound::new).boardName().value();
+
         if (boardId != 1) {
             List<PostDto> posts = postRepository.findAllByBoardId_Value(boardId, pageable)
                 .stream().map(Post::toDto).collect(Collectors.toList());
 
             CreatePostsDto createPostsDto =
-                new CreatePostsDto(posts, comments, reComments, likes, users, boards);
+                new CreatePostsDto(posts, comments, reComments, likes, users, boards, boardName);
 
             return new PostsDto(createPostsDto,
                 new PostPageDto(postRepository.findAll(pageable).getNumber() + 1,
@@ -86,7 +89,7 @@ public class GetPostService {
         List<PostDto> posts = postDto(pageable);
 
         CreatePostsDto createPostsDto =
-            new CreatePostsDto(posts, comments, reComments, likes, users, boards);
+            new CreatePostsDto(posts, comments, reComments, likes, users, boards, boardName);
 
         return new PostsDto(createPostsDto,
             new PostPageDto(postRepository.findAll(pageable).getNumber() + 1,
@@ -157,6 +160,9 @@ public class GetPostService {
 
         List<BoardDto> boards = boardDto();
 
+        String boardName =
+            boardRepository.findById(boardId).orElseThrow(BoardNotFound::new).boardName().value();
+
         if (keywordType.equals("title")) {
             searchedPosts = searchByPostTitle(keyword, pageable)
                 .map(Post::toDto).stream().collect(Collectors.toList());
@@ -188,7 +194,7 @@ public class GetPostService {
                 .stream().map(Post::toDto).collect(Collectors.toList());
 
             CreatePostsDto createPostsDto =
-                new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards);
+                new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards, boardName);
 
             return new PostsDto(createPostsDto,
                 new PostPageDto(searchByAuthor(pageable, user).getNumber() + 1,
@@ -196,7 +202,7 @@ public class GetPostService {
         }
 
         CreatePostsDto createPostsDto =
-            new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards);
+            new CreatePostsDto(searchedPosts, comments, reComments, likes, users, boards, boardName);
 
         if(keywordType.equals("content")) {
             return new PostsDto(createPostsDto,

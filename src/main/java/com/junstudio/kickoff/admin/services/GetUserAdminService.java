@@ -107,4 +107,10 @@ public class GetUserAdminService {
     private List<Recomment> findRecommentsByUserId(User user) {
         return recommentRepository.findAllByUserId_Value(user.id());
     }
+
+    public void register(String name, String identification, String password) {
+        Admin admin = new Admin(name, identification, password);
+
+        adminRepository.save(admin);
+    }
 }

@@ -96,7 +96,7 @@ class BoardControllerTest {
             .willReturn(new PostsDto(
                 new CreatePostsDto(List.of(post.toDto()), List.of(comment.toDto()),
                     List.of(recomment.toDto()), List.of(like.toDto()),
-                    List.of(user.toDto()), List.of(board.toDto())),
+                    List.of(user.toDto()), List.of(board.toDto()), board.boardName().value()),
                 new PostPageDto(1, 1L)));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/boards/1/posts"))
@@ -138,7 +138,7 @@ class BoardControllerTest {
                 new CreatePostsDto(
                     List.of(post.toDto()), List.of(comment.toDto()),
                     List.of(recomment.toDto()), List.of(like.toDto()),
-                    List.of(user.toDto()), List.of(board.toDto())),
+                    List.of(user.toDto()), List.of(board.toDto()), board.boardName().value()),
                 new PostPageDto(1, 1L))
             );
 
@@ -167,7 +167,7 @@ class BoardControllerTest {
                 new CreatePostsDto(
                     List.of(post.toDto()), List.of(comment.toDto()),
                     List.of(recomment.toDto()), List.of(like.toDto()),
-                    List.of(user.toDto()), List.of(board.toDto())),
+                    List.of(user.toDto()), List.of(board.toDto()), board.boardName().value()),
                 new PostPageDto(1, 1L))
             );
 
@@ -191,7 +191,7 @@ class BoardControllerTest {
                 new CreatePostsDto(
                     List.of(post.toDto()), List.of(comment.toDto()),
                     List.of(recomment.toDto()), List.of(like.toDto()),
-                    List.of(user.toDto()), List.of(board.toDto())),
+                    List.of(user.toDto()), List.of(board.toDto()), board.boardName().value()),
                 new PostPageDto(1, 1L))
             );
 
