@@ -75,7 +75,7 @@ class UserControllerTest {
         identification = "je1ly";
 
         user = new User(1L, identification, "encodedPassword",
-            "Jun", "profileImage", new Grade("아마추어"), true, LocalDateTime.now());
+            "Jun", "profileImage", 1L, new Grade("아마추어"), true, LocalDateTime.now());
 
         post = Post.fake();
         comment = Comment.fake();

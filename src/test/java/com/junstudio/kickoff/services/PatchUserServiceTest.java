@@ -32,6 +32,7 @@ class PatchUserServiceTest {
             user.identification(),
             user.name(),
             user.profileImage(),
+            user.bucket(),
             user.grade().name(),
             user.isMyToken(),
             user.createdAt().toString()

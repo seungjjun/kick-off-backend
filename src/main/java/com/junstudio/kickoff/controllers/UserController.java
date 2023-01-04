@@ -7,6 +7,7 @@ import com.junstudio.kickoff.dtos.UserDto;
 import com.junstudio.kickoff.dtos.UserInformationDto;
 import com.junstudio.kickoff.dtos.UsersDto;
 import com.junstudio.kickoff.exceptions.AlreadyExistingIdentification;
+import com.junstudio.kickoff.exceptions.AlreadyExistingName;
 import com.junstudio.kickoff.exceptions.PasswordNotMatched;
 import com.junstudio.kickoff.exceptions.PatchFailed;
 import com.junstudio.kickoff.models.User;
@@ -111,7 +112,7 @@ public class UserController {
     }
 
     @ExceptionHandler(PatchFailed.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public PatchFailed patchFailed() {
         return new PatchFailed();
     }
@@ -120,6 +121,12 @@ public class UserController {
     @ResponseStatus(HttpStatus.CONFLICT)
     public String emailAlreadyTaken() {
         return "Email already existing!";
+    }
+
+    @ExceptionHandler(AlreadyExistingName.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public AlreadyExistingName alreadyExistingName() {
+        return new AlreadyExistingName();
     }
 
     @ExceptionHandler(PasswordNotMatched.class)

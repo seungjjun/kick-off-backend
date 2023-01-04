@@ -10,7 +10,7 @@ public class PostInformation {
     @Column(name = "post_title")
     private String title;
 
-    @Column(name = "post_content")
+    @Column(name = "post_content", length = 10000)
     private String content;
 
     public PostInformation() {

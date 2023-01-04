@@ -35,7 +35,7 @@ class LoginServiceTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "jun", "url", new Grade("아마추어"), false, LocalDateTime.now());
+        user = new User(1L, "jel1y", "password", "jun", "url", 1L, new Grade("아마추어"), false, LocalDateTime.now());
 
         userRepository = mock(UserRepository.class);
         passwordEncoder = new Argon2PasswordEncoder();

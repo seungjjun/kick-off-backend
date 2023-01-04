@@ -12,7 +12,7 @@ class UserTest {
     @Test
     void User() {
         User user = new User(1L, "jel1y", "encodedPassword",
-            "Jun", "profileImage", new Grade("아마추어"), false, LocalDateTime.now());
+            "Jun", "profileImage", 1L, new Grade("아마추어"), false, LocalDateTime.now());
 
         assertThat(user.identification()).isEqualTo("jel1y");
         assertThat(user.name()).isEqualTo("Jun");
@@ -21,7 +21,7 @@ class UserTest {
     @Test
     void authenticate() {
         User user = new User(1L, "jel1y", "password",
-            "Jun", "profileImage", new Grade("아마추어"), false, LocalDateTime.now());
+            "Jun", "profileImage", 1L, new Grade("아마추어"), false, LocalDateTime.now());
 
         PasswordEncoder passwordEncoder = new Argon2PasswordEncoder();
 
