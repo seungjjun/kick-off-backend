@@ -30,6 +30,8 @@ public class User {
 
     private String profileImage;
 
+    private Long bucket;
+
     @Embedded
     private Grade grade;
 
@@ -46,16 +48,18 @@ public class User {
         this.name = name;
         this.identification = identification;
         this.grade = new Grade("아마추어");
+        this.bucket = 5L;
     }
 
     public User(Long id, String identification, String encodedPassword,
-                String name, String profileImage, Grade grade, boolean isMyToken,
+                String name, String profileImage, Long bucket, Grade grade, boolean isMyToken,
                 LocalDateTime createdAt) {
         this.id = id;
         this.identification = identification;
         this.encodedPassword = encodedPassword;
         this.name = name;
         this.profileImage = profileImage;
+        this.bucket = bucket;
         this.grade = grade;
         this.isMyToken = isMyToken;
         this.createdAt = createdAt;
@@ -93,12 +97,17 @@ public class User {
         return createdAt;
     }
 
+    public Long bucket() {
+        return bucket;
+    }
+
     public UserDto toDto() {
         return new UserDto(
             id,
             identification,
             name,
             profileImage,
+            bucket,
             grade.name(),
             isMyToken,
             createdAt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
@@ -135,6 +144,14 @@ public class User {
 
     public static User fake() {
         return new User(1L, "jel1y", "password",
-            "Jun", "profileImage", new Grade("아마추어"), false, LocalDateTime.now());
+            "Jun", "profileImage", 10L, new Grade("아마추어"), false, LocalDateTime.now());
+    }
+
+    public void saveBucket(Long availableBuckets) {
+        bucket = availableBuckets;
+    }
+
+    public void consume() {
+        bucket -= 1L;
     }
 }

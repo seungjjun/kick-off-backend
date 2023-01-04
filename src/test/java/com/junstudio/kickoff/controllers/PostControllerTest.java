@@ -70,7 +70,7 @@ class PostControllerTest {
 
     @BeforeEach
     void setup() {
-        user = new User(1L, "jel1y", "password", "son7", "image", new Grade("아마추어"), false, LocalDateTime.now());
+        user = new User(1L, "jel1y", "password", "son7", "image", 1L, new Grade("아마추어"), false, LocalDateTime.now());
 
         board = Board.fake();
         post = Post.fake();

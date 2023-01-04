@@ -1,6 +1,7 @@
 package com.junstudio.kickoff.services;
 
 import com.junstudio.kickoff.exceptions.AlreadyExistingIdentification;
+import com.junstudio.kickoff.exceptions.AlreadyExistingName;
 import com.junstudio.kickoff.exceptions.PasswordNotMatched;
 import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.UserRepository;
@@ -24,6 +25,10 @@ public class CreateUserService {
     public User register(String name, String identification, String password, String confirmPassword) {
         if (userRepository.existsByIdentification(identification)) {
             throw new AlreadyExistingIdentification();
+        }
+
+        if (userRepository.existsByName(name)) {
+            throw new AlreadyExistingName();
         }
 
         if(!password.equals(confirmPassword)) {

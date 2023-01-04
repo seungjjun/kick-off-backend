@@ -9,6 +9,8 @@ public class UserDto {
 
     private final String profileImage;
 
+    private final Long bucket;
+
     private final String grade;
 
     private final boolean isMyToken;
@@ -20,6 +22,7 @@ public class UserDto {
         String identification,
         String name,
         String profileImage,
+        Long bucket,
         String grade,
         boolean isMyToken,
         String createdAt
@@ -28,6 +31,7 @@ public class UserDto {
         this.identification = identification;
         this.name = name;
         this.profileImage = profileImage;
+        this.bucket = bucket;
         this.grade = grade;
         this.isMyToken = isMyToken;
         this.createdAt = createdAt;
@@ -47,6 +51,10 @@ public class UserDto {
 
     public String getProfileImage() {
         return profileImage;
+    }
+
+    public Long getBucket() {
+        return bucket;
     }
 
     public String getGrade() {

@@ -115,7 +115,7 @@ class NotificationControllerTest {
                 .header("Authorization", "Bearer " + token))
             .andExpect(status().isOk());
 
-        verify(notificationService).subscribe("je1ly", "");
+        verify(notificationService).subscribe("je1ly");
     }
 
     @Test

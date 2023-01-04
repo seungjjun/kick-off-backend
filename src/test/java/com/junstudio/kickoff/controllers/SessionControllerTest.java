@@ -43,6 +43,7 @@ class SessionControllerTest {
             "password",
             "jun",
             "url",
+            1L,
             new Grade("아마추어"),
             false,
             LocalDateTime.now()

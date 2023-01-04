@@ -33,7 +33,7 @@ public class NotificationService {
         this.userRepository = userRepository;
     }
 
-    public SseEmitter subscribe(String identification, String lastEventId) {
+    public SseEmitter subscribe(String identification) {
         Long userId = userRepository.findByIdentification(identification)
             .orElseThrow(UserNotFound::new).id();
 
@@ -42,15 +42,6 @@ public class NotificationService {
 
         emitter.onCompletion(() -> sseEmitterRepository.deleteById(id));
         emitter.onTimeout(() -> sseEmitterRepository.deleteById(id));
-
-//        sendToClient(emitter, id, "Connected!");
-
-//        if (!lastEventId.isEmpty()) {
-//            Map<String, Object> events = sseEmitterRepository.findAllEventCacheStartWithId(String.valueOf(userId));
-//            events.entrySet().stream()
-//                .filter(entry -> lastEventId.compareTo(entry.getKey()) < 0)
-//                .forEach(entry -> sendToClient(emitter, entry.getKey(), entry.getValue()));
-//        }
 
         return emitter;
     }
@@ -86,7 +77,6 @@ public class NotificationService {
 
         sseEmitters.forEach(
             (key, emitter) -> {
-                sseEmitterRepository.saveEventCache(key, notification);
                 try {
                     sendToClient(emitter, key, from(notification));
                 } catch (JsonProcessingException e) {

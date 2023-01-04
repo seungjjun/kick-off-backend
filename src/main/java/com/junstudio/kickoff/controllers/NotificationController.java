@@ -51,10 +51,9 @@ public class NotificationController {
 
     @GetMapping(value = "/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter connect(
-        @RequestAttribute("identification") String identification,
-        @RequestHeader(value = "Last-Event-ID", required = false, defaultValue = "") String lastEventId
+        @RequestAttribute("identification") String identification
     ) {
-        return notificationService.subscribe(identification, lastEventId);
+        return notificationService.subscribe(identification);
     }
 
     @DeleteMapping("/notifications/{notificationId}")

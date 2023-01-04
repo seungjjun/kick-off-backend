@@ -1,9 +1,6 @@
 package com.junstudio.kickoff.services;
 
-import com.junstudio.kickoff.models.Grade;
 import com.junstudio.kickoff.models.Notification;
-import com.junstudio.kickoff.models.Post;
-import com.junstudio.kickoff.models.User;
 import com.junstudio.kickoff.repositories.NotificationRepository;
 import com.junstudio.kickoff.repositories.SseEmitterRepository;
 import com.junstudio.kickoff.repositories.UserRepository;
@@ -11,16 +8,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
-import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
